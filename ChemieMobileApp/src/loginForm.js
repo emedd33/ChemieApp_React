@@ -39,11 +39,9 @@ export default class LoginForm extends React.Component {
 const styles = StyleSheet.create({
   container: {
     padding: 10,
-    flex: 1,
-  },
+    },
   input: {
-    height:50,
-    width: 280,
+    height:60,
     backgroundColor: 'rgba(225,225,225,0.2)',
     color: 'black',
     marginBottom: 10,
