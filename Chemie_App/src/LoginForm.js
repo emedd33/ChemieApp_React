@@ -7,7 +7,7 @@ import {createStackNavigator} from 'react-navigation';
 export default class LoginForm extends React.Component {
   static navigationOptions = {
     title: 'Login',
-    header: { visible:false },
+    header: null,
   };
 
   render(){

@@ -20,9 +20,7 @@ const ChemieApp = createStackNavigator({
     Login:{screen: LoginScreen},
     Home: {screen: HomeScreen},
 },{
-  navigationOptions:{
-
-  }
+  headerMode: 'none'
 });
 
 
