@@ -3,11 +3,13 @@ import {View,Text, TextInput, TouchableOpacity, StyleSheet} from 'react-native';
 
 import {createStackNavigator} from 'react-navigation';
 
+
 export default class LoginForm extends React.Component {
   static navigationOptions = {
     title: 'Login',
     header: { visible:false },
   };
+
   render(){
 
     return (
@@ -35,7 +37,7 @@ export default class LoginForm extends React.Component {
           //onPress={onButtonPress}
         >
           <Text style={styles.buttonText}
-
+            onPress={() => {this.props.navigation.navigate('Home')}}
           >
             LOGIN
           </Text>

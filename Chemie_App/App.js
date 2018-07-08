@@ -16,35 +16,12 @@ export default class App extends React.Component {
 }
 
 
-
-
-class Home extends React.Component {
-  static navigationOptions = {
-    title: 'Hometest',
-  };
-  render(){
-    const {navigate} = this.props.navigation;
-    return (
-      <View style={styles.container}>
-        <Text
-          onPress={() => navigate('Profile')}> Navigate to Profile
-        </Text>
-
-      </View>
-    );
-  }
-}
-
-
-
-
-
 const ChemieApp = createStackNavigator({
     Login:{screen: LoginScreen},
     Home: {screen: HomeScreen},
 },{
   navigationOptions:{
-    
+
   }
 });
 
@@ -57,20 +34,3 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-
-
-class ProfileScreen extends React.Component{
-  static navigationOptions = {
-    title: 'Profile',
-  };
-  render(){
-    const {navigate} = this.props.navigation;
-    return (
-      <View style={styles.container}>
-        <Text
-          onPress={() => navigate('Home')}> Navigate to Home
-        </Text>
-      </View>
-    );
-  }
-}
