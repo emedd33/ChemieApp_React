@@ -3,13 +3,30 @@ import {View,Text, TextInput, TouchableOpacity, StyleSheet} from 'react-native';
 
 import {createStackNavigator} from 'react-navigation';
 
+//{/*() => {this.props.navigation.navigate('Home')}*/}
 
 export default class LoginForm extends React.Component {
   static navigationOptions = {
     title: 'Login',
     header: null,
   };
+  constructor(props){
+    super(props);
+    this.loginCheck = this.loginCheck.bind(this);
+    this.state = {
+      username: '',
+      password:'',
 
+      }
+    }
+  loginCheck(){
+    if (this.state.username == 'a'&& this.state.password == 'x'){
+        console.log('success');
+        this.props.navigation.navigate('Home');
+    } else{
+      console.log('failure');
+    }
+  }
   render(){
 
     return (
@@ -17,28 +34,27 @@ export default class LoginForm extends React.Component {
 
         <TextInput
           style={styles.input}
-          onSubmitEditing={() => this.passwordInput.focus()}
           autoCapitalize = 'none'
           autoCorrect={false}
           returnKeyType='next'
           placeholder = 'Brukernavn'
+          onChangeText={(text)=> this.setState({username:text})}
         />
         <TextInput
           style={styles.input}
           autoCapitalize = 'none'
-          ref={(input)=> this.passwordInput = input}
+          //ref={(input)=> this.passwordInput = input}
           autoCorrect={false}
           returnKeyType='go'
           placeholder = 'Passord'
           secureTextEntry
+          onChangeText={(text)=> this.setState({password:text})}
         />
         <TouchableOpacity
           style={styles.buttonContainer}
           //onPress={onButtonPress}
         >
-          <Text style={styles.buttonText}
-            onPress={() => {this.props.navigation.navigate('Home')}}
-          >
+          <Text style={styles.buttonText} onPress={this.loginCheck}>
             LOGIN
           </Text>
 
