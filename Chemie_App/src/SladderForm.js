@@ -13,9 +13,10 @@ constructor(props){
     this.state = {
       loading: false,
       data: [],
+      respons: null,
       error: null,
       refreshing: false,
-      fetch_url: "http://192.168.0.17:8000/bucketlists/",
+      fetch_url: 'http://192.168.0.17:8000/bucketlists/',
       sladderText: '',
     }
   }
@@ -23,11 +24,18 @@ constructor(props){
   sendSladder(){
     console.log('posting');
     fetch(url,{
-      method:'GET',
+      method:'POST',
       headers:{
         Accept:'application/json',
+        'Content-Type':'application/json',
       },
-    }).then((res)=>console.log(res))
+      body: JSON.stringify({
+        name:'Posting from React',
+      }),
+    }).then((res)=>{
+      res.json();
+      console.log(res);
+    })
   }
   render(){
     return(
