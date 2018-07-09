@@ -16,12 +16,12 @@ export default class LoginForm extends React.Component {
     this.state = {
       username: '',
       password:'',
-
       }
     }
   loginCheck(){
     if (this.state.username == 'a'&& this.state.password == 'x'){
         console.log('success');
+        //TODO: Add post request to get auth token
         this.props.navigation.navigate('Home');
     } else{
       console.log('failure');

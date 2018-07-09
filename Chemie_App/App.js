@@ -17,18 +17,10 @@ export default class App extends React.Component {
 
 
 const ChemieApp = createStackNavigator({
-    Login:{screen: LoginScreen},
+    // TODO: Add splashscreen to navigation
+
     Home: {screen: HomeScreen},
+    Login:{screen: LoginScreen},
 },{
   headerMode: 'none'
-});
-
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
 });

@@ -1,6 +1,8 @@
 import React from 'react';
 import {View, Text, Image, StyleSheet, KeyboardAvoidingView} from 'react-native';
 
+import SladderForm from './SladderForm';
+
 export default class HomeScreen extends React.Component{
   static navigationOptions = {
     title: 'Home',
@@ -8,16 +10,29 @@ export default class HomeScreen extends React.Component{
   };
   render(){
     return (
-      <View style={styles.conatiner}>
-        <Text>Hello Home app</Text>
-      </View>
-    );
+      <KeyboardAvoidingView behavior="padding" style={styles.container}>
+
+        <View style={styles.homeContainer}>
+          <Text>Home View</Text>
+        </View>
+        <View style={styles.formConatiner}>
+
+          <SladderForm/>
+
+        </View>
+      </KeyboardAvoidingView>
+      );
   }
 }
 
 const styles = StyleSheet.create({
-  container:{
-    flex:1,
+    container:{
+      flex:1
     },
-
+    homeContainer:{
+        alignItems: 'center',
+        flexGrow: 1,
+        justifyContent: 'center'
+    },
+    
 });
