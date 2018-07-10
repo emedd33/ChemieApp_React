@@ -84,7 +84,7 @@ const styles = StyleSheet.create(
   {
     constainer:{
       flex:1,
-    },
+      },
     sladderConatainer:{
       borderColor: 'black',
         marginRight:10,

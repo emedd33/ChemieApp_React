@@ -1,11 +1,12 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import Expo from 'expo';
+import {Expo, Asset, AppLoading} from 'expo';
 import {createStackNavigator} from 'react-navigation';
 
 
 import LoginScreen from './src/LoginScreen';
 import HomeScreen from './src/HomeScreen';
+import SplashScreen from './src/SplashScreen';
 
 export default class App extends React.Component {
   render(){
@@ -18,9 +19,10 @@ export default class App extends React.Component {
 
 const ChemieApp = createStackNavigator({
     // TODO: Add splashscreen to navigation
-
-    Home: {screen: HomeScreen},
+    Splash:{screen: SplashScreen},
     Login:{screen: LoginScreen},
-},{
-  headerMode: 'none'
+    Home: {screen: HomeScreen},
+
+  },{
+    headerMode: 'none'
 });

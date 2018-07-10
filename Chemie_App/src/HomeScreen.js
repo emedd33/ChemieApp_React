@@ -11,7 +11,7 @@ export default class HomeScreen extends React.Component{
   render(){
     return (
       <KeyboardAvoidingView behavior="padding" style={styles.container}>
-
+        
         <View style={styles.homeContainer}>
           <Text>Home View</Text>
         </View>
@@ -34,5 +34,5 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         justifyContent: 'center'
     },
-    
+
 });
