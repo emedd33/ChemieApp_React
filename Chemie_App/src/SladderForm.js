@@ -6,13 +6,13 @@ const url_sladder = 'http://httpbin.org/ip';
 const url ='http://192.168.0.17:8000/bucketlists/';
 const url_GET ='http://httpbin.org/get';
 const url_POST = 'http://httpbin.org/post';
+
 export default class SladderForm extends React.Component{
 constructor(props){
     super(props);
     this.sendSladder = this.sendSladder.bind(this);
     this.state = {
       loading: false,
-      data: [],
       respons: null,
       error: null,
       refreshing: false,
@@ -22,20 +22,37 @@ constructor(props){
   }
 
   sendSladder(){
-    console.log('posting');
-    fetch(url,{
-      method:'POST',
-      headers:{
-        Accept:'application/json',
-        'Content-Type':'application/json',
-      },
-      body: JSON.stringify({
-        name:'Posting from React',
-      }),
-    }).then((res)=>{
-      res.json();
-      console.log(res);
-    })
+    this.setState({
+      loading:true
+    });
+    console.log(this.state.sladderText)
+    if(this.state.sladderText != ''){
+      fetch(url,{
+        method:'POST',
+        headers:{
+          Accept:'application/json',
+          'Content-Type':'application/json',
+        },
+        body: JSON.stringify({
+          name:this.state.sladderText,
+        }),
+      })
+
+      .then((res)=>{
+        console.log(res.status);
+        res.json();
+        this.setState({
+          loading:false,
+          respons:201,
+        });
+      })
+
+      .catch((error) => {
+       this.setState({
+         error:error,
+         loading : false });
+     });
+    }
   }
   render(){
     return(
