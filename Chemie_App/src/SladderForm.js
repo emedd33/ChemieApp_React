@@ -57,16 +57,22 @@ constructor(props){
   render(){
     return(
       <View style={styles.container}>
-        <TextInput
-          style={styles.input}
-          autoCapitalize = 'sentences'
-          autoCorrect={true}
-          returnKeyType='go'
-          placeholder = 'Skriv inn sladder'
-          onChangeText={(text)=> this.setState({sladderText:text})}
-        />
-        <TouchableOpacity style={styles.buttonContainer} onPress={this.sendSladder  }>
-          <Text>Send Sladder</Text>
+        <View style={styles.sladderConatainer}>
+          <TextInput
+            style={styles.input}
+            /*TODO: Må fjernes i IOS*/
+            underlineColorAndroid="transparent"
+            autoCapitalize = 'sentences'
+            autoCorrect={true}
+            returnKeyType='go'
+            placeholder = 'Skriv inn sladder'
+            onChangeText={(text)=> this.setState({sladderText:text})}
+          />
+        </View>
+          <TouchableOpacity style={styles.submit} onPress={this.sendSladder  }>
+          <Text style={styles.submitText}>
+            Send Sladder
+          </Text>
         </TouchableOpacity>
 
       </View>
@@ -79,20 +85,40 @@ const styles = StyleSheet.create(
     constainer:{
       flex:1,
     },
+    sladderConatainer:{
+      borderColor: 'black',
+        marginRight:10,
+        marginLeft:10,
+        marginTop:10,
+        paddingTop:2,
+        paddingBottom:2,
+        borderRadius:10,
+        borderWidth: 1,
+    },
     input: {
       height:120,
       backgroundColor: 'rgba(225,225,225,0.2)',
       color: 'black',
       marginBottom: 10,
       padding: 10,
+      textAlignVertical: 'top',
+      /*TODO:This is only Android only, need IOS fix*/
+
     },
-    buttonContainer:{
-      height:80,
-      backgroundColor:'#F9CF00',
-      paddingVertical: 15,
-      margin: 10,
-      marginBottom:400,
-      alignItems:'center',
+      submit:{
+        marginRight:40,
+        marginLeft:40,
+        marginTop:10,
+        paddingTop:20,
+        paddingBottom:20,
+        backgroundColor:'#68a0cf',
+        borderRadius:10,
+        borderWidth: 1,
+        borderColor: 'white'
+      },
+      submitText:{
+        color:'#fff',
+        textAlign:'center',
       },
   }
 );
