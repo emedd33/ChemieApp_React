@@ -1,7 +1,9 @@
 import React from 'react';
-import {View, Text, Image, StyleSheet, KeyboardAvoidingView} from 'react-native';
+import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
 
 import SladderForm from './SladderForm';
+
+
 
 export default class HomeScreen extends React.Component{
   static navigationOptions = {
@@ -10,29 +12,38 @@ export default class HomeScreen extends React.Component{
   };
   render(){
     return (
-      <KeyboardAvoidingView behavior="padding" style={styles.container}>
-        
+      <View style={styles.container}>
         <View style={styles.homeContainer}>
-          <Text>Home View</Text>
-        </View>
-        <View style={styles.formConatiner}>
+          <TouchableOpacity style={styles.navigationButtons}>
+            <Text>Sladreboks</Text>
+          </TouchableOpacity>
 
-          <SladderForm/>
+          <TouchableOpacity style={styles.navigationButtons}>
+            <Text>Notification</Text>
+          </TouchableOpacity>
 
+          <TouchableOpacity style={styles.navigationButtons}>
+            <Text>Settings</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.navigationButtons}>
+            <Text>Events</Text>
+          </TouchableOpacity>
         </View>
-      </KeyboardAvoidingView>
-      );
+      </View>
+    );
   }
 }
-
 const styles = StyleSheet.create({
-    container:{
-      flex:1
+          container:{
+            flex:1
+    },
+    navigationButtons:{
+
     },
     homeContainer:{
-        alignItems: 'center',
-        flexGrow: 1,
-        justifyContent: 'center'
+      alignItems: 'center',
+      flexGrow: 1,
+      justifyContent: 'center'
     },
-
 });

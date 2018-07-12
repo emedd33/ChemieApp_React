@@ -6,10 +6,7 @@ import {createStackNavigator} from 'react-navigation';
 //{/*() => {this.props.navigation.navigate('Home')}*/}
 
 export default class LoginForm extends React.Component {
-  static navigationOptions = {
-    title: 'Login',
-    header: null,
-  };
+
   constructor(props){
     super(props);
     this.loginCheck = this.loginCheck.bind(this);
@@ -19,9 +16,10 @@ export default class LoginForm extends React.Component {
       }
     }
   loginCheck(){
-    if (this.state.username == 'a'&& this.state.password == 'x'){
+    if (this.state.username == ''&& this.state.password == ''){
         console.log('success');
         //TODO: Add post request to get auth token
+
         this.props.navigation.navigate('Home');
     } else{
       console.log('failure');
@@ -52,9 +50,11 @@ export default class LoginForm extends React.Component {
         />
         <TouchableOpacity
           style={styles.buttonContainer}
-          //onPress={onButtonPress}
         >
-          <Text style={styles.buttonText} onPress={this.loginCheck}>
+          <Text
+            style={styles.buttonText}
+            onPress={this.loginCheck}
+          >
             LOGIN
           </Text>
 
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     },
   input: {
     height:60,
-    backgroundColor: 'rgba(225,225,225,0.2)',
+    backgroundColor: '#d1d1d1',
     color: 'black',
     marginBottom: 10,
     padding: 10,

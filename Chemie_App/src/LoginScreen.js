@@ -2,14 +2,15 @@ import React from 'react';
 import {View, Text, Image, StyleSheet,TouchableOpacity, KeyboardAvoidingView} from 'react-native';
 
 import LoginForm from './LoginForm'
+
 export default class LoginScreen extends React.Component{
-
+  static navigationOptions = {
+    title: 'Login',
+    header: null,
+  };
   render(){
-    const { navigate } = this.props.navigation;
     return (
-
-      <KeyboardAvoidingView behavior="padding" style={styles.container}>
-
+      <KeyboardAvoidingView style={styles.container} behavior='padding'>
         <View style={styles.loginContainer}>
           <Image
             resizeMode='contain'
@@ -20,7 +21,7 @@ export default class LoginScreen extends React.Component{
           <LoginForm navigation={this.props.navigation}/>
         </View>
       </KeyboardAvoidingView>
-      );
+        );
   }
 }
 

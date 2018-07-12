@@ -6,17 +6,14 @@ export default class splashscreen extends React.Component{
   constructor(props){
     super(props)
   }
-
-
-
   static navigationOptions = {
     title: 'Splash',
     header: null,
   };
   componentWillMount(){
-    setInterval(()=>{
-      this.props.navigation.navigate('Login');
-    },2000);
+    //setInterval(()=>{
+      //this.props.navigation.navigate('Login');
+    //},2000);
   }
   render(){
     return (
@@ -25,10 +22,13 @@ export default class splashscreen extends React.Component{
           <Image
             resizeMode='contain'
             style={styles.logo}
-            source={require('./hclogo.png')} />
+            source={require('./hclogo.png')}
+          />
+          <Text onPress={()=>this.props.navigation.navigate('Login')}>Press</Text>
         </View>
 
-    </View>
+
+      </View>
       );
   }
 }
@@ -45,8 +45,8 @@ const styles = StyleSheet.create({
     },
     logo: {
 
-        width: 300,
-        height: 150
+        width: 150,
+        height: 75
     },
 
 });
