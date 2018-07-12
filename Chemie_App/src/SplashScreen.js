@@ -22,7 +22,7 @@ export default class splashscreen extends React.Component{
           <Image
             resizeMode='contain'
             style={styles.logo}
-            source={require('./hclogo.png')}
+            source={require('./images/hclogo.png')}
           />
           <Text onPress={()=>this.props.navigation.navigate('Login')}>Press</Text>
         </View>

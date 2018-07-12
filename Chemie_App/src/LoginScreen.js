@@ -15,7 +15,7 @@ export default class LoginScreen extends React.Component{
           <Image
             resizeMode='contain'
             style={styles.logo}
-            source={require('./hclogo.png')} />
+            source={require('./images/hclogo.png')} />
         </View>
         <View style={styles.formConatiner}>
           <LoginForm navigation={this.props.navigation}/>

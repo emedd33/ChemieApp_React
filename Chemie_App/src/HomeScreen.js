@@ -1,8 +1,6 @@
 import React from 'react';
 import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
 
-import SladderForm from './SladderForm';
-
 
 
 export default class HomeScreen extends React.Component{
@@ -12,10 +10,12 @@ export default class HomeScreen extends React.Component{
   };
   render(){
     return (
-      <View style={styles.container}>
+
         <View style={styles.homeContainer}>
           <TouchableOpacity style={styles.navigationButtons}>
-            <Text>Sladreboks</Text>
+            <Text
+              onPress={()=>this.props.navigation.navigate('Sladder')}
+            >Sladreboks</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.navigationButtons}>
@@ -29,21 +29,25 @@ export default class HomeScreen extends React.Component{
           <TouchableOpacity style={styles.navigationButtons}>
             <Text>Events</Text>
           </TouchableOpacity>
-        </View>
+
       </View>
     );
   }
 }
 const styles = StyleSheet.create({
-          container:{
-            flex:1
-    },
-    navigationButtons:{
+    container:{
 
     },
     homeContainer:{
-      alignItems: 'center',
-      flexGrow: 1,
-      justifyContent: 'center'
+        margin:20,
+        marginTop:100,
+        flex: 1,
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        alignItems: 'center'
+        },
+    navigationButtons:{
+      width:'30%',
+      margin: 20,
     },
 });

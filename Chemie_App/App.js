@@ -7,6 +7,7 @@ import {createStackNavigator} from 'react-navigation';
 import LoginScreen from './src/LoginScreen';
 import HomeScreen from './src/HomeScreen';
 import SplashScreen from './src/SplashScreen';
+import SladderScreen from './src/SladderScreen';
 import SettingsScreen from './src/SettingsScreen';
 
 export default class App extends React.Component {
@@ -20,10 +21,11 @@ export default class App extends React.Component {
 
 const ChemieApp = createStackNavigator({
     // TODO: Fix splash from from preventing navigation from login to home
+
     Splash:{screen: SplashScreen},
     Login:{screen: LoginScreen},
-
     Home:{screen: HomeScreen},
+    Sladder:{screen:SladderScreen},
     Settings: {screen: SettingsScreen},
 
 
