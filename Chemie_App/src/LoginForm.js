@@ -5,26 +5,57 @@ import {createStackNavigator} from 'react-navigation';
 
 //{/*() => {this.props.navigation.navigate('Home')}*/}
 
+const fetch_url = 'http://192.168.0.17:8000/api/api-auth/';
+
 export default class LoginForm extends React.Component {
 
   constructor(props){
     super(props);
-    this.loginCheck = this.loginCheck.bind(this);
+    this.loginHTTPRequest = this.loginHTTPRequest.bind(this);
     this.state = {
       username: '',
       password:'',
+      respons:'',
+      error:null,
+      loading: false,
       }
     }
-  loginCheck(){
-    if (this.state.username == ''&& this.state.password == ''){
-        console.log('success');
-        //TODO: Add post request to get auth token
+    loginHTTPRequest(){
+      if(this.state.username == '' && this.state.password == ''){
+        this.setState({
+          loading:true,
+          });
+        //console.log(this.state.username + this.state.password);
+        fetch(fetch_url,{
+          method:'POST',
+          headers:{
+            Accept:'application/json',
+            'Content-Type':'application/json',
+          },
+          body: JSON.stringify({
+            username:'emedd33',
+            password:'123qweasd',
+          }),
+        })
 
-        this.props.navigation.navigate('Home');
-    } else{
-      console.log('failure');
+        .then((res)=>{
+          //TODO: extract token from respons
+          this.setState({
+            respons:res,
+            loading:false,
+          });
+          this.props.navigation.navigate('Home');
+        })
+        .catch((error) => {
+          console.log(error);
+          this.setState({
+            error:error,
+            loading:false,
+          });
+        });
+       }
     }
-  }
+
   render(){
 
     return (
@@ -50,10 +81,10 @@ export default class LoginForm extends React.Component {
         />
         <TouchableOpacity
           style={styles.buttonContainer}
+          onPress={this.loginHTTPRequest}
         >
           <Text
             style={styles.buttonText}
-            onPress={this.loginCheck}
           >
             LOGIN
           </Text>
@@ -82,6 +113,7 @@ const styles = StyleSheet.create({
     color: 'black',
     textAlign: 'center',
     fontWeight: '700',
+    marginBottom:20,
   }
 
 });

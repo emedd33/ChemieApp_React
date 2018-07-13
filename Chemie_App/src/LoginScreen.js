@@ -7,7 +7,7 @@ export default class LoginScreen extends React.Component{
   static navigationOptions = {
     title: 'Login',
     header: null,
-  };
+    };
   render(){
     return (
       <KeyboardAvoidingView style={styles.container} behavior='padding'>
