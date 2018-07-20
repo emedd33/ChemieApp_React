@@ -1,57 +1,86 @@
 import React from 'react';
-import {View,Text,Button, TextInput, TouchableOpacity, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  Button,
+  TextInput,
+  AsyncStorage,
+  TouchableOpacity,
+  StyleSheet
+} from 'react-native';
 
-
-const url_sladder = 'http://httpbin.org/ip';
-const url ='http://192.168.0.17:8000/bucketlists/';
-const url_GET ='http://httpbin.org/get';
-const url_POST = 'http://httpbin.org/post';
+const fetch_url = 'http://192.168.0.17:8000/api/sladreboks/submission/'
 
 export default class SladderForm extends React.Component{
 constructor(props){
     super(props);
     this.sendSladder = this.sendSladder.bind(this);
+    this.checkAuthToken = this.checkAuthToken.bind(this);
     this.state = {
       loading: false,
-      respons: null,
       error: null,
       refreshing: false,
-      fetch_url: 'http://192.168.0.17:8000/bucketlists/',
       sladderText: '',
+      token: 'token ',
     }
   }
+  checkAuthToken = async () => {
+    try {
+      console.log('Sladder checkAuthToken');
+      let token = await AsyncStorage.getItem('AuthToken');
 
+      // TODO: Find a better conditions to check if token is correct
+      if (token !== null && token.length > 20){
+          let tokenPlaceholder = this.state.token;
+          let newToken = tokenPlaceholder.concat(token);
+          this.setState({
+            access:true,
+            token:newToken,
+          })
+      }
+    } catch (error) {
+      alert(error);
+    }
+
+
+  }
+  componentWillMount(){
+    console.log('Sladder componentWillMount');
+    this.checkAuthToken();
+  }
   sendSladder(){
+    // TODO: add sendImage
     this.setState({
       loading:true
     });
     console.log(this.state.sladderText)
+    console.log(this.state.token);
     if(this.state.sladderText != ''){
-      fetch(url,{
+      fetch(fetch_url,{
         method:'POST',
         headers:{
-          Accept:'application/json',
-          'Content-Type':'application/json',
+          "Authorization": this.state.token,
+          Accept: "application/json",
+          "Content-Type":"application/json",
         },
         body: JSON.stringify({
-          name:this.state.sladderText,
+          content:this.state.sladderText,
         }),
       })
-
       .then((res)=>{
         console.log(res.status);
         res.json();
         this.setState({
           loading:false,
-          respons:201,
         });
       })
 
       .catch((error) => {
        this.setState({
-         error:error,
          loading : false });
+      alert(error);
      });
+
     }
   }
   render(){
@@ -87,20 +116,17 @@ const styles = StyleSheet.create(
       },
     sladderConatainer:{
       borderColor: 'black',
-        marginRight:10,
-        marginLeft:10,
-        marginTop:10,
         paddingTop:2,
         paddingBottom:2,
         borderRadius:10,
         borderWidth: 1,
+        height:150,
+        width:240,
     },
     input: {
-      height:120,
       backgroundColor: 'rgba(225,225,225,0.2)',
       color: 'black',
       marginBottom: 10,
-      padding: 10,
 
       /*TODO:This is only Android only, need IOS fix*/
       textAlignVertical: 'top',
@@ -108,8 +134,8 @@ const styles = StyleSheet.create(
 
     },
       submit:{
-        marginRight:40,
-        marginLeft:40,
+        marginRight:10,
+        marginLeft:10,
         marginTop:10,
         paddingTop:20,
         paddingBottom:20,

@@ -18,13 +18,13 @@ export default class splashscreen extends React.Component{
   };
   checkAuthToken = async () => {
     try {
-      console.log('checkAuthToken');
+      console.log('Splash checkAuthToken');
       let token = await AsyncStorage.getItem('AuthToken');
       // TODO: Find a better conditions to check if token is correct
       if (token !== null && token.length > 20){
-          console.log('true');
+
           this.setState({
-            firstScreen:'Home',
+            firstScreen:'Sladder',
             access:true,
           })
       }
@@ -35,7 +35,7 @@ export default class splashscreen extends React.Component{
 
   }
   componentWillMount(){
-    console.log('componentWillMount');
+    console.log('Splash componentWillMount');
     this.checkAuthToken();
   }
   componentDidMount(){
