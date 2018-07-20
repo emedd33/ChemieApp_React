@@ -6,6 +6,7 @@ export default class splashscreen extends React.Component{
   constructor(props){
     super(props)
     this.checkAuthToken = this.checkAuthToken.bind(this);
+    this.componentDidMount = this.componentDidMount.bind(this);
     this.state={
       access: false,
       firstScreen:'Login',
@@ -23,8 +24,8 @@ export default class splashscreen extends React.Component{
       if (token !== null && token.length > 20){
           console.log('true');
           this.setState({
-            access:true,
             firstScreen:'Home',
+            access:true,
           })
       }
     } catch (error) {
@@ -38,10 +39,12 @@ export default class splashscreen extends React.Component{
     this.checkAuthToken();
   }
   componentDidMount(){
-    setInterval(()=>{
-      console.log('componentDidMount');
+
+    // TODO: find better way to wait for checkAuthToken.
+    setTimeout(()=>{
       this.props.navigation.navigate(this.state.firstScreen);
-    },2000);
+    }, 2000);
+
   }
 
   render(){

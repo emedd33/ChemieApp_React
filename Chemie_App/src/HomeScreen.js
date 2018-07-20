@@ -12,25 +12,32 @@ export default class HomeScreen extends React.Component{
     return (
 
         <View style={styles.homeContainer}>
-          <TouchableOpacity style={styles.navigationButtons}>
+          <TouchableOpacity style={styles.submitContainer}>
             <Text
               onPress={()=>this.props.navigation.navigate('Sladder')}
+              style={styles.submitText}
             >Sladreboks</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.navigationButtons}>
-            <Text>Notification</Text>
+          <TouchableOpacity style={styles.submitContainer}>
+            <Text
+              style={styles.submitText}
+            >Notification</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.navigationButtons}>
-            <Text>Settings</Text>
+          <TouchableOpacity style={styles.submitContainer}>
+            <Text
+              style={styles.submitText}
+            >Settings</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.navigationButtons}>
-            <Text>Events</Text>
+          <TouchableOpacity style={styles.submitContainer}>
+            <Text
+              style={styles.submitText}
+            >Events</Text>
           </TouchableOpacity>
 
-      </View>
+        </View>
     );
   }
 }
@@ -47,7 +54,29 @@ const styles = StyleSheet.create({
         alignItems: 'center'
         },
     navigationButtons:{
-      width:'30%',
+      width:'35%',
+      height:'30%',
       margin: 20,
+      backgroundColor:'#c1d9ff',
+      alignItems:'center',
+      justifyContent:'center',
     },
+    submitContainer:{
+      margin:20,
+      width:'35%',
+      height:'30%',
+      paddingTop:20,
+      paddingBottom:20,
+      backgroundColor:'#F9CF00',
+      borderRadius:10,
+      borderWidth: 1,
+      borderColor: '#F9CF00',
+      alignItems:'center',
+    },
+    submitText:{
+      color:'black',
+      textAlign:'center',
+      justifyContent:'center',
+    },
+
 });

@@ -9,6 +9,9 @@ export default class SladderScreen extends React.Component{
     title: 'Sladder',
     header: null,
   };
+  componentDidMount(){
+    console.log('componentDidMount');
+  }
   render(){
     return (
       <View style={styles.container}>
