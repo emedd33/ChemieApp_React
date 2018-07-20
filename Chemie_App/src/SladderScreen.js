@@ -10,7 +10,7 @@ export default class SladderScreen extends React.Component{
     header: null,
   };
   componentDidMount(){
-    console.log('componentDidMount');
+    console.log('SladderScreen componentDidMount');
   }
   render(){
     return (

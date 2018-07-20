@@ -6,8 +6,10 @@ import {
   TextInput,
   AsyncStorage,
   TouchableOpacity,
-  StyleSheet
+  StyleSheet,
+  Alert,
 } from 'react-native';
+
 
 const fetch_url = 'http://192.168.0.17:8000/api/sladreboks/submission/'
 
@@ -26,7 +28,7 @@ constructor(props){
   }
   checkAuthToken = async () => {
     try {
-      console.log('Sladder checkAuthToken');
+      console.log('SladderForm checkAuthToken');
       let token = await AsyncStorage.getItem('AuthToken');
 
       // TODO: Find a better conditions to check if token is correct
@@ -45,11 +47,18 @@ constructor(props){
 
   }
   componentWillMount(){
-    console.log('Sladder componentWillMount');
+    console.log('SladderForm componentWillMount');
     this.checkAuthToken();
   }
+  componentDidMount(){
+    console.log('SladderForm componentDidMount');
+  }
   sendSladder(){
+
+
+
     // TODO: add sendImage
+
     this.setState({
       loading:true
     });
@@ -73,15 +82,23 @@ constructor(props){
         this.setState({
           loading:false,
         });
+        if (res.status < 300 && res.status >= 200){
+          Alert.alert("Sladder sent!", "Sugerpumpa takker deg");
+          this.textInput.clear();
+        } else {
+          throw res.status;
+        }
       })
 
       .catch((error) => {
        this.setState({
          loading : false });
-      alert(error);
+      Alert.alert(
+        "Noe gikk galt",
+        error);
      });
 
-    }
+   }
   }
   render(){
     return(
@@ -89,21 +106,27 @@ constructor(props){
         <View style={styles.sladderConatainer}>
           <TextInput
             style={styles.input}
+
             /*TODO: Må fjernes i IOS*/
             underlineColorAndroid="transparent"
+
+            ref={input => { this.textInput = input }}
             autoCapitalize = 'sentences'
             autoCorrect={true}
             returnKeyType='go'
             placeholder = 'Skriv inn sladder'
             onChangeText={(text)=> this.setState({sladderText:text})}
           />
+
         </View>
-        <TouchableOpacity style={styles.submit} onPress={this.sendSladder  }>
+        <TouchableOpacity
+          style={styles.submit}
+          onPress={this.sendSladder}
+        >
           <Text style={styles.submitText}>
             Send Sladder
           </Text>
         </TouchableOpacity>
-
       </View>
     );
   }
@@ -139,13 +162,13 @@ const styles = StyleSheet.create(
         marginTop:10,
         paddingTop:20,
         paddingBottom:20,
-        backgroundColor:'#68a0cf',
+        backgroundColor:'#F9CF00',
         borderRadius:10,
         borderWidth: 1,
-        borderColor: 'white'
+        borderColor: '#F9CF00',
       },
       submitText:{
-        color:'#fff',
+        color:'#000',
         textAlign:'center',
       },
   }

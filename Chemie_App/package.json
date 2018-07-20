@@ -24,6 +24,7 @@
     "node-fetch": "^2.1.2",
     "react": "16.3.1",
     "react-native": "~0.55.2",
+    "react-native-easy-toast": "^1.1.0",
     "react-native-progress": "^3.5.0",
     "react-navigation": "^2.6.1"
   }
