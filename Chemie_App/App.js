@@ -18,9 +18,11 @@ export default class App extends React.Component {
   }
 }
 
+// TODO: Fix splash from from preventing navigation from login to home
+// TODO: remove navigation from home to login or loging to splash with back arrow
 
 const ChemieApp = createStackNavigator({
-    // TODO: Fix splash from from preventing navigation from login to home
+
 
     Splash:{screen: SplashScreen},
     Login:{screen: LoginScreen},

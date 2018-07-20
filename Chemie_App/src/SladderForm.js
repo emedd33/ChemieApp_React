@@ -69,7 +69,7 @@ constructor(props){
             onChangeText={(text)=> this.setState({sladderText:text})}
           />
         </View>
-          <TouchableOpacity style={styles.submit} onPress={this.sendSladder  }>
+        <TouchableOpacity style={styles.submit} onPress={this.sendSladder  }>
           <Text style={styles.submitText}>
             Send Sladder
           </Text>
@@ -101,8 +101,10 @@ const styles = StyleSheet.create(
       color: 'black',
       marginBottom: 10,
       padding: 10,
-      textAlignVertical: 'top',
+
       /*TODO:This is only Android only, need IOS fix*/
+      textAlignVertical: 'top',
+
 
     },
       submit:{

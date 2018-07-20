@@ -1,20 +1,52 @@
 import React from 'react';
-import {View, Text, Image, StyleSheet, KeyboardAvoidingView} from 'react-native';
+import {View, Text, Image, StyleSheet,AsyncStorage, KeyboardAvoidingView} from 'react-native';
 
 
 export default class splashscreen extends React.Component{
   constructor(props){
     super(props)
+    this.checkAuthToken = this.checkAuthToken.bind(this);
+    this.state={
+      access: false,
+      firstScreen:'Login',
+    }
   }
   static navigationOptions = {
     title: 'Splash',
     header: null,
   };
-  componentWillMount(){
-    //setInterval(()=>{
-      //this.props.navigation.navigate('Login');
-    //},2000);
+  checkAuthToken = async () => {
+    try {
+      console.log('checkAuthToken');
+
+      isToken = false;
+      AsyncStorage.clear();
+      let token = await AsyncStorage.getItem('AuthToken');
+      // TODO: Find a better conditions to check if token is correct
+      if (token !== null && token.length > 20){
+          console.log('true');
+          this.setState({
+            access:true,
+            firstScreen:'Home',
+          })
+      }
+    } catch (error) {
+      alert(error);
+    }
+
+
   }
+  componentWillMount(){
+    console.log('componentWillMount');
+    this.checkAuthToken();
+  }
+  componentDidMount(){
+    setInterval(()=>{
+      console.log('componentDidMount');
+      this.props.navigation.navigate(this.state.firstScreen);
+    },2000);
+  }
+
   render(){
     return (
       <View style={styles.container}>
@@ -24,7 +56,7 @@ export default class splashscreen extends React.Component{
             style={styles.logo}
             source={require('./images/hclogo.png')}
           />
-          <Text onPress={()=>this.props.navigation.navigate('Login')}>Press</Text>
+          <Text onPress={this.splashPress}>Press</Text>
         </View>
 
 
