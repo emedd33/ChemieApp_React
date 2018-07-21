@@ -15,21 +15,29 @@ export default class SladderScreen extends React.Component{
   render(){
     return (
       <View style={styles.container}>
-        <KeyboardAvoidingView style={styles.sladderConatainer} behavior='padding'>
-          <Text>Sladder Screen</Text>
-          <SladderForm/>
-        </KeyboardAvoidingView>
+        <View style={styles.titleContainer}>
+          <Text style={styles.titleText}>
+            SladderScreen
+          </Text>
+        </View>
+        <SladderForm/>
       </View>
     );
   }
 }
 const styles = StyleSheet.create({
     container:{
-      flex:1
+      flex:1,
+      alignItems: 'stretch',
+      justifyContent: 'center',
     },
-    sladderConatainer:{
-      alignItems: 'center',
-      flexGrow: 1,
-      justifyContent: 'center'
-    }
+    titleContainer:{
+      backgroundColor: 'powderblue',
+      flex: 1,
+      alignItems:'center',
+      justifyContent: 'center',
+    },
+    titleText:{
+
+    },
 });
