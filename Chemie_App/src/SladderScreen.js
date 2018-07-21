@@ -17,7 +17,8 @@ export default class SladderScreen extends React.Component{
       <View style={styles.container}>
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>
-            SladderScreen
+            Send gjerne inn sitater, rykter eller tilbakemeldinger til Sugepumpa.
+            {"\n"}For spørsmål kontakt Sugepumpa@hch.ntnu.no
           </Text>
         </View>
         <SladderForm/>
@@ -32,10 +33,10 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
     },
     titleContainer:{
-      backgroundColor: 'powderblue',
       flex: 1,
       alignItems:'center',
       justifyContent: 'center',
+      margin:10,
     },
     titleText:{
 

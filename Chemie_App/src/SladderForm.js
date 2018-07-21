@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 
 
-const fetch_url = 'http://192.168.0.17:8000/api/sladreboks/submission/'
+const fetch_url = "http://192.168.0.17:8000/api/sladreboks/submission/"
 
 export default class SladderForm extends React.Component{
 constructor(props){
@@ -63,8 +63,7 @@ constructor(props){
     this.setState({
       loading:true
     });
-    console.log(this.state.sladderText)
-    console.log(this.state.token);
+
     if(this.state.sladderText != ''){
       fetch(fetch_url,{
         method:'POST',
@@ -78,14 +77,12 @@ constructor(props){
         }),
       })
       .then((res)=>{
-        console.log(res.status);
-        res.json();
         this.setState({
           loading:false,
         });
         if (res.status < 300 && res.status >= 200){
-          Alert.alert("Sladder sent!", "Sugerpumpa takker deg");
           this.textInput.clear();
+          Alert.alert("Sladder sent!", "Sugerpumpa takker deg");
         } else {
           throw res.status;
         }
@@ -115,6 +112,7 @@ constructor(props){
           autoCapitalize = 'sentences'
           returnKeyType='go'
           placeholder = 'Skriv inn sladder'
+          ref={input => { this.textInput = input }}
           onChangeText={(text)=> this.setState({sladderText:text})}
           underlineColorAndroid="transparent"
         >
@@ -124,7 +122,7 @@ constructor(props){
           onPress={this.sendSladder}
         >
           <Text>
-            Send Sladder
+            Send
           </Text>
         </TouchableOpacity>
 
@@ -138,17 +136,17 @@ const styles = StyleSheet.create({
     container:{
       flex: 3,
       alignItems:'center',
-      justifyContent: 'center',
       },
     sladderInput:{
       alignSelf: 'stretch',
       backgroundColor:'white',
       height:150,
-      margin:20,
       textAlignVertical: 'top',
       padding:5,
       borderRadius:10,
       borderWidth: 1,
+      margin:10,
+      marginBottom:20,
     },
     sladderSubmit:{
       backgroundColor:'white',
