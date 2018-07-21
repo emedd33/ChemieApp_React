@@ -1,5 +1,12 @@
 import React from 'react';
-import {View, Text, Image, StyleSheet, TouchableOpacity, KeyboardAvoidingView} from 'react-native';
+import {View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  BackHandler,
+} from 'react-native';
 
 import SladderForm from './SladderForm';
 
@@ -7,11 +14,8 @@ import SladderForm from './SladderForm';
 export default class SladderScreen extends React.Component{
   static navigationOptions = {
     title: 'Sladder',
-    header: null,
-  };
-  componentDidMount(){
-    console.log('SladderScreen componentDidMount');
-  }
+    };
+  
   render(){
     return (
       <View style={styles.container}>

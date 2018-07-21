@@ -35,5 +35,5 @@ const ChemieApp = createStackNavigator({
 
 
   },{
-    headerMode: 'none'
+    //headerMode: 'none'
 });

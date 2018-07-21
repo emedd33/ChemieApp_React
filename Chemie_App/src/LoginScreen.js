@@ -1,5 +1,12 @@
 import React from 'react';
-import {View, Text, Image, StyleSheet,TouchableOpacity, KeyboardAvoidingView} from 'react-native';
+import {View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  BackHandler,
+} from 'react-native';
 
 import LoginForm from './LoginForm'
 
@@ -8,6 +15,12 @@ export default class LoginScreen extends React.Component{
     title: 'Login',
     header: null,
     };
+  componentDidMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+  }
+  handleBackButton() {
+        return true;
+  }
   render(){
     return (
       <KeyboardAvoidingView style={styles.container} behavior='padding'>

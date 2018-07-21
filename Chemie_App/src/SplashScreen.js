@@ -8,7 +8,6 @@ export default class splashscreen extends React.Component{
     this.checkAuthToken = this.checkAuthToken.bind(this);
     this.componentDidMount = this.componentDidMount.bind(this);
     this.state={
-      access: false,
       firstScreen:'Login',
     }
   }
@@ -24,9 +23,8 @@ export default class splashscreen extends React.Component{
       if (token !== null && token.length > 20){
 
           this.setState({
-            firstScreen:'Sladder',
-            access:true,
-          })
+            firstScreen:'Home',
+          });
       }
     } catch (error) {
       alert(error);

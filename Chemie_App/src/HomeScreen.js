@@ -1,20 +1,36 @@
 import React from 'react';
-import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
+import {View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  BackHandler,
+  ToastAndroid,
+} from 'react-native';
 
 
 
 export default class HomeScreen extends React.Component{
   static navigationOptions = {
     title: 'Home',
-    header: null,
+    headerLeft: null
   };
+  componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+  }
+  handleBackButton() {
+    return true;
+  }
+
   render(){
     return (
 
         <View style={styles.homeContainer}>
-          <TouchableOpacity style={styles.submitContainer}>
+          <TouchableOpacity
+            style={styles.submitContainer}
+            onPress={()=>this.props.navigation.navigate('Sladder')}
+          >
             <Text
-              onPress={()=>this.props.navigation.navigate('Sladder')}
               style={styles.submitText}
             >Sladreboks</Text>
           </TouchableOpacity>
