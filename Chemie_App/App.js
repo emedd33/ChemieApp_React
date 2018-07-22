@@ -4,11 +4,14 @@ import {Expo, Asset, AppLoading} from 'expo';
 import {createStackNavigator} from 'react-navigation';
 
 
-import LoginScreen from './src/LoginScreen';
+import LoginScreen from './src/Login/LoginScreen';
+
+import SplashScreen from './src/Splash/SplashScreen';
+
 import HomeScreen from './src/HomeScreen';
-import SplashScreen from './src/SplashScreen';
-import SladderScreen from './src/SladderScreen';
-import SettingsScreen from './src/SettingsScreen';
+
+import SladderScreen from './src/Sladder/SladderScreen';
+import SettingsScreen from './src/Settings/SettingsScreen';
 
 export default class App extends React.Component {
   render(){

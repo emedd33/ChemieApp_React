@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 
 import {createStackNavigator} from 'react-navigation';
-import TokenFunctions from './Functions/Tokens';
+
 
 
 const fetch_url = 'http://192.168.0.17:8000/api/api-auth/';

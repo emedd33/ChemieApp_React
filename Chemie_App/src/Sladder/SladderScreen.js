@@ -14,15 +14,18 @@ import SladderForm from './SladderForm';
 export default class SladderScreen extends React.Component{
   static navigationOptions = {
     title: 'Sladder',
+    headerStyle: {
+      backgroundColor: '#F9CF00'
+    },
     };
-  
+
   render(){
     return (
       <View style={styles.container}>
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>
             Send gjerne inn sitater, rykter eller tilbakemeldinger til Sugepumpa.
-            {"\n"}For spørsmål kontakt Sugepumpa@hch.ntnu.no
+            {"\n"}For spørsmål kontakt Sugepumpa@hc.ntnu.no
           </Text>
         </View>
         <SladderForm/>

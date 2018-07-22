@@ -13,7 +13,10 @@ import {View,
 export default class HomeScreen extends React.Component{
   static navigationOptions = {
     title: 'Home',
-    headerLeft: null
+    headerLeft: null,
+    headerStyle: {
+      backgroundColor: '#F9CF00'
+    },
   };
   componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
