@@ -39,36 +39,43 @@ export default class HomeScreen extends React.Component{
             style={styles.submitContainer}
             onPress={()=>this.props.navigation.navigate('Sladder')}
           >
-            <Text
-              style={styles.submitText}
-            >Sladreboks</Text>
+            <Image
+              resizeMode='contain'
+              style={styles.SladderLogo}
+              source={require('./Gossip_icon.png')}
+            />
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.submitContainer}
             onPress={()=>this.props.navigation.navigate('Notification')}
           >
-            <Text
-              style={styles.submitText}
-            >Notification</Text>
+            <Image
+              resizeMode='contain'
+              style={styles.SladderLogo}
+              source={require('./Coffee_icon.png')}
+            />
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.submitContainer}
             onPress={()=>this.props.navigation.navigate('Settings')}
-          >
-            <Text
-              style={styles.submitText}
-            >Settings</Text>
+          ><Image
+            resizeMode='contain'
+            style={styles.SladderLogo}
+            source={require('./Settings_icon.png')}
+           />
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.submitContainer}
             onPress={()=>this.props.navigation.navigate('Events')}
           >
-            <Text
-              style={styles.submitText}
-            >Events</Text>
+            <Image
+              resizeMode='contain'
+              style={styles.SladderLogo}
+              source={require('./Party_icon.png')}
+            />
           </TouchableOpacity>
 
         </View>
@@ -115,5 +122,9 @@ const styles = StyleSheet.create({
       textAlign:'center',
       justifyContent:'center',
     },
+    SladderLogo:{
+      width:100,
+      height:100,
+    }
 
 });
