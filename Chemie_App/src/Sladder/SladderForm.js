@@ -114,6 +114,8 @@ constructor(props){
           placeholder = 'Skriv inn sladder'
           ref={input => { this.textInput = input }}
           onChangeText={(text)=> this.setState({sladderText:text})}
+
+          // TODO: Andriod only, must check IOS
           underlineColorAndroid="transparent"
         >
         </TextInput>
@@ -149,56 +151,16 @@ const styles = StyleSheet.create({
       marginBottom:20,
     },
     sladderSubmit:{
-      backgroundColor:'white',
+      backgroundColor:'#F9CF00',
       alignSelf: 'stretch',
       height:50,
       marginLeft:50,
       marginRight:50,
       borderRadius:10,
       borderWidth: 1,
+      borderColor:'#d1d1d1',
       alignItems:'center',
       justifyContent: 'center',
     }
 
 });
-    /*
-        paddingTop:2,
-        paddingBottom:2,
-        borderRadius:10,
-        borderWidth: 1,
-        height:150,
-        width:40,
-        flexGrow: 1,
-
-    },
-    input: {
-      backgroundColor: 'rgba(225,225,225,0.2)',
-      flex:1,
-      /*
-      color: 'black',
-      marginBottom: 10,
-
-      //TODO:This is only Android only, need IOS fix
-      textAlignVertical: 'top',
-
-
-
-    },
-      submit:{
-        backgroundColor:'#F9CF00',
-        flex:1,
-        /*
-        marginRight:10,
-        marginLeft:10,
-        marginTop:10,
-        paddingTop:20,
-        paddingBottom:20,
-
-        borderRadius:10,
-        borderWidth: 1,
-        borderColor: '#F9CF00',
-
-      },
-      submitText:{
-        /*color:'#000',
-        textAlign:'center',*/

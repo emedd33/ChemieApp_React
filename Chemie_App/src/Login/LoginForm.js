@@ -6,6 +6,8 @@ import {
   AsyncStorage,
   TouchableOpacity,
   StyleSheet,
+  Alert,
+  KeyboardAvoidingView,
 } from 'react-native';
 
 import {createStackNavigator} from 'react-navigation';
@@ -47,6 +49,7 @@ export default class LoginForm extends React.Component {
             credentials: 'same-origin',
             mode: 'same-origin',
           },
+          timeout: 2000,
           body: JSON.stringify({
             username:'emedd33',
             password:'123qweasd',
@@ -58,19 +61,20 @@ export default class LoginForm extends React.Component {
         if (response.status >= 200 && response.status < 300) {
           // TODO:  Extract token from respons and store it with AsyncStorr
 
-
           console.log(response);
           AsyncStorage.setItem('AuthToken', 'e35e316a74d8d8833f4174189af183e70958ec30');
-          }
-        })
-        .then((response)=>{
           this.props.navigation.navigate('Home');
+        } else if (response.status == 400) {
+          Alert.alert("Ups!","Feil brukernavn eller passord");
+        } else {
+          throw response.status
+        }
         })
         .catch((error) => {
           this.setState({
             loading:false,
           });
-          alert(error);
+          Alert.alert("Ups! Feil ved innlogging","Det har skjedd en feil med feilmelding: " + error);
         });
        }
 
@@ -80,69 +84,76 @@ export default class LoginForm extends React.Component {
   render(){
 
     return (
-      <View style={styles.container}>
+      <KeyboardAvoidingView style={styles.container} behavior="padding">
 
-        <TextInput
-          style={styles.input}
-          autoCapitalize = 'none'
-          autoCorrect={false}
-          returnKeyType='next'
-          placeholder = 'Username'
-          placeholderTextColor="#707070"
-          onChangeText={(text)=> this.setState({username:text})}
-        />
-        <TextInput
-          style={styles.input}
-          autoCapitalize = 'none'
-          autoCorrect={false}
-          returnKeyType='go'
-          placeholder = 'Password'
-          placeholderTextColor="#707070"
-          secureTextEntry
-          onChangeText={(text)=> this.setState({password:text})}
-        />
-        <TouchableOpacity
-          style={styles.submitContainer}
-          onPress={this.loginHTTPRequest}
-        >
-          <Text
-            style={styles.submitText}
+        <View style={styles.loginFormContainer}>
+          <TextInput
+            style={styles.input}
+            autoCapitalize = 'none'
+            autoCorrect={false}
+            returnKeyType='next'
+            placeholder = 'Username'
+            placeholderTextColor="#707070"
+            underlineColorAndroid="transparent"
+            onChangeText={(text)=> this.setState({username:text})}
+          />
+          <TextInput
+            style={styles.input}
+            autoCapitalize = 'none'
+            autoCorrect={false}
+            returnKeyType='go'
+            placeholder = 'Password'
+            placeholderTextColor="#707070"
+            secureTextEntry
+            underlineColorAndroid="transparent"
+            onChangeText={(text)=> this.setState({password:text})}
+          />
+          <TouchableOpacity
+            style={styles.submitContainer}
+            onPress={this.loginHTTPRequest}
           >
-            LOGIN
-          </Text>
-
-        </TouchableOpacity>
-
-      </View>
-    );
+            <Text style={styles.submitText}>
+              Login
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </KeyboardAvoidingView>
+      );
   }
 }
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
+    flex:1
     },
-  input: {
-    height:60,
-    backgroundColor: '#d1d1d1',
-    color: 'black',
-    marginBottom: 10,
-    padding: 10,
-  },
-  submitContainer:{
-    marginRight:20,
-    marginLeft:20,
-    marginTop:10,
-    marginBottom:10,
-    paddingTop:20,
-    paddingBottom:20,
-    backgroundColor:'#F9CF00',
-    borderRadius:10,
-    borderWidth: 1,
-    borderColor: '#F9CF00',
-  },
-  submitText:{
-    color:'black',
-    textAlign:'center',
-  },
+    loginFormContainer:{
+      flex:1,
 
+    },
+    input: {
+      height:50,
+      backgroundColor: '#d1d1d1',
+      color: 'black',
+      marginTop: 10,
+      marginLeft:10,
+      marginRight:10,
+      padding: 10,
+      borderRadius:10,
+      borderWidth: 1,
+      borderColor:'#d1d1d1',
+    },
+    submitContainer:{
+      marginRight:20,
+      marginLeft:20,
+      marginTop:10,
+      paddingTop:20,
+      paddingBottom:20,
+      backgroundColor:'#F9CF00',
+      borderRadius:10,
+      borderWidth: 1,
+      borderColor: '#F9CF00',
+    },
+    submitText:{
+      color:'black',
+      textAlign:'center',
+    },
 });

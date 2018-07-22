@@ -23,18 +23,19 @@ export default class LoginScreen extends React.Component{
   }
   render(){
     return (
-      <KeyboardAvoidingView style={styles.container} behavior='padding'>
-        <View style={styles.loginContainer}>
+      <View
+        style={styles.container}
+      >
+        <View style={styles.loginImageContainer}>
           <Image
             resizeMode='contain'
             style={styles.logo}
             source={require('./images/hclogo.png')} />
+
         </View>
-        <View style={styles.formConatiner}>
-          <LoginForm navigation={this.props.navigation}/>
-        </View>
-      </KeyboardAvoidingView>
-        );
+        <LoginForm navigation={this.props.navigation}/>
+      </View>
+    );
   }
 }
 
@@ -42,14 +43,17 @@ const styles = StyleSheet.create({
     container:{
       flex:1
     },
-    buttonContainer:{
-      backgroundColor:'#F9CF00',
-      paddingVertical: 15,
-      },
-    loginContainer:{
+    loginImageContainer:{
         alignItems: 'center',
-        flexGrow: 1,
-        justifyContent: 'center'
+        flex: 0.7,
+        justifyContent: 'center',
+
+    },
+    logingHelpContainer:{
+      flex:0.5,
+      backgroundColor:"steelblue",
+      justifyContent: 'center',
+      alignItems: 'center',
     },
     logo: {
         width: 300,
