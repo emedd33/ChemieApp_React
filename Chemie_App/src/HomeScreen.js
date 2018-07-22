@@ -17,6 +17,12 @@ export default class HomeScreen extends React.Component{
     headerStyle: {
       backgroundColor: '#F9CF00'
     },
+    headerTitle: (
+      <Image
+        source={require('./hclogo_headerIcon.png')}
+        style={{width:50, height:50, marginLeft:10}}
+      />
+  ),
   };
   componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
@@ -71,7 +77,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'wrap',
         alignItems: 'center'
-        },
+    },
+    headerImage:{
+
+    },
     navigationButtons:{
       width:'35%',
       height:'30%',
