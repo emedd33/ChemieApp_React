@@ -4,15 +4,20 @@ import { StyleSheet, Text, View } from 'react-native';
 export default class LoginScreen extends React.Component{
   static navigationOptions = {
     title: 'Settings',
-    header: null,
+    headerStyle: {
+      backgroundColor: '#F9CF00'
+    },
   };
-
   render(){
     return (
-      <View>
-        <Text>hhh</Text>
-        <Text onPress={(()=>this.props.navigation.navigate('Login'))}>press</Text>
+      <View style={styles.container}>
+        <Text>SettingsScreen</Text>
       </View>
     );
   }
 }
+const styles = StyleSheet.create({
+  container:{
+    flex:1,
+  },
+});

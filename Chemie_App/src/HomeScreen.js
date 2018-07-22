@@ -44,19 +44,28 @@ export default class HomeScreen extends React.Component{
             >Sladreboks</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.submitContainer}>
+          <TouchableOpacity
+            style={styles.submitContainer}
+            onPress={()=>this.props.navigation.navigate('Notification')}
+          >
             <Text
               style={styles.submitText}
             >Notification</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.submitContainer}>
+          <TouchableOpacity
+            style={styles.submitContainer}
+            onPress={()=>this.props.navigation.navigate('Settings')}
+          >
             <Text
               style={styles.submitText}
             >Settings</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.submitContainer}>
+          <TouchableOpacity
+            style={styles.submitContainer}
+            onPress={()=>this.props.navigation.navigate('Events')}
+          >
             <Text
               style={styles.submitText}
             >Events</Text>
