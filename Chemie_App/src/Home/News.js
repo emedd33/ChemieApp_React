@@ -8,8 +8,11 @@ import {
   View,
   ScrollView,
   AsyncStorage,
+  Dimensions,
+  Image
 } from 'react-native';
 
+import HTML from 'react-native-render-html';
 const fetch_url = "http://192.168.1.101:8000/api/news/articles/";
 
 export default class News extends React.Component{
@@ -82,18 +85,25 @@ render(){
   }
   return(
     <ScrollView style={styles.container}>
+      <View style={styles.newsContainer}>
+        {
+          this.state.articles.map(( item, key ) =>
+            (
+              <View key = { key } style = { styles.item }>
+                <Text style = { styles.titleText }>{ item.title }</Text>
+                <Image
+                  resizeMode='contain'
+                  style={styles.newsImage}
+                  source={{uri:item.image}} />
+                <HTML style={styles.contentText} html={item.content} imagesMaxWidth={Dimensions.get('window').width} />
 
-      {
-        this.state.articles.map(( item, key ) =>
-          (
-            <View key = { key } style = { styles.item }>
-              <Text style = { styles.text }>{ item.title }</Text>
-              <Text style = { styles.text }>{ item.content }</Text>
 
-              <View style = { styles.separator }/>
-            </View>
-          ))
-      }
+                <View style = { styles.newsSeparator }/>
+              </View>
+            ))
+        }
+      </View>
+
     </ScrollView>
     );
   }
@@ -105,9 +115,27 @@ const styles = StyleSheet.create({
     flex:3,
   },
   loadingContainer:{
+    marginTop:50,
+  },
+  newsContainer:{
     justifyContent:'center',
     alignItems:'center',
-    marginTop:50,
+  },
+  titleText:{
+    fontSize:40,
+    marginLeft:10
+  },
+  contentText:{
+
+  },
+  newsImage:{
+    width:150,
+    height:150,
+    marginLeft:20
+  },
+  newsSeparator:{
+    height:20,
   }
+
 
 });

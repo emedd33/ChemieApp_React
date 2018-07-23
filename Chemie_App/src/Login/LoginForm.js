@@ -12,7 +12,7 @@ import {
 
 import {createStackNavigator} from 'react-navigation';
 
-
+import * as Progress from 'react-native-progress';
 
 const fetch_url = 'http://192.168.1.101:8000/api/api-auth/';
 
@@ -24,7 +24,7 @@ export default class LoginForm extends React.Component {
     this.state = {
       username: '',
       password:'',
-      status: null,
+      httpStatus: null,
       loading: false,
       }
     }
@@ -57,31 +57,30 @@ export default class LoginForm extends React.Component {
 
         .then((response)=>{
           this.setState({
-            status:response.status,
+            httpStatus:response.status,
           })
           return response.text()
         })
         .then((responseJson)  => {
 
-          if (this.state.status >= 200 && this.state.status < 300) {
-            //let token = responseJson.token[10:-2;
+          if (this.state.httpStatus >= 200 && this.state.httpStatus < 300) {
+
             let tokenObject = JSON.parse(responseJson)
             let token = "token " + tokenObject.token
 
-
             AsyncStorage.setItem('AuthToken', token);
             this.props.navigation.navigate('Home');
-          } else if (this.state.status == 400) {
+          } else if (this.state.httpStatus == 400) {
             Alert.alert("Ups!","Feil brukernavn eller passord");
           } else {
-            throw this.state.status
+            throw this.state.httpStatus
           }
         })
         .catch((error) => {
-          this.setState({
-            loading:false,
-          });
           Alert.alert("Ups! Feil ved innlogging","Det har skjedd en feil med feilmelding: " + error);
+        });
+        this.setState({
+          loading:false,
         });
        }
 
@@ -89,7 +88,14 @@ export default class LoginForm extends React.Component {
 
 
   render(){
-
+    while(this.state.loading){
+      // TODO: This needs to be chacked to IOS, https://github.com/oblador/react-native-progress
+      return(
+        <View style={styles.loadingContainer}>
+          <Progress.Circle size={80} indeterminate={true} color="black" />
+        </View>
+      );
+    }
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding">
 
@@ -169,4 +175,9 @@ const styles = StyleSheet.create({
       color:'black',
       textAlign:'center',
     },
+    loadingContainer:{
+      justifyContent:'center',
+      alignItems:'center',
+      marginTop:50,
+    }
 });
