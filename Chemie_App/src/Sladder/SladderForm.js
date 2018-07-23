@@ -1,4 +1,6 @@
 import React from 'react';
+import * as Progress from 'react-native-progress';
+
 import {
   View,
   Text,
@@ -12,7 +14,7 @@ import {
 } from 'react-native';
 
 
-const fetch_url = "http://192.168.0.17:8000/api/sladreboks/submission/"
+const fetch_url = "http://192.168.1.101:8000/api/sladreboks/submission/"
 
 export default class SladderForm extends React.Component{
 constructor(props){
@@ -21,26 +23,25 @@ constructor(props){
     this.checkAuthToken = this.checkAuthToken.bind(this);
     this.state = {
       loading: false,
-      error: null,
-      refreshing: false,
       sladderText: '',
-      token: 'token ',
+      AuthToken: 'token ',
+      httpStatus: null,
     }
   }
   checkAuthToken = async () => {
     try {
       console.log('SladderForm checkAuthToken');
+      this.setState({
+        loading:true,
+      });
       let token = await AsyncStorage.getItem('AuthToken');
-
+      console.log(token);
       // TODO: Find a better conditions to check if token is correct
-      if (token !== null && token.length > 20){
-          let tokenPlaceholder = this.state.token;
-          let newToken = tokenPlaceholder.concat(token);
+
           this.setState({
-            access:true,
-            token:newToken,
-          })
-      }
+            AuthToken:token,
+            loading:false,
+      })
     } catch (error) {
       alert(error);
     }
@@ -53,22 +54,19 @@ constructor(props){
   }
   componentDidMount(){
     console.log('SladderForm componentDidMount');
+
   }
-  sendSladder(){
-
-
-
+  sendSladder = async() =>{
     // TODO: add sendImage
-
     this.setState({
       loading:true
     });
 
     if(this.state.sladderText != ''){
-      fetch(fetch_url,{
+      let response = await fetch(fetch_url,{
         method:'POST',
         headers:{
-          "Authorization": this.state.token,
+          "Authorization": this.state.AuthToken,
           Accept: "application/json",
           "Content-Type":"application/json",
         },
@@ -76,29 +74,36 @@ constructor(props){
           content:this.state.sladderText,
         }),
       })
-      .then((res)=>{
-        this.setState({
-          loading:false,
-        });
-        if (res.status < 300 && res.status >= 200){
-          this.textInput.clear();
-          Alert.alert("Sladder sent!", "Sugerpumpa takker deg");
-        } else {
-          throw res.status;
-        }
-      })
-
       .catch((error) => {
-       this.setState({
-         loading : false });
-      Alert.alert(
+        Alert.alert(
         "Noe gikk galt",
-        error);
+        "Feilmelding: " + error);
      });
-
+     console.log(response);
+     this.setState({
+       httpStatus:response.status,
+     })
+     if (this.state.httpStatus < 300 && this.state.httpStatus >= 200){
+       Alert.alert("Sladder sent!", "Sugerpumpa takker deg");
+     } else {
+       Alert.alert(
+       "Noe gikk galt",
+       "http Status: " + this.state.httpStatus);
+     }
+     this.setState({
+       loading:false,
+     });
    }
   }
   render(){
+    while(this.state.loading){
+      // TODO: This needs to be chacked to IOS, https://github.com/oblador/react-native-progress
+      return(
+        <View style={styles.loadingContainer}>
+          <Progress.Circle size={80} indeterminate={true} color="black" />
+        </View>
+      );
+    }
     return(
       <KeyboardAvoidingView
         style={styles.container}
@@ -142,7 +147,7 @@ const styles = StyleSheet.create({
     sladderInput:{
       alignSelf: 'stretch',
       backgroundColor:'white',
-      height:150,
+      height:200,
       textAlignVertical: 'top',
       padding:5,
       borderRadius:10,
@@ -166,6 +171,10 @@ const styles = StyleSheet.create({
       shadowOpacity: 0.8,
       shadowRadius: 3,
       elevation: 2,
-    }
+    },
+    loadingContainer:{
+      alignItems:'center',
+      flex:3
+    },
 
 });

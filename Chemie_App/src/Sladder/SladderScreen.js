@@ -6,29 +6,42 @@ import {View,
   TouchableOpacity,
   KeyboardAvoidingView,
   BackHandler,
+  Linking,
 } from 'react-native';
 
 import SladderForm from './SladderForm';
 
 
 export default class SladderScreen extends React.Component{
+  constructor(props){
+    super(props);
+    this.openMail=this.openMail.bind(this);
+  }
   static navigationOptions = {
     title: 'Sladder',
     headerStyle: {
       backgroundColor: '#F9CF00'
     },
     };
-
+    openMail(){
+    Linking.openURL('mailto:Sugepumpa@hc.ntnu.no?');  
+    }
   render(){
     return (
       <View style={styles.container}>
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>
-            Send gjerne inn sitater, rykter eller tilbakemeldinger til Sugepumpa.
-            {"\n"}For spørsmål kontakt Sugepumpa@hc.ntnu.no
+            Send gjerne inn sitater, rykter eller tilbakemeldinger til NTNUs beste linjeforeningsavis.
           </Text>
         </View>
         <SladderForm/>
+        <View style={styles.helpContainer}>
+          <Text>For spørsmål kontakt </Text>
+          <Text
+            style={styles.mailText}
+            onPress={this.openMail}
+          > Sugepumpa@hc.ntnu.no</Text>
+        </View>
       </View>
     );
   }
@@ -40,12 +53,20 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
     },
     titleContainer:{
-      flex: 1,
+      flex: 0.7,
       alignItems:'center',
       justifyContent: 'center',
-      margin:10,
+      margin:5,
     },
     titleText:{
-
+      textAlign:'center',
+    },
+    helpContainer:{
+      flex:1,
+      alignItems:'center',
+      justifyContent: 'center',
+    },
+    mailText:{
+      color:'blue',
     },
 });

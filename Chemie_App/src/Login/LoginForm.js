@@ -139,7 +139,9 @@ const styles = StyleSheet.create({
     flex:1
     },
     loginFormContainer:{
-      flex:1,
+      flex:2,
+      justifyContent:'center',
+      alignItems:'center',
 
     },
     input: {
@@ -153,11 +155,13 @@ const styles = StyleSheet.create({
       borderRadius:10,
       borderWidth: 1,
       borderColor:'#d1d1d1',
+      alignSelf: 'stretch',
     },
     submitContainer:{
       marginRight:20,
       marginLeft:20,
       marginTop:10,
+      alignSelf: 'stretch',
       backgroundColor:'#F9CF00',
       borderRadius:10,
       height:50,

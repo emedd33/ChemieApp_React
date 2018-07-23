@@ -56,6 +56,8 @@ export default class News extends React.Component{
          console.error(error);
       });
       if (this.state.httpStatus >= 200 && this.state.httpStatus < 300) {
+
+        //Converting published_date to more readable format for user
         for (var i = 0; i<jsonResponse.length && i < 5; i++){
           year = jsonResponse[i].published_date.slice(0,4);
           month = jsonResponse[i].published_date.slice(5,7);
