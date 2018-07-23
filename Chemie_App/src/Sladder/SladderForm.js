@@ -158,9 +158,14 @@ const styles = StyleSheet.create({
       marginRight:50,
       borderRadius:10,
       borderWidth: 1,
-      borderColor:'#d1d1d1',
+      borderColor:'#F9CF00',
       alignItems:'center',
       justifyContent: 'center',
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.8,
+      shadowRadius: 3,
+      elevation: 2,
     }
 
 });

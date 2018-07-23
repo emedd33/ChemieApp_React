@@ -20,7 +20,7 @@ export default class HomeScreen extends React.Component{
     headerTitle: (
       <Image
         source={require('./hclogo_headerIcon.png')}
-        style={{width:50, height:50, marginLeft:10}}
+        style={{width:50, height:50, marginLeft:10,        }}
       />
   ),
   };
@@ -116,6 +116,12 @@ const styles = StyleSheet.create({
       borderWidth: 1,
       borderColor: '#F9CF00',
       alignItems:'center',
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.8,
+      shadowRadius: 3,
+      elevation: 2,
+
     },
     submitText:{
       color:'black',
