@@ -30,6 +30,7 @@ export default class News extends React.Component{
   }
 
   getNewsFromAPI = async() => {
+    console.log("News getNewsFromAPI");
     let token = await AsyncStorage.getItem('AuthToken');
     this.setState({
       AuthToken:token,
@@ -54,10 +55,14 @@ export default class News extends React.Component{
       .catch((error) => {
          console.error(error);
       });
-      console.log("POST FETCH");
-      console.log(this.state.httpStatus);
-      console.log(jsonResponse);
       if (this.state.httpStatus >= 200 && this.state.httpStatus < 300) {
+        for (var i = 0; i<jsonResponse.length && i < 5; i++){
+          year = jsonResponse[i].published_date.slice(0,4);
+          month = jsonResponse[i].published_date.slice(5,7);
+          day = jsonResponse[i].published_date.slice(8,10);
+          let date_String = "Publisert " + day + "/" + month + "/" + year;
+          jsonResponse[i].published_date = date_String;
+        }
         this.setState({
           articles:jsonResponse,
         });
@@ -91,6 +96,7 @@ render(){
             (
               <View key = { key } style = { styles.item }>
                 <Text style = { styles.titleText }>{ item.title }</Text>
+                <Text style = { styles.dateText }>{ item.published_date}</Text>
                 <Image
                   resizeMode='contain'
                   style={styles.newsImage}
@@ -116,14 +122,20 @@ const styles = StyleSheet.create({
   },
   loadingContainer:{
     marginTop:50,
+    justifyContent:'center',
+    alignItems:'center',
   },
   newsContainer:{
     justifyContent:'center',
     alignItems:'center',
   },
   titleText:{
+    textAlign:'center',
     fontSize:40,
-    marginLeft:10
+
+  },
+  dateText:{
+    textAlign:'center',
   },
   contentText:{
 
@@ -131,7 +143,8 @@ const styles = StyleSheet.create({
   newsImage:{
     width:150,
     height:150,
-    marginLeft:20
+    alignSelf:'center',
+
   },
   newsSeparator:{
     height:20,

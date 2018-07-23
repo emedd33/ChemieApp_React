@@ -109,6 +109,11 @@ export default class HomeScreen extends React.Component{
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.8,
+        shadowRadius: 3,
+        elevation: 2,
 
     },
     headerImage:{
@@ -142,7 +147,6 @@ export default class HomeScreen extends React.Component{
     },
     newsContainer:{
       flex:3.5,
-      backgroundColor:"skyblue",
     },
 
   });
