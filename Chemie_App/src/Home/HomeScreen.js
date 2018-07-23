@@ -5,11 +5,19 @@ import {View,
   StyleSheet,
   TouchableOpacity,
   BackHandler,
+  ScrollView,
+  AsyncStorage,
 } from 'react-native';
+
+import News from './News';
 
 export default class HomeScreen extends React.Component{
   constructor(props){
     super(props);
+    //this.getToken = this.getToken.bind(this);
+    this.state = {
+      loading:false
+    }
 
   }
   static navigationOptions = {
@@ -25,13 +33,17 @@ export default class HomeScreen extends React.Component{
       />
   ),
   };
-
+  componentWillMount(){
+    console.log("Home componentWillMount");
+    //this.getToken()
+  }
   componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
   }
   handleBackButton() {
     return true;
   }
+
 
   render(){
     return (
@@ -83,7 +95,7 @@ export default class HomeScreen extends React.Component{
 
           </View>
           <View style={styles.newsContainer}>
-
+            <News/>
           </View>
         </View>
       );
@@ -123,13 +135,14 @@ export default class HomeScreen extends React.Component{
       shadowRadius: 3,
       elevation: 2,
     },
+
+    SladderLogo:{
+      width:70,
+      height:70,
+    },
     newsContainer:{
       flex:3.5,
       backgroundColor:"skyblue",
     },
-    SladderLogo:{
-      width:70,
-      height:70,
-    }
 
   });

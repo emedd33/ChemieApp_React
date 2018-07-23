@@ -24,14 +24,13 @@ export default class LoginForm extends React.Component {
     this.state = {
       username: '',
       password:'',
-      respons:'',
-      error:null,
+      status: null,
       loading: false,
       }
     }
 
     // TODO: Make loginHTTPRequest a general fuction
-    loginHTTPRequest(){
+    loginHTTPRequest = async() => {
       // TODO: Set timer for request
       // TODO: give toast massage for respons
       // TODO: prevent multiple request if server is not up
@@ -41,7 +40,7 @@ export default class LoginForm extends React.Component {
           loading:true,
           });
 
-        fetch(fetch_url,{
+        await fetch(fetch_url,{
           method:'POST',
           headers:{
             Accept:'application/json',
@@ -57,18 +56,26 @@ export default class LoginForm extends React.Component {
         })
 
         .then((response)=>{
+          this.setState({
+            status:response.status,
+          })
+          return response.text()
+        })
+        .then((responseJson)  => {
 
-        if (response.status >= 200 && response.status < 300) {
-          // TODO:  Extract token from respons and store it with AsyncStorr
+          if (this.state.status >= 200 && this.state.status < 300) {
+            //let token = responseJson.token[10:-2;
+            let tokenObject = JSON.parse(responseJson)
+            let token = "token " + tokenObject.token
 
-          console.log(response);
-          AsyncStorage.setItem('AuthToken', 'e35e316a74d8d8833f4174189af183e70958ec30');
-          this.props.navigation.navigate('Home');
-        } else if (response.status == 400) {
-          Alert.alert("Ups!","Feil brukernavn eller passord");
-        } else {
-          throw response.status
-        }
+
+            AsyncStorage.setItem('AuthToken', token);
+            this.props.navigation.navigate('Home');
+          } else if (this.state.status == 400) {
+            Alert.alert("Ups!","Feil brukernavn eller passord");
+          } else {
+            throw this.state.status
+          }
         })
         .catch((error) => {
           this.setState({
