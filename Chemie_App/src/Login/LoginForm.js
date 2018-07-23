@@ -14,7 +14,7 @@ import {createStackNavigator} from 'react-navigation';
 
 
 
-const fetch_url = 'http://192.168.0.17:8000/api/api-auth/';
+const fetch_url = 'http://192.168.1.101:8000/api/api-auth/';
 
 export default class LoginForm extends React.Component {
 
@@ -35,7 +35,7 @@ export default class LoginForm extends React.Component {
       // TODO: Set timer for request
       // TODO: give toast massage for respons
       // TODO: prevent multiple request if server is not up
-
+      // TODO: save username and prefferences.
       if(this.state.username != '' && this.state.password != ''){
         this.setState({
           loading:true,

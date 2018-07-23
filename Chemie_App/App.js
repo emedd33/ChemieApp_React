@@ -23,7 +23,7 @@ export default class App extends React.Component {
 // TODO: Fix splash from from preventing navigation from login to home
 // TODO: remove navigation from home to login or loging to splash with back arrow
 // TODO: Change style to be relative size to size of phone/tablet
-
+// TODO: Add documentation
 const ChemieApp = createStackNavigator({
 
 

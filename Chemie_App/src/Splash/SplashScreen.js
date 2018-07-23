@@ -1,5 +1,12 @@
 import React from 'react';
-import {View, Text, Image, StyleSheet,AsyncStorage, KeyboardAvoidingView} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  AsyncStorage,
+  KeyboardAvoidingView
+} from 'react-native';
 
 
 export default class splashscreen extends React.Component{
@@ -23,7 +30,7 @@ export default class splashscreen extends React.Component{
       if (token !== null && token.length > 20){
 
           this.setState({
-            firstScreen:'Home',
+            firstScreen:'Settings',
           });
       }
     } catch (error) {
