@@ -30,7 +30,7 @@ export default class splashscreen extends React.Component{
       if (token !== null && token.length > 20){
 
           this.setState({
-            firstScreen:'Home',
+            firstScreen:'Events',
           });
       }
     } catch (error) {

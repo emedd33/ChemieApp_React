@@ -8,6 +8,8 @@ import {
   AsyncStorage,
   Image,
   TouchableOpacity,
+  ScrollView,
+  ImageBackground
 } from 'react-native';
 
 const fetch_url = "http://192.168.1.101:8000/api/events/social/"
@@ -28,6 +30,7 @@ export default class EventScreen extends React.Component{
       httpStatus:null,
       }
       this.getEventsFromAPI = this.getEventsFromAPI.bind(this);
+      this.getMonth = this.getMonth.bind(this);
   }
 
   getEventsFromAPI = async() => {
@@ -67,12 +70,21 @@ export default class EventScreen extends React.Component{
 
         //Converting date to more readable format for user
         for (var i = 0; i<jsonResponse.length && i < 5; i++){
-          year = jsonResponse[i].date.slice(0,4);
+          console.log(jsonResponse[i].date);
           month = jsonResponse[i].date.slice(5,7);
+          month_name = this.getMonth(month);
+
           day = jsonResponse[i].date.slice(8,10);
-          let date_String = "Publisert " + day + "/" + month + "/" + year;
+          time = jsonResponse[i].date.slice(11,16);
+          let date_String = day + " " + month_name + ' - ' + time;
           jsonResponse[i].date = date_String;
+
+          //Adding an instance of number of spots to response
+          slut_spots = jsonResponse[i].attendees.length;
+          jsonResponse[i]['slut_spots'] = slut_spots;
+
         }
+
         this.setState({
           events:jsonResponse,
         });
@@ -85,6 +97,48 @@ export default class EventScreen extends React.Component{
     console.log("Events componentWillMount");
     this.getEventsFromAPI()
   }
+  getMonth(month) {
+    result = month;
+    switch(parseInt(month)){
+      case 1:
+        result = 'Januar';
+        break;
+      case 2:
+        result = 'Februar';
+        break;
+      case 3:
+        result = 'Mars';
+        break;
+      case 4:
+        result = 'April';
+        break;
+      case 5:
+        result = 'Mai';
+        break;
+      case 6:
+        result = 'Juni';
+        break;
+      case 7:
+        result = 'Juli';
+        break;
+      case 8:
+        result = 'August';
+        break;
+      case 9:
+        result = 'September';
+        break;
+      case 10:
+        result = 'Oktober';
+        break;
+      case 11:
+        result = 'November';
+        break;
+      case 12:
+        result = 'Desember';
+        break;
+    }
+    return result;
+  }
 render(){
   if(this.state.loading){
     // TODO: This needs to be chacked to IOS, https://github.com/oblador/react-native-progress
@@ -95,28 +149,41 @@ render(){
     );
   }
   return(
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       {
         this.state.events.map(( item, key ) =>
           (
 
-            <View key = { key } style = { styles.item }>
-              <TouchableOpacity>
-                <Text style = { styles.titleText }>{ item.title }</Text>
-                <Text style = { styles.dateText }>{ item.date}</Text>
-                <Image
-                  resizeMode='contain'
-                  style={styles.eventImage}
-                  source={{uri:item.image}} />
+            <View key = { key } style = { styles.container}>
+              <TouchableOpacity style={styles.eventConatiner}>
+                <View style={styles.imageContainer}>
+                  <ImageBackground style={ styles.imgBackground }
+                    resizeMode='cover'
+                    source={{uri:item.image}}>
+                    <View style={styles.imageOverlay}>
+                      <Text style={styles.overlayTitle}>
+                        {item.date}
+                      </Text>
+                    </View>
+                  </ImageBackground>
+                </View>
 
-                <View style = { styles.eventSeparator }/>
+                <View style={styles.infoContainer}>
+                  <Text style={styles.eventTitle}>
+                    {item.title}
+                  </Text>
+                  <Text style ={styles.numberOfAttendees}>
+                    {item.slut_spots} av {item.sluts} påmeldte
+                  </Text>
+                </View>
               </TouchableOpacity>
+
             </View>
 
 
           ))
       }
-    </View>
+    </ScrollView>
     );
   }
 }
@@ -130,24 +197,68 @@ const styles = StyleSheet.create({
     justifyContent:'center',
     alignItems:'center',
   },
-  contentText:{
+
+  eventConatiner:{
+    flex:1,
+    margin:20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 3,
+    elevation: 3,
+    borderColor:'transparent',
+    borderRadius:10,
+    borderWidth: 1,
+    height:300,
 
   },
-  eventImage:{
-    width:200,
-    height:200,
-    alignSelf:'center',
 
+  //Upper part over EventContainer
+  imageContainer:{
+    flex:2,
   },
-  eventSeparator:{
-    height:20,
+  imgBackground:{
+    width: '100%',
+    height: '100%',
+    flex: 1,
   },
-  titleText:{
+  imageOverlay:{
+    marginTop:100,
+    backgroundColor:'black',
+    opacity:0.5,
+    alignSelf: 'stretch',
+    height:'30%',
+    position: 'absolute',
+    bottom:0,
+    right:0,
+    left:0,
+    alignItems:'center',
+    justifyContent:'center',
+  },
+  overlayTitle:{
+    color:'white',
+    fontSize:20,
+    opacity:1,
+  },
+
+  // lower part of event Container
+  infoContainer:{
+    flex:1,
+
+    justifyContent:'center',
+    alignItems:'center',
+    margin:10,
+  },
+  eventTitle:{
+    fontSize:20,
+    flex:1,
     textAlign:'center',
-    fontSize:40,
-
+    margin:20,
   },
-  dateText:{
+  numberOfAttendees:{
     textAlign:'center',
   },
+
+
+
 });
