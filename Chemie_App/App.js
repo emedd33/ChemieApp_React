@@ -10,6 +10,7 @@ import SplashScreen from './src/Splash/SplashScreen';
 import SladderScreen from './src/Sladder/SladderScreen';
 import SettingsScreen from './src/Settings/SettingsScreen';
 import EventScreen from './src/Events/EventScreen';
+import EventDetailScreen from './src/Events/EventDetailScreen';
 
 export default class App extends React.Component {
   render(){
@@ -33,6 +34,7 @@ const ChemieApp = createStackNavigator({
     Sladder:{screen:SladderScreen},
     Settings: {screen: SettingsScreen},
     Events: {screen: EventScreen},
+    EventDetailScreen: {screen: EventDetailScreen},
     Notification: {screen: NotificationScreen},
 
 

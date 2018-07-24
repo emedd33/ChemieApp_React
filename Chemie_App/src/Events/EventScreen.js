@@ -1,6 +1,7 @@
 import React from 'react';
 import * as Progress from 'react-native-progress';
 
+
 import {
   StyleSheet,
   Text,
@@ -12,6 +13,7 @@ import {
   ImageBackground
 } from 'react-native';
 
+import EventDetailScreen from './EventDetailScreen';
 const fetch_url = "http://192.168.1.101:8000/api/events/social/"
 
 export default class EventScreen extends React.Component{
@@ -31,6 +33,7 @@ export default class EventScreen extends React.Component{
       }
       this.getEventsFromAPI = this.getEventsFromAPI.bind(this);
       this.getMonth = this.getMonth.bind(this);
+
   }
 
   getEventsFromAPI = async() => {
@@ -139,6 +142,10 @@ export default class EventScreen extends React.Component{
     }
     return result;
   }
+  detailNavigation(id){
+    console.log(id);
+     this.props.navigation.navigate('EventDetailScreen', {id});
+  }
 render(){
   if(this.state.loading){
     // TODO: This needs to be chacked to IOS, https://github.com/oblador/react-native-progress
@@ -155,9 +162,15 @@ render(){
           (
 
             <View key = { key } style = { styles.container}>
-              <TouchableOpacity style={styles.eventConatiner}>
+              <TouchableOpacity
+                style={styles.eventConatiner}
+                onPress={this.detailNavigation.bind(this,item.id)}
+              >
                 <View style={styles.imageContainer}>
+
                   <ImageBackground style={ styles.imgBackground }
+                    // TODO: Compress image before rendering since it may slow down app
+
                     resizeMode='cover'
                     source={{uri:item.image}}>
                     <View style={styles.imageOverlay}>
@@ -168,7 +181,8 @@ render(){
                   </ImageBackground>
                 </View>
 
-                <View style={styles.infoContainer}>
+                <View style={styles.infoContainer}
+                >
                   <Text style={styles.eventTitle}>
                     {item.title}
                   </Text>
