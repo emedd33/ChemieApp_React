@@ -1,5 +1,6 @@
 import React from 'react';
 import * as Progress from 'react-native-progress';
+import ImgToBase64 from 'react-native-image-base64';
 
 import {
   View,
@@ -11,22 +12,32 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
+
 } from 'react-native';
 
-
+import UploadImage from './UploadImage';
 const fetch_url = "http://192.168.1.101:8000/api/sladreboks/submission/"
+
 
 export default class SladderForm extends React.Component{
 constructor(props){
     super(props);
     this.sendSladder = this.sendSladder.bind(this);
     this.checkAuthToken = this.checkAuthToken.bind(this);
+
     this.state = {
       loading: false,
       sladderText: '',
       AuthToken: 'token ',
       httpStatus: null,
+      image:null,
+      uploadingImage:false,
+      body:null,
     }
+  }
+  updateState (data) {
+        console.log("UploadImage updateState");
+        this.setState(data);
   }
   checkAuthToken = async () => {
     try {
@@ -52,17 +63,28 @@ constructor(props){
     console.log('SladderForm componentWillMount');
     this.checkAuthToken();
   }
-  componentDidMount(){
-    console.log('SladderForm componentDidMount');
 
-  }
+
+
   sendSladder = async() =>{
     // TODO: add sendImage
-    this.setState({
-      loading:true
-    });
+    console.log("SladderForm sendSladder");
 
-    if(this.state.sladderText != ''){
+    if(this.state.sladderText != '' || this.state.image != null){
+      this.setState({
+        loading:true
+      });
+      let image64 = null
+
+      //Making requestbody with or without uploaded image,
+      if (this.state.image != null){
+        const image64 = this.state.image.base64;
+        this.state.body = {content:this.state.sladderText, image:image64}
+      } else {
+        this.state.body = {content:this.state.sladderText}
+      }
+
+      console.log("SladderForm fetch");
       let response = await fetch(fetch_url,{
         method:'POST',
         headers:{
@@ -70,9 +92,7 @@ constructor(props){
           Accept: "application/json",
           "Content-Type":"application/json",
         },
-        body: JSON.stringify({
-          content:this.state.sladderText,
-        }),
+        body: JSON.stringify(this.state.body),
       })
       .catch((error) => {
         Alert.alert(
@@ -110,9 +130,10 @@ constructor(props){
         behavior="padding"
       >
         <TextInput
+          // TODO: max length 2000 on text input
           style={styles.sladderInput}
           multiline={true}
-          numberOfLines={2}
+          numberOfLines={10}
           autoCorrect={true}
           autoCapitalize = 'sentences'
           returnKeyType='go'
@@ -124,6 +145,7 @@ constructor(props){
           underlineColorAndroid="transparent"
         >
         </TextInput>
+        <UploadImage updateParentState={this.updateState.bind(this)}/>
         <TouchableOpacity
           style={styles.sladderSubmit}
           onPress={this.sendSladder}
@@ -153,7 +175,7 @@ const styles = StyleSheet.create({
       borderRadius:10,
       borderWidth: 1,
       margin:10,
-      marginBottom:20,
+      marginBottom:10,
     },
     sladderSubmit:{
       backgroundColor:'#F9CF00',
@@ -162,6 +184,7 @@ const styles = StyleSheet.create({
       marginLeft:50,
       marginRight:50,
       borderRadius:10,
+      marginBottom:10,
       borderWidth: 1,
       borderColor:'#F9CF00',
       alignItems:'center',
@@ -176,5 +199,6 @@ const styles = StyleSheet.create({
       alignItems:'center',
       flex:3
     },
+
 
 });

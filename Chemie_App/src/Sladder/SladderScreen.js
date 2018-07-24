@@ -24,7 +24,7 @@ export default class SladderScreen extends React.Component{
     },
     };
     openMail(){
-    Linking.openURL('mailto:Sugepumpa@hc.ntnu.no?');  
+    Linking.openURL('mailto:Sugepumpa@hc.ntnu.no?');
     }
   render(){
     return (
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
       textAlign:'center',
     },
     helpContainer:{
-      flex:1,
+      flex:0.5,
       alignItems:'center',
       justifyContent: 'center',
     },
