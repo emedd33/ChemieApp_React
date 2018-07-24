@@ -35,6 +35,7 @@ export default class News extends React.Component{
     this.setState({
       AuthToken:token,
     });
+    console.log(token);
     let jsonResponse = await fetch(fetch_url,{
       method:'GET',
       headers:{
@@ -45,7 +46,6 @@ export default class News extends React.Component{
         this.setState({
           httpStatus:response.status,
         })
-        console.log("ok2");
         return response.text();
       })
       .then((responseJson)  => {
@@ -55,6 +55,13 @@ export default class News extends React.Component{
       .catch((error) => {
          console.error(error);
       });
+
+      //If token is not valid, sends user to loginScreen,
+      if (this.state.httpStatus == 401){
+        AsyncStorage.clear();
+        this.props.navigation.navigate('Login');
+
+      }
       if (this.state.httpStatus >= 200 && this.state.httpStatus < 300) {
 
         //Converting published_date to more readable format for user
@@ -130,6 +137,7 @@ const styles = StyleSheet.create({
   newsContainer:{
     justifyContent:'center',
     alignItems:'center',
+    margin:20,
   },
   titleText:{
     textAlign:'center',
@@ -143,8 +151,8 @@ const styles = StyleSheet.create({
 
   },
   newsImage:{
-    width:150,
-    height:150,
+    width:200,
+    height:200,
     alignSelf:'center',
 
   },

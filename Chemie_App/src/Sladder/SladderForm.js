@@ -102,7 +102,11 @@ constructor(props){
      console.log(response);
      this.setState({
        httpStatus:response.status,
-     })
+     });
+     if (this.state.httpStatus == 401){
+       AsyncStorage.clear();
+       this.props.navigation.navigate('Login');
+     }
      if (this.state.httpStatus < 300 && this.state.httpStatus >= 200){
        Alert.alert("Sladder sent!", "Sugepumpa takker deg");
      } else {

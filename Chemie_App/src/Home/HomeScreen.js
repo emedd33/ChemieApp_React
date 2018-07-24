@@ -95,7 +95,7 @@ export default class HomeScreen extends React.Component{
 
           </View>
           <View style={styles.newsContainer}>
-            <News/>
+            <News navigation={this.props.navigation}/>
           </View>
         </View>
       );
