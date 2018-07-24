@@ -104,7 +104,7 @@ constructor(props){
        httpStatus:response.status,
      })
      if (this.state.httpStatus < 300 && this.state.httpStatus >= 200){
-       Alert.alert("Sladder sent!", "Sugerpumpa takker deg");
+       Alert.alert("Sladder sent!", "Sugepumpa takker deg");
      } else {
        Alert.alert(
        "Noe gikk galt",
