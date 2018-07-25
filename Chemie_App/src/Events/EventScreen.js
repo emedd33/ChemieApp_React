@@ -93,7 +93,7 @@ render(){
           updateParentState={this.updateState}
           navigation={this.props.navigation}
         />
-        <SocialEvents/>
+        <SocialEvents navigation={this.props.navigation}/>
 
       </View>
       );

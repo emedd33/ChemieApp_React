@@ -22,7 +22,7 @@ export default class SocialEvents extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      events: [],
+      events: null,
       loading:true,
       AuthToken:'',
       httpStatus:null,
@@ -38,7 +38,6 @@ export default class SocialEvents extends React.Component{
     this.setState({
       AuthToken:token,
     });
-    console.log(token);
     let jsonResponse = await fetch(fetch_url,{
       method:'GET',
       headers:{
@@ -94,7 +93,9 @@ export default class SocialEvents extends React.Component{
   }
   componentWillMount(){
     console.log("Events componentWillMount");
-    this.getEventsFromAPI()
+    if (this.state.events == null){
+      this.getEventsFromAPI();
+    }
   }
   getMonth(month) {
     result = month;
@@ -139,9 +140,9 @@ export default class SocialEvents extends React.Component{
     return result;
   }
 
-  detailNavigation(id){
-    console.log(id);
-     this.props.navigation.navigate('EventDetailScreen', {id});
+  detailNavigation(body){
+    console.log(body);
+     this.props.navigation.navigate('EventDetailScreen', body);
   }
 render(){
   if(this.state.loading){
@@ -161,32 +162,32 @@ render(){
               <View key = { key } style = { styles.container}>
                 <TouchableOpacity
                   style={styles.eventConatiner}
-                  onPress={this.detailNavigation.bind(this,item.id)}
+                  onPress={this.detailNavigation.bind(this,{
+                    id:item.id,
+                    title:item.title,
+                  })}
                 >
-                  
-                <View style={ styles.titleContainer }
-                >
-                  <Text style={styles.eventTitle}>
-                    {item.title}
-                  </Text>
 
-                </View>
+                  <View style={ styles.titleContainer }>
+                    <Text style={styles.eventTitle}>
+                      {item.title}
+                    </Text>
+                  </View>
 
-                <View style={styles.infoContainer}
-                >
-                  <Text style={styles.titleDate}>
-                    {item.date}
-                  </Text>
-                  <Text style={styles.titleDate}>
-                    {item.location}
-                  </Text>
-                  <Text style ={styles.numberOfAttendees}>
-                    {item.slut_spots} av {item.sluts} påmeldte
-                  </Text>
-                </View>
-              </TouchableOpacity>
+                  <View style={styles.infoContainer}>
+                    <Text style={styles.titleDate}>
+                      {item.date}
+                    </Text>
+                    <Text style={styles.titleDate}>
+                      {item.location}
+                    </Text>
+                    <Text style ={styles.numberOfAttendees}>
+                      {item.slut_spots} av {item.sluts} påmeldte
+                    </Text>
+                  </View>
+                </TouchableOpacity>
 
-            </View>
+              </View>
 
 
           ))
