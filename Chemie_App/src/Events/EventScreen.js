@@ -13,6 +13,7 @@ import {
 
 import EventHeader from './EventsHeader';
 import SocialEvents from './SocialEvents';
+import BedPressEvents from './BedPressEvents'
 const fetch_url = "http://192.168.1.101:8000/api/events/social/"
 
 export default class EventScreen extends React.Component{
@@ -104,9 +105,7 @@ render(){
           updateParentState={this.updateState}
           navigation={this.props.navigation}
         />
-        <View style={styles.EventContainer}>
-          <Text>BedPress</Text>
-        </View>
+        <BedPressEvents navigation={this.props.navigation}/>
 
       </View>
       );

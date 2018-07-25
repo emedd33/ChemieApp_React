@@ -120,7 +120,7 @@ constructor(props){
    }
   }
   render(){
-    while(this.state.loading){
+    if(this.state.loading){
       // TODO: This needs to be chacked to IOS, https://github.com/oblador/react-native-progress
       return(
         <View style={styles.loadingContainer}>
