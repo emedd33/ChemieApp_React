@@ -1,12 +1,20 @@
 import React from 'react';
 import * as Progress from 'react-native-progress';
+import HTML from 'react-native-render-html';
+var moment = require('moment');
 
 import {
   StyleSheet,
   Text,
   View,
   AsyncStorage,
+  Image,
+  ImageBackground,
+  Dimensions,
+  ScrollView,
+
 } from 'react-native';
+
 
 const fetch_url = "http://192.168.1.101:8000/api/events/social/"
 
@@ -27,6 +35,7 @@ export default class EventDetailScreen extends React.Component{
       event:null,
       AuthToken:null,
       id:null,
+      fetch_url:null,
     }
     this.getEventsFromAPI = this.getEventsFromAPI.bind(this);
     this.getMonth = this.getMonth.bind(this);
@@ -80,8 +89,9 @@ export default class EventDetailScreen extends React.Component{
     let token = await AsyncStorage.getItem('AuthToken');
     this.setState({
       AuthToken:token,
+      fetch_url:this.props.navigation.state.params.fetch_url
     });
-    const url = fetch_url.concat(this.props.navigation.state.params.id);
+    const url = this.state.fetch_url.concat(this.props.navigation.state.params.id);
     console.log(url);
     let jsonResponse = await fetch(url,{
       method:'GET',
@@ -97,7 +107,7 @@ export default class EventDetailScreen extends React.Component{
       })
       .then((responseJson)  => {
         let res = JSON.parse(responseJson);
-        return res;
+        return res[0];
       })
       .catch((error) => {
          alert(error);
@@ -110,26 +120,21 @@ export default class EventDetailScreen extends React.Component{
 
       }
       if (this.state.httpStatus >= 200 && this.state.httpStatus < 300) {
-        console.log(jsonResponse.length);
-        //Converting date to more readable format for user
-        for (var i = 0; i<jsonResponse.length && i < 5; i++){
-
-          month = jsonResponse[i].date.slice(5,7);
+          console.log(jsonResponse);
+          month = jsonResponse.date.slice(5,7);
           month_name = this.getMonth(month);
 
-          day = jsonResponse[i].date.slice(8,10);
-          time = jsonResponse[i].date.slice(11,16);
+          day = jsonResponse.date.slice(8,10);
+          time = jsonResponse.date.slice(11,16);
           let date_String = day + " " + month_name + ' - ' + time;
-          jsonResponse[i].date = date_String;
+          jsonResponse['string_date'] = date_String;
 
           //Adding an instance of number of spots to response
-          slut_spots = jsonResponse[i].attendees.length;
-          jsonResponse[i]['slut_spots'] = slut_spots;
-
-        }
+          slut_spots = jsonResponse.attendees.length;
+          jsonResponse['slut_spots'] = slut_spots;
 
         this.setState({
-          events:jsonResponse,
+          event:jsonResponse,
         });
       }
       this.setState({
@@ -151,10 +156,35 @@ render(){
       </View>
     );
   }
+  /*var now = moment().fromNow();
+  var date = moment(this.state.event.date);
+  console.log(date);
+  console.log(now);
+  console.log(moment(now).isAfter(date));
+*/
+console.log(this.state.event);
   return(
     <View style={styles.container}>
+      <View style={styles.titleContainer}>
+        <ImageBackground
+          style={styles.eventImage}
+          source={{uri:this.state.event.image}}
+          resizeMode="contain"
+        >
+          <View style={styles.foregroundLayour}>
+            <Text style={styles.titleText}>{this.state.event.title}</Text>
+          </View>
+        </ImageBackground>
 
-      <Text>EventDetailScreen</Text>
+
+      </View>
+      <View style={styles.formContainer}>
+        <Text>formContainer</Text>
+      </View>
+      <ScrollView style={styles.eventContent}>
+        <HTML style={styles.contentText} html={this.state.event.description} imagesMaxWidth={Dimensions.get('window').width} />
+      </ScrollView>
+
     </View>
     );
   }
@@ -164,10 +194,59 @@ const styles = StyleSheet.create({
   container:{
     flex:1
   },
+  //
   loadingContainer:{
     alignItems:'center',
     justifyContent: 'center',
-    flex:1
+    flex:1,
+
+  //ImageBackground styling,
   },
+  titleContainer:{
+    flex:1,
+    alignItems:'center',
+    justifyContent: 'center',
+    backgroundColor:'black',
+
+  },
+  eventImage:{
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+    alignItems:'center',
+    justifyContent: 'center',
+  },
+  foregroundLayour:{
+    backgroundColor:'black',
+    position: 'absolute',
+    bottom:0,
+    right:0,
+    left:0,
+    alignSelf: 'stretch',
+    height:50,
+    opacity:0.5,
+
+  },
+  titleText:{
+    textAlign:'center',
+    fontSize:30,
+    fontWeight:'bold',
+    color:'#fff',
+  },
+  formContainer:{
+    flex:0.2,
+    backgroundColor:'skyblue',
+    alignItems:'center',
+    justifyContent: 'center',
+  },
+  eventContent:{
+    flex:2,
+
+  },
+  contentText:{
+
+  }
 
 });

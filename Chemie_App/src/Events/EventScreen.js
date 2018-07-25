@@ -16,6 +16,9 @@ import SocialEvents from './SocialEvents';
 import BedPressEvents from './BedPressEvents'
 const fetch_url = "http://192.168.1.101:8000/api/events/social/"
 
+
+// TODO: Filter out events which are overdue
+
 export default class EventScreen extends React.Component{
   static navigationOptions = {
     header:null,

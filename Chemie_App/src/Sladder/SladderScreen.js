@@ -11,7 +11,8 @@ import {View,
 
 import SladderForm from './SladderForm';
 
-
+// TODO: Check if user has selected multiple images
+// TODO: check if it's possible to send video
 export default class SladderScreen extends React.Component{
   constructor(props){
     super(props);

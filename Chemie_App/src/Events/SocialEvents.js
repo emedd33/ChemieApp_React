@@ -165,6 +165,7 @@ render(){
                   onPress={this.detailNavigation.bind(this,{
                     id:item.id,
                     title:item.title,
+                    fetch_url:fetch_url,
                   })}
                 >
 

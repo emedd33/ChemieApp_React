@@ -21,6 +21,7 @@
   "dependencies": {
     "expo": "^27.0.1",
     "fetchival": "^0.3.3",
+    "moment": "^2.22.2",
     "node-fetch": "^2.1.2",
     "react": "16.3.1",
     "react-native": "~0.55.2",

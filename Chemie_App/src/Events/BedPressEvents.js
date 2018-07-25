@@ -22,7 +22,7 @@ export default class BedPressEvents extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      events: null,
+      event: null,
       loading:true,
       AuthToken:'',
       httpStatus:null,
@@ -52,6 +52,7 @@ export default class BedPressEvents extends React.Component{
       })
       .then((responseJson)  => {
         let res = JSON.parse(responseJson);
+        console.log(res);
         return res;
       })
       .catch((error) => {
@@ -165,6 +166,7 @@ render(){
                   onPress={this.detailNavigation.bind(this,{
                     id:item.id,
                     title:item.title,
+                    fetch_url:fetch_url,
                   })}
                 >
 
