@@ -12,23 +12,18 @@ import {
 } from 'react-native';
 
 import EventHeader from './EventsHeader';
+import SocialEvents from './SocialEvents';
 const fetch_url = "http://192.168.1.101:8000/api/events/social/"
 
 export default class EventScreen extends React.Component{
   static navigationOptions = {
     header:null,
-    /*headerTitle: <EventHeader
-      updateParentState={this.updateState}/>,
-    headerStyle: {
-     backgroundColor: '#F9CF00',
-   },*/
+
  }
 
   constructor(props){
     super(props);
     this.state = {
-      loading:true,
-      AuthToken:'',
       screen:'Social',
     }
     this.updateState = this.updateState.bind(this);
@@ -44,11 +39,7 @@ export default class EventScreen extends React.Component{
     console.log("Events componentWillMount");
     this.updateState.bind(this);
   }
-  componentDidMount(){
-    this.setState({
-      loading:false,
-    });
-  }
+
   getMonth(month) {
     result = month;
     switch(parseInt(month)){
@@ -93,29 +84,48 @@ export default class EventScreen extends React.Component{
   }
 
 render(){
-  if(this.state.loading){
-    // TODO: This needs to be chacked to IOS, https://github.com/oblador/react-native-progress
-    return(
-      <View style={styles.loadingContainer}>
-        <Progress.Circle size={80} indeterminate={true} color="black" />
+  console.log(this.state.screen);
+  if (this.state.screen=="Social" ) {
+
+      return(
+      <View style={styles.container}>
+        <EventHeader
+          updateParentState={this.updateState}
+          navigation={this.props.navigation}
+        />
+        <SocialEvents/>
+
       </View>
-    );
+      );
+  } else if (this.state.screen=="BedPress" ) {
+      return(
+      <View style={styles.container}>
+        <EventHeader
+          updateParentState={this.updateState}
+          navigation={this.props.navigation}
+        />
+        <View style={styles.EventContainer}>
+          <Text>BedPress</Text>
+        </View>
+
+      </View>
+      );
+    } else {
+      return(
+      <View style={styles.container}>
+        <EventHeader
+          updateParentState={this.updateState}
+          navigation={this.props.navigation}
+        />
+        <View style={styles.EventContainer}>
+
+        </View>
+
+      </View>
+      );
+
   }
-  return(
 
-    <View style={styles.container}>
-      <EventHeader
-        updateParentState={this.updateState}
-        navigation={this.props.navigation}
-      />
-      <View style={styles.EventContainer}>
-        <Text>
-          {this.state.screen}
-        </Text>
-      </View>
-
-    </View>
-    );
   }
 }
 

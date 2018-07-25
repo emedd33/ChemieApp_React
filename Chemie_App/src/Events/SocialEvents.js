@@ -1,6 +1,7 @@
 import React from 'react';
 import * as Progress from 'react-native-progress';
-
+import ImageResizer from 'react-native-image-resizer';
+import {ImageManipulator } from 'expo';
 
 import {
   StyleSheet,
@@ -156,31 +157,28 @@ render(){
       {
         this.state.events.map(( item, key ) =>
           (
+            // TODO: Add image to background,
+              <View key = { key } style = { styles.container}>
+                <TouchableOpacity
+                  style={styles.eventConatiner}
+                  onPress={this.detailNavigation.bind(this,item.id)}
+                >
+                  
+                <View style={ styles.titleContainer }
+                >
+                  <Text style={styles.eventTitle}>
+                    {item.title}
+                  </Text>
 
-            <View key = { key } style = { styles.container}>
-              <TouchableOpacity
-                style={styles.eventConatiner}
-                onPress={this.detailNavigation.bind(this,item.id)}
-              >
-                <View style={styles.imageContainer}>
-
-                  <ImageBackground style={ styles.imgBackground }
-                    // TODO: Compress image before rendering since it may slow down app
-
-                    resizeMode='cover'
-                    source={{uri:item.image}}>
-                    <View style={styles.imageOverlay}>
-                      <Text style={styles.overlayTitle}>
-                        {item.date}
-                      </Text>
-                    </View>
-                  </ImageBackground>
                 </View>
 
                 <View style={styles.infoContainer}
                 >
-                  <Text style={styles.eventTitle}>
-                    {item.title}
+                  <Text style={styles.titleDate}>
+                    {item.date}
+                  </Text>
+                  <Text style={styles.titleDate}>
+                    {item.location}
                   </Text>
                   <Text style ={styles.numberOfAttendees}>
                     {item.slut_spots} av {item.sluts} påmeldte
@@ -219,52 +217,31 @@ const styles = StyleSheet.create({
     borderColor:'transparent',
     borderRadius:10,
     borderWidth: 1,
-    height:300,
+    height:200,
 
   },
 
   //Upper part over EventContainer
-  imageContainer:{
-    flex:2,
-  },
-  imgBackground:{
-    width: '100%',
-    height: '100%',
-    flex: 1,
-  },
-  imageOverlay:{
-    marginTop:100,
-    backgroundColor:'black',
-    opacity:0.5,
-    alignSelf: 'stretch',
-    height:'30%',
-    position: 'absolute',
-    bottom:0,
-    right:0,
-    left:0,
-    alignItems:'center',
-    justifyContent:'center',
-  },
-  overlayTitle:{
-    color:'white',
-    fontSize:20,
-    opacity:1,
-  },
-
-  // lower part of event Container
   infoContainer:{
     flex:1,
-
+    justifyContent:'center',
+    alignItems:'center',
+  },
+  titleContainer:{
+    flex:1,
     justifyContent:'center',
     alignItems:'center',
     margin:10,
   },
   eventTitle:{
-    fontSize:20,
+    fontSize:30,
+    fontWeight:'bold',
     flex:1,
     textAlign:'center',
     margin:20,
   },
+  // lower part of event Container
+
   numberOfAttendees:{
     textAlign:'center',
   },

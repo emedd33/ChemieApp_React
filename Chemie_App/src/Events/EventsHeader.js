@@ -95,8 +95,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.8,
     shadowRadius: 3,
     elevation: 5,
-
-
   },
   Backarrow_icon: {
       flex:1,
