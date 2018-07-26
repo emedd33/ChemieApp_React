@@ -3,7 +3,6 @@ import * as Progress from 'react-native-progress';
 import HTML from 'react-native-render-html';
 import ProgressBarAnimated from 'react-native-progress-bar-animated';
 
-var moment = require('moment');
 
 import {
   StyleSheet,
@@ -176,12 +175,7 @@ render(){
       </View>
     );
   }
-  /*var now = moment().fromNow();
-  var date = moment(this.state.event.date);
-  console.log(date);
-  console.log(now);
-  console.log(moment(now).isAfter(date));
-*/
+
 
   return(
     <View style={styles.container}>
@@ -203,6 +197,7 @@ render(){
             event:this.state.event,
             fetch_url:this.state.fetch_url,
             type:this.state.type,
+            AuthToken:this.state.AuthToken,
           })}
         >
           <Text>Gå til påmelding</Text>
