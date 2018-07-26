@@ -43,6 +43,7 @@ export default class EventDetailScreen extends React.Component{
     }
     this.getEventsFromAPI = this.getEventsFromAPI.bind(this);
     this.getMonth = this.getMonth.bind(this);
+
   }
   getMonth(month) {
     result = month;
@@ -89,7 +90,7 @@ export default class EventDetailScreen extends React.Component{
 
 
   getEventsFromAPI = async() => {
-    console.log("events getEventsFromAPI");
+    console.log("EventDetailScreen getEventsFromAPI");
     let token = await AsyncStorage.getItem('AuthToken');
     this.setState({
       AuthToken:token,
@@ -157,11 +158,12 @@ export default class EventDetailScreen extends React.Component{
       this.setState({
         loading:false,
       })
-      console.log(this.state.event);
+  }
+  attendEventNavigation(body){
+     this.props.navigation.navigate('EventAttend', body);
   }
 
   componentWillMount(){
-    console.log("EventDetailScreen componentWillMount");
     this.getEventsFromAPI();
 
   }
@@ -194,7 +196,15 @@ render(){
 
       </View>
       <View style={styles.formContainer}>
-        <TouchableOpacity style={styles.goToFormButton}>
+        <TouchableOpacity
+          style={styles.goToFormButton}
+          onPress={this.attendEventNavigation.bind(this,{
+            id:this.state.id,
+            event:this.state.event,
+            fetch_url:this.state.fetch_url,
+            type:this.state.type,
+          })}
+        >
           <Text>Gå til påmelding</Text>
         </TouchableOpacity>
       </View>
