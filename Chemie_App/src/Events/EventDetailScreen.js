@@ -95,6 +95,7 @@ export default class EventDetailScreen extends React.Component{
       AuthToken:token,
       fetch_url:this.props.navigation.state.params.fetch_url,
       type:this.props.navigation.state.params.type,
+      id: this.props.navigation.state.params.id,
     });
     const url = this.state.fetch_url.concat(this.props.navigation.state.params.id);
 

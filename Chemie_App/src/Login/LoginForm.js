@@ -15,12 +15,14 @@ import {createStackNavigator} from 'react-navigation';
 import * as Progress from 'react-native-progress';
 
 const fetch_url = 'http://192.168.1.101:8000/api/api-auth/';
+const fetch_profile_url = 'http://192.168.1.101:8000/api/profile/profile/'
 
 export default class LoginForm extends React.Component {
 
   constructor(props){
     super(props);
     this.loginHTTPRequest = this.loginHTTPRequest.bind(this);
+    this.getProfileSettingsHTTPrequest = this.getProfileSettingsHTTPrequest.bind(this);
     this.state = {
       username: '',
       password:'',
@@ -28,7 +30,42 @@ export default class LoginForm extends React.Component {
       loading: false,
       }
     }
+    getProfileSettingsHTTPrequest = async(token) =>{
+      let jsonResponse = await fetch(fetch_profile_url,{
+        method:'GET',
+        headers:{
+          "Authorization": token,
+        },
+      })
+        .then((response) => {
+          this.setState({
+            httpStatus:response.status,
+          })
+          return response.text();
+        })
+        .then((responseJson)  => {
+          let res = JSON.parse(responseJson);
+          console.log(res);
+          return res[0];
+        })
+        .catch((error) => {
+           console.error(error);
+        });
+        AsyncStorage.setItem('AuthToken',token);
+        AsyncStorage.setItem('Firstname',jsonResponse.first_name);
+        AsyncStorage.setItem('Lastname',jsonResponse.last_name);
+        AsyncStorage.setItem('access_card',jsonResponse.profile.access_card);
+        AsyncStorage.setItem('grade',String(jsonResponse.profile.grade));
+        AsyncStorage.setItem('membership',jsonResponse.profile.membership);
+        AsyncStorage.setItem('username',jsonResponse.username);
+        AsyncStorage.setItem('id',String(jsonResponse.id));
 
+        this.setState({
+          loading:false,
+        });
+        
+        this.props.navigation.navigate('Home');
+    }
     // TODO: Make loginHTTPRequest a general fuction
     loginHTTPRequest = async() => {
       // TODO: Set timer for request
@@ -68,8 +105,11 @@ export default class LoginForm extends React.Component {
             let tokenObject = JSON.parse(responseJson)
             let token = "token " + tokenObject.token
 
-            AsyncStorage.setItem('AuthToken', token);
-            this.props.navigation.navigate('Home');
+            //
+            this.getProfileSettingsHTTPrequest(token);
+
+            //AsyncStorage.setItem('AuthToken', token);
+            //
           } else if (this.state.httpStatus == 400) {
             Alert.alert("Ups!","Feil brukernavn eller passord");
           } else {
@@ -79,16 +119,14 @@ export default class LoginForm extends React.Component {
         .catch((error) => {
           Alert.alert("Ups! Feil ved innlogging","Det har skjedd en feil med feilmelding: " + error);
         });
-        this.setState({
-          loading:false,
-        });
+
        }
 
     }
 
 
   render(){
-    while(this.state.loading){
+    if(this.state.loading){
       // TODO: This needs to be chacked to IOS, https://github.com/oblador/react-native-progress
       return(
         <View style={styles.loadingContainer}>

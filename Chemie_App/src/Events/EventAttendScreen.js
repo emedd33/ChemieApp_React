@@ -8,7 +8,15 @@ import {
   Text,
   View,
   Image,
+  AsyncStorage,
 } from 'react-native';
+
+import EventClosed from './EventClosed';
+import EventNotAllowed from './EventNotAllowed';
+import EventForm from './EventForm';
+
+const social_url = 'http://192.168.1.101:8000/api/events/social/register/'
+//const bedpress_url = 'http://192.168.1.101:8000/api/events/bedpress/register/'
 
 export default class EventAttendScreen extends React.Component{
   static navigationOptions = ({ navigation }) => ({
@@ -21,6 +29,7 @@ export default class EventAttendScreen extends React.Component{
     super(props);
     this.state={
       loading:false,
+      event_id: props.navigation.state.params.id,
       type:props.navigation.state.params.type,
       register_open:false,
       register_open_date:null,
@@ -32,67 +41,131 @@ export default class EventAttendScreen extends React.Component{
       closed_text:null,
       allowed:true,
       payed:false,
+      user_id:null,
+      grade: null,
       event:props.navigation.state.params.event,
       AuthToken:props.navigation.state.params.AuthToken,
       timeTillopen:null,
     }
     this.setParameters = this.setParameters.bind(this);
     this.getregisterDateString = this.getregisterDateString.bind(this);
+    this.getEventStatusFromAPI =   this.getEventStatusFromAPI.bind(this);
+    this.getAsyncProfile = this.getAsyncProfile.bind(this);
+    this.checkDates = this.checkDates.bind(this);
+    this.checkAllowed = this.checkAllowed.bind(this);
+  }
+  getAsyncProfile = async() =>{
+
+    let grade = await AsyncStorage.getItem('grade');
+    let user_id = await AsyncStorage.getItem('id');
+
+    this.setState({
+      grade:grade,
+      user_id:user_id,
+    });
+
+    this.checkAllowed()
+  }
+  checkDates(){
+
+    let screen = "Open";
+    let closed_text = "Arrangmentet er ikke åpent for påmelding enda.";
+    let register_open = false;
+    let register_closed = false;
+
+    if (moment().isAfter(this.state.event.register_startdate)){
+      register_open = true
+    }else {
+      var register_date = moment(this.state.event.register_startdate);
+      var now = moment();
+      screen = "Closed";
+      this.setState({
+        timeTillopen:register_date.from(now)
+      });
+    }
+    if (moment().isAfter(this.state.event.register_deadline)){
+      register_closed = true
+      screen = "Closed";
+      closed_text = "Deadlinen for avmelding er forbi, du kan ikke melde deg av arrangementet."
+    }
+    this.setState({
+      register_open:register_open,
+      register_open:register_open,
+      screen:screen,
+      closed_text:closed_text,
+    })
+
   }
   getregisterDateString(){
     let register_open_date = moment(this.state.event.register_startdate).calendar()
     let register_closed_date = moment(this.state.event.register_closed_date).calendar()
     let register_deadline_date = moment(this.state.event.register_deadline_date).calendar()
-    console.log(register_open_date);
+
     this.setState({
       register_open_date:register_open_date,
       register_closed_date:register_closed_date,
       register_deadline_date:register_deadline_date
     });
   }
+  checkAllowed(){
+    console.log("EventAttend checkAllowed");
+
+    var grade = Number(this.state.grade);
+    var allowed_grades = this.state.event.allowed_grades;
+    if (!allowed_grades.includes(grade)){
+      this.setState({
+        allowed:false
+      });
+    }
+
+  }
   setParameters(){
       this.setState({
         loading:true
-      })
+      });
+      console.log("EventAttend getAsyncProfile");
+      this.getAsyncProfile();
+      console.log("EventAttend getEventStatusFromAPI");
+      this.getEventStatusFromAPI();
+      console.log("EventAttend getregisterDateString");
       this.getregisterDateString();
 
-      let screen = "Closed";
-      let closed_text = "Arrangmentet er ikke åpent for påmelding enda.";
-      let register_open = false;
-      let register_closed = false;
-      console.log("EventAttendScreen setParameters");
-
-      if (moment().isAfter(this.state.event.register_startdate)){
-        register_open = true
-      }else {
-
-        var register_date = moment(this.state.event.register_startdate);
-        var now = moment();
-
-        this.setState({
-          timeTillopen:register_date.from(now)
-        });
-
-      }
-      if (moment().isAfter(this.state.event.register_deadline)){
-        register_closed = true
-        closed_text = "Deadlinen for avmelding er forbi, du kan ikke melde deg av arrangementet."
-      }
-      if (register_open && !register_closed){
-
-      } else {
-        this.setState({
-          register_open:register_open,
-          register_open:register_open,
-          loading:false,
-          screen:screen,
-          closed_text:closed_text,
-        })
-      }
+      console.log("EventAttend checkDates");
+      this.checkDates();
+      this.setState({
+        loading:false
+      });
 
 
   }
+  getEventStatusFromAPI= async()=>{
+    console.log("EventAttendScreen getEventStatusFromAPI");
+    //console.log(this.state);
+    fetch_url = social_url.concat(2)
+    let jsonResponse = await fetch(fetch_url,{
+      method:'GET',
+      headers:{
+        "Authorization": this.state.AuthToken,
+      },
+    })
+      .then((response) => {
+        this.setState({
+          httpStatus:response.status,
+        })
+        return response.text();
+      })
+      .then((responseJson)  => {
+
+        let res = JSON.parse(responseJson);
+
+        return res;
+      })
+      .catch((error) => {
+         console.error(error);
+      });
+  }
   componentWillMount(){
+    console.log("EventAttend componentWillMount");
     this.setParameters();
   }
 render(){
@@ -105,47 +178,24 @@ render(){
   }
   if(this.state.screen =="Closed"){
     return(
-      <View style={styles.container}>
-        <View style={styles.defaultDenied}>
-          <View style={styles.defaultDeniedUpper}>
-            <View style={{flex:1,width:300,paddingTop:10, flexDirection:'row'}}>
-              <Image
-                source={require('./images/Calendar_icon.png')}
-                style={{width:40, height:40}}
-              />
-              <Text style={{fontSize:20, paddingTop:10}}>Datoer</Text>
-            </View>
-            <View style={{flex:1.5  , width:300}}>
-              <View style={{flexDirection:'row'}}>
-                <Text>Påmeldingen åpner: </Text><Text style={{position:'absolute', right:0}}>{this.state.register_open_date}</Text>
-              </View>
-              <View style={{flexDirection:'row'}}>
-                <Text>Påmeldingsfrist:</Text><Text style={{position:'absolute', right:0}}>{this.state.register_closed_date}</Text>
-              </View>
-              <View style={{flexDirection:'row'}}>
-                <Text>Avmeldingsfrist:</Text><Text style={{position:'absolute', right:0}}>{this.state.register_deadline_date}</Text>
-              </View>
+        <EventClosed
+          event_id ={this.state.event_id}
+          user_id  ={this.state.user_id}
 
-
-
-
-            </View>
-          </View>
-          <View style={styles.defaultDeniedLower}>
-            <Text>{this.state.closed_text}</Text>
-            <Text style={{marginTop:10}}>Open {this.state.timeTillopen}</Text>
-          </View>
-
-        </View>
-      </View>
+        />
       );
   }
-  return(
-    <View style={styles.container}>
 
-      <Text>EventAttendScreen</Text>
-    </View>
-    );
+  if(!this.state.allowed){
+    return(
+        <EventNotAllowed eventState={this.state}/>
+      );
+  }
+
+  return(
+
+        <EventForm eventState={this.state}/>
+      );
   }
 }
 
@@ -158,28 +208,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flex:1,
   },
-  defaultDenied:{
-    margin:20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 3,
-    elevation: 3,
-    borderColor:'transparent',
-    borderRadius:10,
-    borderWidth: 1,
-    height:200,
-    alignItems:'center',
-    justifyContent: 'center',
 
-  },
-  defaultDeniedUpper:{
-    flex:2,
-
-  },
-  defaultDeniedLower:{
-    flex:1,
-    justifyContent:'center',
-  },
 
 });
