@@ -34,7 +34,7 @@ export default class EventScreen extends React.Component{
 
     }
     updateState(data){
-      console.log("data");
+
       this.setState(data);
 
     }
@@ -88,7 +88,7 @@ export default class EventScreen extends React.Component{
   }
 
 render(){
-  console.log(this.state.screen);
+
   if (this.state.screen=="Social" ) {
 
       return(

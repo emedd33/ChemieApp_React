@@ -68,7 +68,7 @@ export default class SocialEvents extends React.Component{
 
         //Converting date to more readable format for user
         for (var i = 0; i<jsonResponse.length && i < 5; i++){
-          console.log(jsonResponse[i].date);
+
           month = jsonResponse[i].date.slice(5,7);
           month_name = this.getMonth(month);
 
@@ -141,7 +141,6 @@ export default class SocialEvents extends React.Component{
   }
 
   detailNavigation(body){
-    console.log(body);
      this.props.navigation.navigate('EventDetailScreen', body);
   }
 render(){
@@ -166,6 +165,7 @@ render(){
                     id:item.id,
                     title:item.title,
                     fetch_url:fetch_url,
+                    type:'Social',
                   })}
                 >
 
