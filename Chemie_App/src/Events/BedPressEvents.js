@@ -15,7 +15,10 @@ import {
 } from 'react-native';
 
 import EventDetailScreen from './EventDetailScreen';
-const fetch_url = "http://192.168.1.101:8000/api/events/bedpress/"
+
+import base_params from 'Chemie_App/Params.js';
+const fetch_url = base_params.base_url.concat('/api/events/bedpress/');
+
 
 export default class BedPressEvents extends React.Component{
 

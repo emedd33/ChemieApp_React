@@ -13,7 +13,12 @@ import EventScreen from './src/Events/EventScreen';
 import EventDetailScreen from './src/Events/EventDetailScreen';
 import EventAttendScreen from './src/Events/EventAttendScreen';
 
+const base_params = {
+    base_url:'http://192.168.0.5:8000',
+}
+
 export default class App extends React.Component {
+
   render(){
     return (
       <ChemieApp/>

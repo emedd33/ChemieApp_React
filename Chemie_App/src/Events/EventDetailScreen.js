@@ -17,8 +17,10 @@ import {
 
 } from 'react-native';
 
+import base_params from 'Chemie_App/Params.js';
+const fetch_url = base_params.base_url.concat('/api/events/social/');
 
-const fetch_url = "http://192.168.1.101:8000/api/events/social/"
+
 
 export default class EventDetailScreen extends React.Component{
   static navigationOptions = ({ navigation }) => ({
@@ -97,7 +99,7 @@ export default class EventDetailScreen extends React.Component{
       type:this.props.navigation.state.params.type,
       id: this.props.navigation.state.params.id,
     });
-    const url = this.state.fetch_url.concat(this.props.navigation.state.params.id);
+    const url = this.state.fetch_url.concat(this.props.navigation.state.params.id).concat("/");
 
     let jsonResponse = await fetch(url,{
       method:'GET',

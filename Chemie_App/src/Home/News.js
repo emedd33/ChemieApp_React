@@ -13,7 +13,10 @@ import {
 } from 'react-native';
 
 import HTML from 'react-native-render-html';
-const fetch_url = "http://192.168.1.101:8000/api/news/articles/";
+
+import base_params from 'Chemie_App/Params.js';
+const fetch_url = base_params.base_url.concat('/api/news/articles/');
+
 
 export default class News extends React.Component{
   constructor(props){

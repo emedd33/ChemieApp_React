@@ -15,7 +15,10 @@ import EventClosed from './EventClosed';
 import EventNotAllowed from './EventNotAllowed';
 import EventForm from './EventForm';
 
-const social_url = 'http://192.168.1.101:8000/api/events/social/register/'
+import base_params from 'Chemie_App/Params.js';
+const social_url = base_params.base_url.concat('/api/events/social/register/');
+
+
 //const bedpress_url = 'http://192.168.1.101:8000/api/events/bedpress/register/'
 
 export default class EventAttendScreen extends React.Component{
@@ -117,6 +120,9 @@ export default class EventAttendScreen extends React.Component{
         allowed:false
       });
     }
+    this.setState({
+      loading:false
+    });
 
   }
   setParameters(){
@@ -132,16 +138,13 @@ export default class EventAttendScreen extends React.Component{
 
       console.log("EventAttend checkDates");
       this.checkDates();
-      this.setState({
-        loading:false
-      });
+
 
 
   }
   getEventStatusFromAPI= async()=>{
     console.log("EventAttendScreen getEventStatusFromAPI");
-    //console.log(this.state);
-    fetch_url = social_url.concat(2)
+    fetch_url = social_url.concat(this.state.event_id)
     let jsonResponse = await fetch(fetch_url,{
       method:'GET',
       headers:{

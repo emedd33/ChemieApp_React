@@ -14,8 +14,9 @@ import {createStackNavigator} from 'react-navigation';
 
 import * as Progress from 'react-native-progress';
 
-const fetch_url = 'http://192.168.1.101:8000/api/api-auth/';
-const fetch_profile_url = 'http://192.168.1.101:8000/api/profile/profile/'
+import base_params from 'Chemie_App/Params.js';
+const fetch_url = base_params.base_url.concat('/api/api-auth/');
+const fetch_profile_url = base_params.base_url.concat('/api/profile/profile/');
 
 export default class LoginForm extends React.Component {
 
@@ -63,7 +64,7 @@ export default class LoginForm extends React.Component {
         this.setState({
           loading:false,
         });
-        
+
         this.props.navigation.navigate('Home');
     }
     // TODO: Make loginHTTPRequest a general fuction
@@ -87,8 +88,8 @@ export default class LoginForm extends React.Component {
           },
           timeout: 2000,
           body: JSON.stringify({
-            username:'emedd33',
-            password:'123qweasd',
+            username:this.state.username,
+            password:this.state.password,
           }),
         })
 

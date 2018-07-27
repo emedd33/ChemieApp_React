@@ -14,7 +14,11 @@ import {
 import EventHeader from './EventsHeader';
 import SocialEvents from './SocialEvents';
 import BedPressEvents from './BedPressEvents'
-const fetch_url = "http://192.168.1.101:8000/api/events/social/"
+
+
+import base_params from 'Chemie_App/Params.js';
+const fetch_url = base_params.base_url.concat('/api/events/social/');
+
 
 
 // TODO: Filter out events which are overdue

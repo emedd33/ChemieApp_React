@@ -16,8 +16,9 @@ import {
 } from 'react-native';
 
 import UploadImage from './UploadImage';
-const fetch_url = "http://192.168.1.101:8000/api/sladreboks/submission/"
 
+import base_params from 'Chemie_App/Params.js';
+const fetch_url = base_params.base_url.concat('/api/sladreboks/submission/');
 
 export default class SladderForm extends React.Component{
 constructor(props){
