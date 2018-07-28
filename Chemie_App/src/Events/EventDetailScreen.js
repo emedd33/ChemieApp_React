@@ -162,6 +162,8 @@ export default class EventDetailScreen extends React.Component{
       })
   }
   attendEventNavigation(body){
+      console.log("EventDetailScreen attendEventNavigation");
+      console.log(body);
      this.props.navigation.navigate('EventAttend', body);
   }
 

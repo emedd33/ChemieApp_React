@@ -14,6 +14,8 @@ import {
 
 import base_params from 'Chemie_App/Params.js';
 const social_url = base_params.base_url.concat('/api/events/social/register/');
+const social_register_url = base_params.base_url.concat('/api/events/social/register/post/');
+
 
 //const bedpress_url =
 export default class EventForm extends React.Component{
@@ -22,21 +24,72 @@ export default class EventForm extends React.Component{
     super(props);
     this.state={
       loading:true,
-      sleepover_checked:null,
-      companion_checked:null,
-      companionName:null,
-      companion_allowed:null,
-      snack_checked:null,
-      AuthToken:props.eventState.AuthToken,
-      httpStatus:null,
 
       event_type:props.eventState.type,
       event_id:props.eventState.event_id,
+
+      AuthToken:props.eventState.AuthToken,
+      httpStatus:null,
+
+      companion_allowed:props.eventState.event.companion,
+      snack_allowed:props.eventState.event.night_snack,
+      sleepover_allowed:props.eventState.event.sleepover,
+
+      sleepover_checked:null,
+      snack_checked:null,
+      companion_checked:null,
+      companionNamePlaceholder:"Skriv inn navn på følge",
+      companionName:null,
+
       registered_status:false,
       registered:false,
       payed:false,
     }
     this.getEventStatusFromAPI=this.getEventStatusFromAPI.bind(this);
+    this.postEventStatusToAPI = this.postEventStatusToAPI.bind(this);
+    this.setCompanionInputText = this.setCompanionInputText.bind(this);
+  }
+  postEventStatusToAPI = async() => {
+    let fetch_url = '';
+    if (this.state.event_type =="Social"){
+      fetch_url = social_register_url.concat(this.state.event_id);
+    } else if (this.state.event_type =="BedPress") {
+      console.log("blææ");
+    }
+    fetch_url = fetch_url.concat('/');
+    console.log(fetch_url);
+
+    let jsonResponse = await fetch(fetch_url,{
+      method:'POST',
+      headers:{
+        "Authorization": this.state.AuthToken,
+        Accept: "application/json",
+        "Content-Type":"application/json",
+      },
+      body:JSON.stringify({
+        event:2,
+        status:1,
+      })
+    })
+      .then((response) => {
+
+        alert(response.status);
+        this.setState({
+          httpStatus:response.status,
+        })
+        return response.text();
+      })
+      .then((responseJson)  => {
+        let res = JSON.parse(responseJson);
+
+        return res;
+      })
+      .catch((error) => {
+         console.error(error);
+      });
+      if (this.state.httpStatus >= 200 && this.state.httpStatus < 300){
+        console.log("Success 2");
+      }
   }
   getEventStatusFromAPI = async() =>{
     console.log("EventForm getEventStatusFromAPI");
@@ -70,17 +123,23 @@ export default class EventForm extends React.Component{
       if (this.state.httpStatus >= 200 && this.state.httpStatus < 300){
         console.log("Success");
         if (jsonResponse.length==1){
+          console.log(jsonResponse);
           this.setState({
             registered:true,
             registered_status:jsonResponse[0].status,
             payed:jsonResponse[0].payment_status,
             sleepover_checked:jsonResponse[0].sleepover,
             snack_checked:jsonResponse[0].night_snack,
-            companionName:jsonResponse[0].companion,
-            companion_allowed:jsonResponse[0].event.companion,
-          })
+          });
+          if (jsonResponse[0].companion != null && jsonResponse[0].companion != ''){
+            this.setState({
+
+              companionName:jsonResponse[0].companion,
+              companionNamePlaceholder:jsonResponse[0].companion,
+            })
+          }
         }
-        console.log(this.state);
+
         this.setState({
           loading:false,
         })
@@ -89,6 +148,17 @@ export default class EventForm extends React.Component{
   componentWillMount(){
     this.getEventStatusFromAPI()
   }
+  setCompanionInputText(){
+    if (this.state.companion_checked == true ){
+      var companionName = "Skriv inn navn på følge"
+      this.setState({
+          companionName:companionName,
+      })
+    }
+    this.setState({
+      companion_checked:!this.state.companion_checked,
+
+    })}
 render(){
   var sleepoverCheckboxTitle = <Text></Text>
   var companionCheckboxTitle = <Text></Text>
@@ -102,9 +172,10 @@ render(){
   var registerTextStatus = <Text></Text>
   var deregistrationButton = <Text></Text>
 
-  if(this.state.sleepover_checked != null){
+  if(this.state.sleepover_allowed != null){
     sleepoverCheckbox = <CheckBox
       value={this.state.sleepover_checked}
+      title="Overnatting"
       onValueChange={()=>this.setState({
         sleepover_checked:!this.state.sleepover_checked
       })}
@@ -112,14 +183,25 @@ render(){
                             />
     sleepoverCheckboxTitle = <Text style={styles.checkboxTitle}>Overnatting</Text>
   }
+  if(this.state.snack_allowed != null){
+
+    snackCheckBox = <CheckBox
+      value={this.state.snack_checked}
+      onValueChange={()=>this.setState({
+        snack_checked:!this.state.snack_checked
+
+      })}
+
+                    />
+    snackCheckBoxTitle = <Text style={styles.checkboxTitle}>Nattmat</Text>
+  }
   if(this.state.companion_allowed != null){
 
     companionCheckbox = <CheckBox
       value={
           this.state.companion_checked
       }
-
-
+      onValueChange={this.setCompanionInputText}
                         />
         companionCheckboxTitle = <Text style={styles.checkboxTitle}>Følge</Text>
         compantionInputText = <TextInput
@@ -127,28 +209,15 @@ render(){
           autoCapitalize = 'sentences'
           autoCorrect={false}
           returnKeyType='next'
-          placeholder = 'Skriv inn navn på følge'
+          placeholder = {this.state.companionNamePlaceholder}
           placeholderTextColor="#707070"
           underlineColorAndroid="transparent"
           onChangeText={(text)=> this.setState({companionName:text})}
                               />
       }
-  if(this.state.snack_checked != null){
-
-        snackCheckBox = <CheckBox
-          value={this.state.snack_checked}
-          onValueChange={()=>this.setState({
-            snack_checked:!this.state.snack_checked
-
-          })}
-
-                        />
-        snackCheckBoxTitle = <Text style={styles.checkboxTitle}>Nattmat</Text>
-      }
 
   if (this.state.registered){
     registerText = <Text>Endre registrasjon</Text>
-    console.log("Registered true");
     switch (this.state.registered_status) {
       case 2:
         registerTextStatus = <Text style={{color:'grey', fontSize:20}}>Du er på venteliste</Text>
@@ -159,7 +228,11 @@ render(){
       default:
         registerTextStatus = <Text style={{color:'green', fontSize:20}}>Du er påmeldt</Text>
     }
-    deregistrationButton = <TouchableOpacity style={styles.submitButton}>
+    deregistrationButton =
+    <TouchableOpacity
+      style={styles.submitButton}
+
+    >
       <Text style={{color:'red'}}>Meld meg av</Text>
     </TouchableOpacity>
 
@@ -177,6 +250,7 @@ render(){
 
       // TODO: Fix KeyboardAvoidingView
       <KeyboardAvoidingView style={styles.container} behavior="padding">
+
         <View style={styles.defaultDenied}>
           <View style={styles.defaultDeniedUpper} behavior="padding">
             <View style={{flex:1,width:300,paddingTop:10, flexDirection:'row'}}>
@@ -203,6 +277,7 @@ render(){
         </View>
         <View style={{alignItems:'center',justifyContent:'center'}}>
           {registerTextStatus}
+
         </View>
 
         <View style={styles.checkboxConatainer}>
@@ -222,7 +297,10 @@ render(){
           {compantionInputText}
         </View>
         <View style={styles.submitContainer}>
-          <TouchableOpacity style={styles.submitButton}>
+          <TouchableOpacity
+            style={styles.submitButton}
+            onPress={this.postEventStatusToAPI}
+          >
             {registerText}
 
           </TouchableOpacity>
