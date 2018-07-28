@@ -11,9 +11,9 @@ import {
   Button,
 } from 'react-native';
 
-import EventHeader from './EventsHeader';
-import SocialEvents from './SocialEvents';
-import BedPressEvents from './BedPressEvents'
+import EventHeader from '../Components/EventsHeader';
+import SocialEvents from './Social/SocialEvents';
+import BedPresEvents from './BedPres/BedPresEvents'
 
 
 import base_params from 'Chemie_App/Params.js';
@@ -26,8 +26,7 @@ const fetch_url = base_params.base_url.concat('/api/events/social/');
 export default class EventScreen extends React.Component{
   static navigationOptions = {
     header:null,
-
- }
+  }
 
   constructor(props){
     super(props);
@@ -35,19 +34,16 @@ export default class EventScreen extends React.Component{
       screen:'Social',
     }
     this.updateState = this.updateState.bind(this);
-
     }
-    updateState(data){
+  updateState(data){
 
       this.setState(data);
 
     }
-
   componentWillMount(){
     console.log("Events componentWillMount");
     this.updateState.bind(this);
   }
-
   getMonth(month) {
     result = month;
     switch(parseInt(month)){
@@ -105,14 +101,14 @@ render(){
 
       </View>
       );
-  } else if (this.state.screen=="BedPress" ) {
+  } else if (this.state.screen=="BedPres" ) {
       return(
       <View style={styles.container}>
         <EventHeader
           updateParentState={this.updateState}
           navigation={this.props.navigation}
         />
-        <BedPressEvents navigation={this.props.navigation}/>
+        <BedPresEvents navigation={this.props.navigation}/>
 
       </View>
       );

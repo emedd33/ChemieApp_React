@@ -30,12 +30,11 @@ export default class EventHeader extends Component {
     render() {
        if (this.state.firstScreen =="Social"){
          _style_social = styles.headerButtonContainerClicked;
-         _style_brepress = styles.headerButtonContainer;
-       } else {
-         _style_brepress = styles.headerButtonContainerClicked;
+         _style_bedpres = styles.headerButtonContainer;
+        } else {
+         _style_brepres = styles.headerButtonContainerClicked;
          _style_social = styles.headerButtonContainer;
        }
-      console.log(this.state.firstScreen);
         return (
           <View style={styles.headerContainer}>
             <View style={styles.headerTitleContainer}>
@@ -45,33 +44,28 @@ export default class EventHeader extends Component {
                 <Image
                   resizeMode='contain'
                   style={styles.Backarrow_icon}
-                  source={require('./images/Backarrow_icon.png')}
+                  source={require('../images/Backarrow_icon.png')}
                 />
               </TouchableOpacity>
-
               <Text style={styles.headerTitle}>
                 Events
               </Text>
-
             </View>
-
             <TouchableOpacity
               style={_style_social}
               onPress={this.setEvents.bind(this,"Social")}
             >
-
               <Text>
                 Sosialt
               </Text>
-
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={_style_brepress}
-              onPress={this.setEvents.bind(this,"BedPress")}
+              style={_style_bedpres}
+              onPress={this.setEvents.bind(this,"BedPres")}
             >
               <Text>
-                BedPress
+                BedPres
               </Text>
 
             </TouchableOpacity>

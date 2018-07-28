@@ -11,17 +11,16 @@ import {
   AsyncStorage,
 } from 'react-native';
 
-import EventClosed from './EventClosed';
-import EventNotAllowed from './EventNotAllowed';
-import EventForm from './EventForm';
+import EventClosed from '../Components/EventClosed';
+import EventNotAllowed from '../Components/EventNotAllowed';
+import EventFormSocial from './EventFormSocial';
 
 import base_params from 'Chemie_App/Params.js';
 const social_url = base_params.base_url.concat('/api/events/social/register/');
+const bedpres_url = base_params.base_url.concat('/api/events/bedpres/register/');
 
 
-//const bedpress_url = 'http://192.168.1.101:8000/api/events/bedpress/register/'
-
-export default class EventAttendScreen extends React.Component{
+export default class EventAttendScreenSocial extends React.Component{
   static navigationOptions = ({ navigation }) => ({
     title: `${navigation.state.params.event.title}`,
     headerStyle: {
@@ -135,7 +134,6 @@ export default class EventAttendScreen extends React.Component{
       this.getEventStatusFromAPI();
       console.log("EventAttend getregisterDateString");
       this.getregisterDateString();
-
       console.log("EventAttend checkDates");
       this.checkDates();
 
@@ -194,10 +192,12 @@ render(){
         <EventNotAllowed eventState={this.state}/>
       );
   }
-
   return(
 
-        <EventForm eventState={this.state}/>
+        <EventForm
+          eventState={this.state}
+          navigation={this.props.navigation}
+        />
       );
   }
 }

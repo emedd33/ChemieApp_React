@@ -17,10 +17,10 @@ import {
 import EventDetailScreen from './EventDetailScreen';
 
 import base_params from 'Chemie_App/Params.js';
-const fetch_url = base_params.base_url.concat('/api/events/bedpress/');
+const fetch_url = base_params.base_url.concat('/api/events/bedpres/');
 
 
-export default class BedPressEvents extends React.Component{
+export default class BedPresEvents extends React.Component{
 
   constructor(props){
     super(props);
@@ -36,7 +36,7 @@ export default class BedPressEvents extends React.Component{
   }
 
   getEventsFromAPI = async() => {
-    console.log("BedPress getEventsFromAPI");
+    console.log("BedPres getEventsFromAPI");
     let token = await AsyncStorage.getItem('AuthToken');
     this.setState({
       AuthToken:token,
@@ -170,7 +170,7 @@ render(){
                     id:item.id,
                     title:item.title,
                     fetch_url:fetch_url,
-                    type:'BedPress',
+                    type:'BedPres',
                   })}
                 >
 

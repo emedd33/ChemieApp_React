@@ -21,7 +21,7 @@ render(){
         <View style={styles.defaultDeniedUpper}>
           <View style={{flex:1,width:300,paddingTop:10, flexDirection:'row'}}>
             <Image
-              source={require('./images/Calendar_icon.png')}
+              source={require('../images/Calendar_icon.png')}
               style={{width:40, height:40}}
             />
             <Text style={{fontSize:20, paddingTop:10}}>Datoer</Text>

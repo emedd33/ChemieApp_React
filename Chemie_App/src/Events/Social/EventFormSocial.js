@@ -16,8 +16,9 @@ import base_params from 'Chemie_App/Params.js';
 const social_url = base_params.base_url.concat('/api/events/social/register/');
 const social_register_url = base_params.base_url.concat('/api/events/social/register/post/');
 
+const bedpres_url = base_params.base_url.concat('/api/events/bedpres/register/');
+const bedpres_register_url = base_params.base_url.concat('/api/events/bedpres/register/post/');
 
-//const bedpress_url =
 export default class EventForm extends React.Component{
 
   constructor(props){
@@ -48,16 +49,29 @@ export default class EventForm extends React.Component{
     this.getEventStatusFromAPI=this.getEventStatusFromAPI.bind(this);
     this.postEventStatusToAPI = this.postEventStatusToAPI.bind(this);
     this.setCompanionInputText = this.setCompanionInputText.bind(this);
+    this.forceUpdateHandler = this.forceUpdateHandler.bind(this);
   }
+  componentWillMount(){
+    this.setState({
+      loading:true
+    })
+    this.getEventStatusFromAPI()
+  }
+  forceUpdateHandler(){
+   this.forceUpdate();
+ };
   postEventStatusToAPI = async() => {
+    this.setState({
+      loading:true
+    })
     let fetch_url = '';
     if (this.state.event_type =="Social"){
       fetch_url = social_register_url.concat(this.state.event_id);
-    } else if (this.state.event_type =="BedPress") {
-      console.log("blææ");
+    } else if (this.state.event_type =="BedPres") {
+      fetch_url = bedpres_register_url.concat(this.state.event_id);
     }
     fetch_url = fetch_url.concat('/');
-    console.log(fetch_url);
+
 
     let jsonResponse = await fetch(fetch_url,{
       method:'POST',
@@ -67,13 +81,13 @@ export default class EventForm extends React.Component{
         "Content-Type":"application/json",
       },
       body:JSON.stringify({
-        event:2,
+        event:this.state.event_id,
         status:1,
       })
     })
       .then((response) => {
 
-        alert(response.status);
+
         this.setState({
           httpStatus:response.status,
         })
@@ -87,17 +101,19 @@ export default class EventForm extends React.Component{
       .catch((error) => {
          console.error(error);
       });
+
       if (this.state.httpStatus >= 200 && this.state.httpStatus < 300){
-        console.log("Success 2");
+        this.getEventStatusFromAPI()
       }
   }
   getEventStatusFromAPI = async() =>{
     console.log("EventForm getEventStatusFromAPI");
     let fetch_url = '';
+    console.log(this.state.event_type);
     if (this.state.event_type =="Social"){
       fetch_url = social_url.concat(this.state.event_id);
-    } else if (this.state.event_type =="BedPress") {
-      console.log("blææ");
+    } else if (this.state.event_type =="BedPres") {
+      fetch_url = bedpres_url.concat(this.state.event_id);
     }
 
     let jsonResponse = await fetch(fetch_url,{
@@ -123,7 +139,6 @@ export default class EventForm extends React.Component{
       if (this.state.httpStatus >= 200 && this.state.httpStatus < 300){
         console.log("Success");
         if (jsonResponse.length==1){
-          console.log(jsonResponse);
           this.setState({
             registered:true,
             registered_status:jsonResponse[0].status,
@@ -145,9 +160,7 @@ export default class EventForm extends React.Component{
         })
       }
   }
-  componentWillMount(){
-    this.getEventStatusFromAPI()
-  }
+
   setCompanionInputText(){
     if (this.state.companion_checked == true ){
       var companionName = "Skriv inn navn på følge"
@@ -160,6 +173,7 @@ export default class EventForm extends React.Component{
 
     })}
 render(){
+  console.log("render");
   var sleepoverCheckboxTitle = <Text></Text>
   var companionCheckboxTitle = <Text></Text>
   var snackCheckBoxTitle = <Text></Text>
@@ -231,7 +245,7 @@ render(){
     deregistrationButton =
     <TouchableOpacity
       style={styles.submitButton}
-
+      onPress={this.forceUpdateHandler}
     >
       <Text style={{color:'red'}}>Meld meg av</Text>
     </TouchableOpacity>

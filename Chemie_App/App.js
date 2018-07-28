@@ -10,8 +10,10 @@ import SplashScreen from './src/Splash/SplashScreen';
 import SladderScreen from './src/Sladder/SladderScreen';
 import SettingsScreen from './src/Settings/SettingsScreen';
 import EventScreen from './src/Events/EventScreen';
-import EventDetailScreen from './src/Events/EventDetailScreen';
-import EventAttendScreen from './src/Events/EventAttendScreen';
+import EventDetailScreenSocial from './src/Events/Social/EventDetailScreenSocial';
+import EventAttendScreenSocial from './src/Events/Social/EventAttendScreenSocial';
+//import EventDetailScreenBedPres from './src/Events/Social/EventDetailScreenBedPres';
+//import EventAttendScreenBedPres from './src/Events/Social/EventAttendScreenBedPres';
 
 const base_params = {
     base_url:'http://192.168.0.5:8000',
@@ -39,10 +41,12 @@ const ChemieApp = createStackNavigator({
     Home:{screen: HomeScreen},
     Sladder:{screen:SladderScreen},
     Settings: {screen: SettingsScreen},
-    Events: {screen: EventScreen},
-    EventDetailScreen: {screen: EventDetailScreen},
     Notification: {screen: NotificationScreen},
-    EventAttend: {screen:EventAttendScreen},
+    Events: {screen: EventScreen},
+    EventDetailScreenSocial: {screen: EventDetailScreenSocial},
+    EventAttendSocial: {screen:EventAttendScreenSocial},
+  //  EventDetailScreenBedPres: {screen: EventDetailScreenBedPres},
+  //  EventAttendBedPres: {screen:EventAttendScreenBedPres},
 
 
 

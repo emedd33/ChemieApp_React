@@ -18,7 +18,7 @@ render(){
       <View style={styles.defaultDenied}>
         <View style={styles.upperDenied}>
           <Image
-            source={require('./images/Sadface_icon.png')}
+            source={require('../images/Sadface_icon.png')}
             style={{width:60, height:60}}
           />
         </View>
