@@ -91,7 +91,7 @@ export default class EventDetailScreenSocial extends React.Component{
 
 
   getEventsFromAPI = async() => {
-    console.log("EventDetailScreen getEventsFromAPI");
+
     let token = await AsyncStorage.getItem('AuthToken');
     this.setState({
       AuthToken:token,
@@ -162,8 +162,6 @@ export default class EventDetailScreenSocial extends React.Component{
       })
   }
   attendEventNavigation(body){
-      console.log("EventDetailScreen attendEventNavigation");
-      console.log(body);
      this.props.navigation.navigate('EventAttendSocial', body);
   }
 

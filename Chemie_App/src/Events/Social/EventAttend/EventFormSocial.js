@@ -57,6 +57,7 @@ export default class EventFormSocial extends React.Component{
       registered_status:false,
       registered:false,
       payed:false,
+      price_member:null,
 
 
     }
@@ -110,6 +111,7 @@ export default class EventFormSocial extends React.Component{
             registered:true,
             registered_status:jsonResponse[0].status,
             payed:jsonResponse[0].payment_status,
+            price_member:jsonResponse[0].event.price_member,
             sleepover_checked:jsonResponse[0].sleepover,
             snack_checked:jsonResponse[0].night_snack,
           });
@@ -120,12 +122,13 @@ export default class EventFormSocial extends React.Component{
               companionNamePlaceholder:jsonResponse[0].companion,
             })
           }
+
+          }
         }
 
         this.setState({loading:false});
 
       }
-  }
   postEventStatusToAPI = async() => {
       this.setState({loading:true});
       let fetch_url = '';
@@ -158,7 +161,6 @@ export default class EventFormSocial extends React.Component{
         })
       })
         .then((response) => {
-          console.log(response);
             this.setState({
             response:response,
             httpStatus:response.status,
