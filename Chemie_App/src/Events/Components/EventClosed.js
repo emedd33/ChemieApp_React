@@ -1,10 +1,12 @@
 import React from 'react';
 
+
 import {
   StyleSheet,
   Text,
   View,
   Image,
+  TouchableOpacity,
 } from 'react-native';
 
 export default class EventClosed extends React.Component{
@@ -15,26 +17,32 @@ export default class EventClosed extends React.Component{
 
 render(){
   // TODO: Add refresh button
+
   return(
     <View style={styles.container}>
+      <View style={{justifyContent:'center', alignItems:'center', marginTop:10}}>
+        <Text style={{fontSize:20}}>
+          Påmeldingen har ikke åpnet
+        </Text>
+      </View>
       <View style={styles.defaultDenied}>
         <View style={styles.defaultDeniedUpper}>
-          <View style={{flex:1,width:300,paddingTop:10, flexDirection:'row'}}>
+          <View style={{flex:1,width:300, flexDirection:'row'}}>
             <Image
-              source={require('../images/Calendar_icon.png')}
-              style={{width:40, height:40}}
+              source={require('Chemie_App/src/Events/images/Calendar_icon.png')}
+              style={{width:40, height:40, marginTop:5, marginRight:25}}
             />
-            <Text style={{fontSize:20, paddingTop:10}}>Datoer</Text>
+            <Text style={{fontSize:30}}>Datoer</Text>
           </View>
 
-          <View style={{flex:1.5  , width:300}}>
-            <Text>{this.state.closed_text}</Text>
-            <Text style={{marginTop:10}}>Open: {this.state.timeTillopen}</Text>
+          <View style={{flex:1.5  , width:300, justifyContent:'center', alignItems:'center'}}>
+            <Text></Text>
+            <Text style={{marginTop:10, fontSize:20}}>Åpner {this.state.timeTillopen}</Text>
           </View>
         </View>
         <View style={styles.defaultDeniedLower}>
           <View style={{flexDirection:'row',width:300}}>
-            <Text>Påmeldingen åpner: </Text><Text style={{position:'absolute', right:0}}>{this.state.register_open_date}</Text>
+            <Text>Påmelding: </Text><Text style={{position:'absolute', right:0}}>{this.state.register_open_date}</Text>
           </View>
           <View style={{flexDirection:'row'}}>
             <Text>Påmeldingsfrist:</Text><Text style={{position:'absolute', right:0}}>{this.state.register_closed_date}</Text>
@@ -43,6 +51,18 @@ render(){
             <Text>Avmeldingsfrist:</Text><Text style={{position:'absolute', right:0}}>{this.state.register_deadline_date}</Text>
           </View>
         </View>
+
+      </View>
+      <View style={{justifyContent:'center', alignItems:'center'}}>
+        <TouchableOpacity
+          style={styles.refreshButton}
+          onPress={this.props.setParameters}
+        >
+          <Image
+            source={require('Chemie_App/src/Events/images/Refresh_icon.png')}
+            style={{width:40, height:40}}
+          />
+        </TouchableOpacity>
 
       </View>
     </View>
@@ -64,7 +84,7 @@ const styles = StyleSheet.create({
     borderColor:'transparent',
     borderRadius:10,
     borderWidth: 1,
-    height:200,
+    height:170,
     alignItems:'center',
     justifyContent: 'center',
 
@@ -75,6 +95,23 @@ const styles = StyleSheet.create({
   },
   defaultDeniedLower:{
     flex:1,
+    marginBottom:10
   },
+  refreshButton:{
+    alignItems:'center',
+    justifyContent:'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 3,
+    elevation: 3,
+    borderColor:'transparent',
+    borderRadius:10,
+    borderWidth: 1,
+    backgroundColor:'green',
+    width:70,
+    height:70,
+
+  }
 
 });

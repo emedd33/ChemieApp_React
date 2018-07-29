@@ -153,6 +153,7 @@ export default class EventDetailScreenSocial extends React.Component{
               jsonResponse['price_member'] = "Gratis"
               jsonResponse['payment_information'] = "Gratis arrangement. Husk at ved påmelding så forplikter du deg til å møte opp. Fravær vil føre til utestengelse fra arrangementer."
           }
+      
         this.setState({
           event:jsonResponse,
         });
@@ -230,6 +231,20 @@ render(){
             </Text>
             <Text>
               {this.state.event.price_member}
+            </Text>
+            <Text>
+              kr.
+            </Text>
+          </View>
+          <View style={styles.eventSummaryItem}>
+            <Text style={{fontWeight:'bold', marginRight:10}}>
+              Pris ikke-medlem:
+            </Text>
+            <Text>
+              {this.state.event.price_not_member}
+            </Text>
+            <Text>
+              kr.
             </Text>
           </View>
           <View style={styles.eventSummaryItem}>

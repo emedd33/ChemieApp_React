@@ -2,6 +2,8 @@ import React from 'react';
 import * as Progress from 'react-native-progress';
 
 var moment = require('moment');
+import 'moment/locale/nb';
+
 
 import {
   StyleSheet,
@@ -99,6 +101,7 @@ export default class EventAttendScreenSocial extends React.Component{
 
   }
   getregisterDateString(){
+
     let register_open_date = moment(this.state.event.register_startdate).calendar()
     let register_closed_date = moment(this.state.event.register_closed_date).calendar()
     let register_deadline_date = moment(this.state.event.register_deadline_date).calendar()
@@ -140,7 +143,6 @@ export default class EventAttendScreenSocial extends React.Component{
 
   }
   getEventStatusFromAPI= async()=>{
-
     fetch_url = social_url.concat(this.state.event_id)
     let jsonResponse = await fetch(fetch_url,{
       method:'GET',
@@ -169,6 +171,7 @@ export default class EventAttendScreenSocial extends React.Component{
     this.setParameters();
   }
 render(){
+  console.log();
   if (this.state.loading) {
     return(
       <View style={styles.loadingContainer}>
@@ -179,9 +182,8 @@ render(){
   if(this.state.screen =="Closed"){
     return(
         <EventClosed
-          event_id ={this.state.event_id}
-          user_id  ={this.state.user_id}
-
+          eventState={this.state}
+          setParameters = {this.setParameters}
         />
       );
   }

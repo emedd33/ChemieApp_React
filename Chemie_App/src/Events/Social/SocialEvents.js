@@ -3,6 +3,8 @@ import * as Progress from 'react-native-progress';
 import ImageResizer from 'react-native-image-resizer';
 import {ImageManipulator } from 'expo';
 
+
+
 import {
   StyleSheet,
   Text,
@@ -160,7 +162,12 @@ render(){
         this.state.events.map(( item, key ) =>
           (
             // TODO: Add image to background,
-              <View key = { key } style = { styles.container}>
+              <View
+                key = { key }
+                style = { styles.container}
+
+              >
+
                 <TouchableOpacity
                   style={styles.eventConatiner}
                   onPress={this.detailNavigation.bind(this,{
@@ -218,10 +225,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.8,
     shadowRadius: 3,
     elevation: 3,
-    borderColor:'transparent',
+    borderColor:'#F9CF00',
     borderRadius:10,
     borderWidth: 1,
-    height:200,
+    height:170,
+    backgroundColor:'#F9CF00',
 
   },
 
@@ -230,12 +238,12 @@ const styles = StyleSheet.create({
     flex:1,
     justifyContent:'center',
     alignItems:'center',
+    marginBottom:10
   },
   titleContainer:{
-    flex:1,
+    flex:2,
     justifyContent:'center',
     alignItems:'center',
-    margin:10,
   },
   eventTitle:{
     fontSize:30,
