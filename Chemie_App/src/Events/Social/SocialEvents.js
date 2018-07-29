@@ -14,7 +14,7 @@ import {
   ImageBackground
 } from 'react-native';
 
-import EventDetailScreen from './EventDetailScreen';
+import EventDetailScreenSocial from './EventDetailScreenSocial';
 
 import base_params from 'Chemie_App/Params.js';
 const fetch_url = base_params.base_url.concat('/api/events/social/');
@@ -143,7 +143,7 @@ export default class SocialEvents extends React.Component{
   }
 
   detailNavigation(body){
-     this.props.navigation.navigate('EventDetailScreen', body);
+     this.props.navigation.navigate('EventDetailScreenSocial', body);
   }
 render(){
   if(this.state.loading){

@@ -11,8 +11,8 @@ import {
   AsyncStorage,
 } from 'react-native';
 
-import EventClosed from '../Components/EventClosed';
-import EventNotAllowed from '../Components/EventNotAllowed';
+import EventClosed from 'Chemie_App/src/Events/Components/EventClosed';
+import EventNotAllowed from 'Chemie_App/src/Events/Components/EventNotAllowed';
 import EventFormSocial from './EventFormSocial';
 
 import base_params from 'Chemie_App/Params.js';
@@ -110,7 +110,6 @@ export default class EventAttendScreenSocial extends React.Component{
     });
   }
   checkAllowed(){
-    console.log("EventAttend checkAllowed");
 
     var grade = Number(this.state.grade);
     var allowed_grades = this.state.event.allowed_grades;
@@ -128,20 +127,20 @@ export default class EventAttendScreenSocial extends React.Component{
       this.setState({
         loading:true
       });
-      console.log("EventAttend getAsyncProfile");
+
       this.getAsyncProfile();
-      console.log("EventAttend getEventStatusFromAPI");
+
       this.getEventStatusFromAPI();
-      console.log("EventAttend getregisterDateString");
+
       this.getregisterDateString();
-      console.log("EventAttend checkDates");
+
       this.checkDates();
 
 
 
   }
   getEventStatusFromAPI= async()=>{
-    console.log("EventAttendScreen getEventStatusFromAPI");
+
     fetch_url = social_url.concat(this.state.event_id)
     let jsonResponse = await fetch(fetch_url,{
       method:'GET',
@@ -166,7 +165,7 @@ export default class EventAttendScreenSocial extends React.Component{
       });
   }
   componentWillMount(){
-    console.log("EventAttend componentWillMount");
+
     this.setParameters();
   }
 render(){
@@ -194,7 +193,7 @@ render(){
   }
   return(
 
-        <EventForm
+        <EventFormSocial
           eventState={this.state}
           navigation={this.props.navigation}
         />

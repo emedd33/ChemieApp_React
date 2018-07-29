@@ -14,7 +14,7 @@ import {
   ImageBackground
 } from 'react-native';
 
-import EventDetailScreen from './EventDetailScreen';
+//import EventDetailScreen from './EventDetailScreen';
 
 import base_params from 'Chemie_App/Params.js';
 const fetch_url = base_params.base_url.concat('/api/events/bedpres/');

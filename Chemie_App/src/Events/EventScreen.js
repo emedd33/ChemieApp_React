@@ -11,7 +11,7 @@ import {
   Button,
 } from 'react-native';
 
-import EventHeader from '../Components/EventsHeader';
+import EventHeader from './Components/EventHeader';
 import SocialEvents from './Social/SocialEvents';
 import BedPresEvents from './BedPres/BedPresEvents'
 

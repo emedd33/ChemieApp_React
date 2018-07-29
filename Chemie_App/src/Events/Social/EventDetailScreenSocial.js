@@ -22,7 +22,7 @@ const fetch_url = base_params.base_url.concat('/api/events/social/');
 
 
 
-export default class EventDetailScreen extends React.Component{
+export default class EventDetailScreenSocial extends React.Component{
   static navigationOptions = ({ navigation }) => ({
    title: `${navigation.state.params.title}`,
     headerTitleStyle : {
@@ -164,7 +164,7 @@ export default class EventDetailScreen extends React.Component{
   attendEventNavigation(body){
       console.log("EventDetailScreen attendEventNavigation");
       console.log(body);
-     this.props.navigation.navigate('EventAttend', body);
+     this.props.navigation.navigate('EventAttendSocial', body);
   }
 
   componentWillMount(){

@@ -11,7 +11,7 @@ import SladderScreen from './src/Sladder/SladderScreen';
 import SettingsScreen from './src/Settings/SettingsScreen';
 import EventScreen from './src/Events/EventScreen';
 import EventDetailScreenSocial from './src/Events/Social/EventDetailScreenSocial';
-import EventAttendScreenSocial from './src/Events/Social/EventAttendScreenSocial';
+import EventAttendScreenSocial from './src/Events/Social/EventAttend/EventAttendScreenSocial';
 //import EventDetailScreenBedPres from './src/Events/Social/EventDetailScreenBedPres';
 //import EventAttendScreenBedPres from './src/Events/Social/EventAttendScreenBedPres';
 
