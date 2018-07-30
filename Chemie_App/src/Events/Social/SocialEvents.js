@@ -4,6 +4,8 @@ import ImageResizer from 'react-native-image-resizer';
 import {ImageManipulator } from 'expo';
 
 
+import getMonth from 'Chemie_App/src/Functions/getMonth';
+import HttpRequest from 'Chemie_App/src/Functions/HttpRequests';
 
 import {
   StyleSheet,
@@ -31,118 +33,56 @@ export default class SocialEvents extends React.Component{
       AuthToken:'',
       httpStatus:null,
       }
-      this.getEventsFromAPI = this.getEventsFromAPI.bind(this);
-      this.getMonth = this.getMonth.bind(this);
+
+      this.setParameters = this.setParameters.bind(this);
+
 
   }
+  setParameters = async()=>{
+    let jsonResponse = await HttpRequest.GetRequest(fetch_url);
 
-  getEventsFromAPI = async() => {
-    console.log("events getEventsFromAPI");
-    let token = await AsyncStorage.getItem('AuthToken');
     this.setState({
-      AuthToken:token,
+      events:jsonResponse.response,
     });
-    let jsonResponse = await fetch(fetch_url,{
-      method:'GET',
-      headers:{
-        "Authorization": this.state.AuthToken,
-      },
+    if (jsonResponse.httpStatus == 401){
+      AsyncStorage.clear();
+      this.props.navigation.navigate('Login');
+    }
+
+    if (jsonResponse.httpStatus >= 200 && jsonResponse.httpStatus < 300) {
+
+      //Converting date to more readable format for user
+      for (var i = 0; i<jsonResponse.response.length && i < 5; i++){
+
+        month = jsonResponse.response[i].date.slice(5,7);
+        month_name = getMonth.getMonthFunction(month);
+
+        day = jsonResponse.response[i].date.slice(8,10);
+        time = jsonResponse.response[i].date.slice(11,16);
+        let date_String = day + " " + month_name + ' - ' + time;
+        jsonResponse.response[i].date = date_String;
+
+        //Adding an instance of number of spots to response
+        slut_spots = jsonResponse.response[i].attendees.length;
+        jsonResponse.response[i]['slut_spots'] = slut_spots;
+
+      }
+    }
+    this.setState({
+      loading:false,
     })
-      .then((response) => {
-        this.setState({
-          httpStatus:response.status,
-        })
-        return response.text();
-      })
-      .then((responseJson)  => {
-        let res = JSON.parse(responseJson);
-        return res;
-      })
-      .catch((error) => {
-         console.error(error);
-      });
-
-      //If token is not valid, sends user to loginScreen,
-      if (this.state.httpStatus == 401){
-        AsyncStorage.clear();
-        this.props.navigation.navigate('Login');
-
-      }
-      if (this.state.httpStatus >= 200 && this.state.httpStatus < 300) {
-
-        //Converting date to more readable format for user
-        for (var i = 0; i<jsonResponse.length && i < 5; i++){
-
-          month = jsonResponse[i].date.slice(5,7);
-          month_name = this.getMonth(month);
-
-          day = jsonResponse[i].date.slice(8,10);
-          time = jsonResponse[i].date.slice(11,16);
-          let date_String = day + " " + month_name + ' - ' + time;
-          jsonResponse[i].date = date_String;
-
-          //Adding an instance of number of spots to response
-          slut_spots = jsonResponse[i].attendees.length;
-          jsonResponse[i]['slut_spots'] = slut_spots;
-
-        }
-
-        this.setState({
-          events:jsonResponse,
-        });
-      }
-      this.setState({
-        loading:false,
-      })
   }
+
   componentWillMount(){
-    console.log("Events componentWillMount");
+
     if (this.state.events == null){
-      this.getEventsFromAPI();
+      this.setState({
+        loading:true
+      })
+      this.setParameters();
     }
   }
-  getMonth(month) {
-    result = month;
-    switch(parseInt(month)){
-      case 1:
-        result = 'Januar';
-        break;
-      case 2:
-        result = 'Februar';
-        break;
-      case 3:
-        result = 'Mars';
-        break;
-      case 4:
-        result = 'April';
-        break;
-      case 5:
-        result = 'Mai';
-        break;
-      case 6:
-        result = 'Juni';
-        break;
-      case 7:
-        result = 'Juli';
-        break;
-      case 8:
-        result = 'August';
-        break;
-      case 9:
-        result = 'September';
-        break;
-      case 10:
-        result = 'Oktober';
-        break;
-      case 11:
-        result = 'November';
-        break;
-      case 12:
-        result = 'Desember';
-        break;
-    }
-    return result;
-  }
+
 
   detailNavigation(body){
      this.props.navigation.navigate('EventDetailScreenSocial', body);
@@ -156,8 +96,10 @@ render(){
       </View>
     );
   }
+
   return(
     <ScrollView style={styles.container}>
+
       {
         this.state.events.map(( item, key ) =>
           (

@@ -1,4 +1,5 @@
 import React from 'react';
+import * as Progress from 'react-native-progress';
 
 
 import {
@@ -13,11 +14,17 @@ export default class EventClosed extends React.Component{
   constructor(props){
     super(props);
     this.state = this.props.eventState;
+
   }
 
 render(){
-  // TODO: Add refresh button
-
+  if (this.state.loading) {
+    return(
+      <View style={styles.loadingContainer}>
+        <Progress.Circle size={80} indeterminate={true} color="black" />
+      </View>
+    );
+  }
   return(
     <View style={styles.container}>
       <View style={{justifyContent:'center', alignItems:'center', marginTop:10}}>
@@ -53,18 +60,7 @@ render(){
         </View>
 
       </View>
-      <View style={{justifyContent:'center', alignItems:'center'}}>
-        <TouchableOpacity
-          style={styles.refreshButton}
-          onPress={this.props.setParameters}
-        >
-          <Image
-            source={require('Chemie_App/src/Events/images/Refresh_icon.png')}
-            style={{width:40, height:40}}
-          />
-        </TouchableOpacity>
 
-      </View>
     </View>
     );
   }
@@ -73,6 +69,11 @@ render(){
 const styles = StyleSheet.create({
   container:{
     flex:1
+  },
+  loadingContainer:{
+    alignItems:'center',
+    justifyContent: 'center',
+    flex:1,
   },
   defaultDenied:{
     margin:20,
@@ -97,21 +98,6 @@ const styles = StyleSheet.create({
     flex:1,
     marginBottom:10
   },
-  refreshButton:{
-    alignItems:'center',
-    justifyContent:'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 3,
-    elevation: 3,
-    borderColor:'transparent',
-    borderRadius:10,
-    borderWidth: 1,
-    backgroundColor:'green',
-    width:70,
-    height:70,
 
-  }
 
 });

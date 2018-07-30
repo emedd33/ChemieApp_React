@@ -11,7 +11,6 @@ import {
   Switch,
   TouchableOpacity,
   AsyncTask,
-  Alert,
 } from 'react-native';
 
 import base_params from 'Chemie_App/Params.js';
@@ -23,19 +22,10 @@ export default class EventFormSubmit extends React.Component{
     this.state = props.eventState;
     var optionContainerFlexSize = 0.5;
     var submitContainerFlexSize = 1;
-    this.registerToEvent = this.registerToEvent.bind(this);
   }
   handleCheckBox(body){
     this.setState(body)
     this.props.updateParentState(body)
-  }
-  registerToEvent(){
-    if(!this.state.register_closed){
-      this.props.postEventStatusToAPI()
-    } else {
-      Alert.alert("Ups","Arrangementets påmeldingsfrist har utløpts.")
-    }
-
   }
 render(){
 
@@ -138,7 +128,7 @@ render(){
       <View style={styles.submitConatainer}>
         <TouchableOpacity
           style={styles.submitButton}
-          onPress={this.registerToEvent}
+          onPress={this.props.postEventStatusToAPI}
         >
           <Text style={{fontSize:20}}>Meld meg på</Text>
 

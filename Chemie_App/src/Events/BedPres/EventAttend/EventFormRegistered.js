@@ -28,13 +28,13 @@ export default class EventFormRegistered extends React.Component{
       });
     }
 render(){
-  var registerstatus = <Text style={{fontSize:20, color:'green', marginTop:10}}>Du er påmeldt</Text>
+  var registerstatus = <Text style={{fontSize:20, color:'green'}}>Du er påmeldt</Text>
   switch (this.state.registered_status) {
     case 2:
-      registerstatus = <Text style={{fontSize:20, color:'grey',marginTop:10}}>Du er på venteliste</Text>
+      registerstatus = <Text style={{fontSize:20, color:'grey'}}>Du er på venteliste</Text>
       break;
     case 3:
-      registerstatus = <Text style={{fontSize:20, color:'grey',marginTop:10}}>Du er på interesseliste</Text>
+      registerstatus = <Text style={{fontSize:20, color:'grey'}}>Du er på interesseliste</Text>
       break;
     default:
       break;
@@ -45,7 +45,8 @@ render(){
     style={{width:40, height:30}}
                      />
   var paymentStatus = <Text>Ikke betalt</Text>
-  if (this.state.payment_status) {
+
+  if (this.state.payment_status || this.state.price_member == 0) {
     paymentImage = <Image
       source={require('Chemie_App/src/Events/images/Check_icon.png')}
       style={{width:40, height:40}}
@@ -105,7 +106,7 @@ render(){
           </View>
         </View>
         <View style={{justifyContent:'center',alignItems:'center', marginTop:20}}>
-          <Text style={{fontSize:10}}>Avmelding eller endring av registrering gjøres på chemie.no </Text>
+          <Text style={{fontSize:10}}>Avmelding eller endring av registrering gjøres på nettsidene våre </Text>
           <Text
             onPress={this.handelUrlClick}
             style={{color:'blue', marginTop:10, fontSize:15}}
