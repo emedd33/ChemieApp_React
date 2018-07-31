@@ -14,27 +14,37 @@ export default class EventHeader extends Component {
   constructor(props){
     super(props);
     this.state={
-      loading:false,
-      firstScreen:'Social',
+      loading:props.loading,
+      currentScreen:props.firstScreen,
+      _style_social:styles.headerButtonContainerClicked,
+      _style_bedpres: styles.headerButtonContainer,
     }
 
   }
-  setEvents(currentScreen){
-    this.setState({
-      firstScreen:currentScreen,
-    });
 
-    this.props.updateParentState({screen:currentScreen});
+  setEvents(navigateToScreen){
+    parentLoading = this.props.getLoadingStatus();
+    if(!parentLoading && navigateToScreen!=this.state.currentScreen){
+      this.setState({
+        currentScreen:navigateToScreen,
+      });
+      if (navigateToScreen =="BedPres"){
+        this.setState({
+          _style_bedpres:styles.headerButtonContainerClicked,
+          _style_social: styles.headerButtonContainer,
+        });
+      } else  {
+        this.setState({
+          _style_social:styles.headerButtonContainerClicked,
+          _style_bedpres: styles.headerButtonContainer,
+        });
+      }
+
+      this.props.updateParentState({screen:navigateToScreen, loading:true});
+    }
   }
 
     render() {
-       if (this.state.firstScreen =="Social"){
-         _style_social = styles.headerButtonContainerClicked;
-         _style_bedpres = styles.headerButtonContainer;
-        } else {
-         _style_brepres = styles.headerButtonContainerClicked;
-         _style_social = styles.headerButtonContainer;
-       }
         return (
           <View style={styles.headerContainer}>
             <View style={styles.headerTitleContainer}>
@@ -52,7 +62,7 @@ export default class EventHeader extends Component {
               </Text>
             </View>
             <TouchableOpacity
-              style={_style_social}
+              style={this.state._style_social}
               onPress={this.setEvents.bind(this,"Social")}
             >
               <Text>
@@ -61,7 +71,7 @@ export default class EventHeader extends Component {
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={_style_bedpres}
+              style={this.state._style_bedpres}
               onPress={this.setEvents.bind(this,"BedPres")}
             >
               <Text>

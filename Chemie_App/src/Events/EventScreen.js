@@ -32,102 +32,65 @@ export default class EventScreen extends React.Component{
     super(props);
     this.state = {
       screen:'Social',
+      loading:true,
     }
     this.updateState = this.updateState.bind(this);
+    this.getLoadingStatus=this.getLoadingStatus.bind(this);
     }
   updateState(data){
-
       this.setState(data);
-
     }
-  componentWillMount(){
-    console.log("Events componentWillMount");
-    this.updateState.bind(this);
+  getLoadingStatus(){
+    return this.state.loading;
   }
-  getMonth(month) {
-    result = month;
-    switch(parseInt(month)){
-      case 1:
-        result = 'Januar';
-        break;
-      case 2:
-        result = 'Februar';
-        break;
-      case 3:
-        result = 'Mars';
-        break;
-      case 4:
-        result = 'April';
-        break;
-      case 5:
-        result = 'Mai';
-        break;
-      case 6:
-        result = 'Juni';
-        break;
-      case 7:
-        result = 'Juli';
-        break;
-      case 8:
-        result = 'August';
-        break;
-      case 9:
-        result = 'September';
-        break;
-      case 10:
-        result = 'Oktober';
-        break;
-      case 11:
-        result = 'November';
-        break;
-      case 12:
-        result = 'Desember';
-        break;
-    }
-    return result;
+  componentWillMount(){
+  }
+  componentDidMount(){
+    this.setState({
+      loading:false
+    })
   }
 
 render(){
-
   if (this.state.screen=="Social" ) {
-
       return(
       <View style={styles.container}>
         <EventHeader
           updateParentState={this.updateState}
           navigation={this.props.navigation}
+          firstScreen="Social"
+          loading={this.state.loading}
+          getLoadingStatus={this.getLoadingStatus}
         />
-        <SocialEvents navigation={this.props.navigation}/>
+        <SocialEvents
+          updateParentState={this.updateState}
+          navigation={this.props.navigation}
+          loading={this.state.loading}
+        />
+
 
       </View>
       );
   } else if (this.state.screen=="BedPres" ) {
+    console.log(this.state.loading);
       return(
       <View style={styles.container}>
         <EventHeader
           updateParentState={this.updateState}
           navigation={this.props.navigation}
+          firstScreen="BedPres"
+          loading={this.state.loading}
+          getLoadingStatus={this.getLoadingStatus}
         />
-        <BedPresEvents navigation={this.props.navigation}/>
-
-      </View>
-      );
-    } else {
-      return(
-      <View style={styles.container}>
-        <EventHeader
+        <BedPresEvents
           updateParentState={this.updateState}
           navigation={this.props.navigation}
+          loading={this.state.loading}
         />
-        <View style={styles.EventContainer}>
-
-        </View>
 
       </View>
       );
-
-  }
-
+    }
   }
 }
 
@@ -140,7 +103,12 @@ const styles = StyleSheet.create({
     justifyContent:'center',
     alignItems:'center',
 
-  }
+  },
+  loadingContainer:{
+    marginTop:50,
+    justifyContent:'center',
+    alignItems:'center',
+  },
 
 
 });

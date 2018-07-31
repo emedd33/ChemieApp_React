@@ -11,6 +11,7 @@ import {
   Switch,
   TouchableOpacity,
   AsyncTask,
+  Alert,
 } from 'react-native';
 
 import base_params from 'Chemie_App/Params.js';
@@ -22,60 +23,21 @@ export default class EventFormSubmit extends React.Component{
     this.state = props.eventState;
     var optionContainerFlexSize = 0.5;
     var submitContainerFlexSize = 1;
+    this.registerToEvent = this.registerToEvent.bind(this);
   }
   handleCheckBox(body){
     this.setState(body)
     this.props.updateParentState(body)
   }
+  registerToEvent(){
+    if(!this.state.register_closed){
+      this.props.postEventStatusToAPI()
+    } else {
+      Alert.alert("Ups","Arrangementets påmeldingsfrist har utløpts.")
+    }
+
+  }
 render(){
-
-  var sleepoverCheckboxTitle = <Text></Text>
-  var sleepoverCheckbox = <Text></Text>
-
-  var snackCheckBoxTitle = <Text></Text>
-  var snackCheckBox = <Text></Text>
-
-  var companionInputText = <Text></Text>
-  var compoanionHelpText = <Text></Text>
-
-  if(this.state.sleepover_allowed){
-    this.optionContainerFlexSize += 0.5;
-    this.submitContainerFlexSize -=0.125;
-    sleepoverCheckbox = <Switch
-      title='Overnatting'
-      value={this.state.sleepover_checked}
-      onValueChange={()=>{this.handleCheckBox({sleepover_checked:!this.state.sleepover_checked})}}
-                        />
-      sleepoverCheckboxTitle = <Text style={styles.checkboxTitle}>Overnatting</Text>
-    }
-  if(this.state.snack_allowed){
-    this.optionContainerFlexSize += 0.5;
-    this.submitContainerFlexSize -=0.125;
-      snackCheckBox = <Switch
-        value={this.state.snack_checked}
-        onValueChange={()=>{this.handleCheckBox({snack_checked:!this.state.snack_checked})}}
-
-                      />
-      snackCheckBoxTitle = <Text style={styles.checkboxTitle}>Nattmat</Text>
-    }
-  if(this.state.companion_allowed){
-      this.submitContainerFlexSize -=0.25;
-      this.optionContainerFlexSize += 1;
-      compoanionHelpText = <Text style={{textAlign:'center', fontSize:10}}>
-        Navn på ekstern person. Ønske om bordkavaler sendes til arrangør.
-      </Text>
-
-      companionInputText = <TextInput
-        style={styles.companionInputText}
-        autoCapitalize = 'sentences'
-        autoCorrect={false}
-        returnKeyType='next'
-        placeholder = {this.state.companionNamePlaceholder}
-        placeholderTextColor="#707070"
-        underlineColorAndroid="transparent"
-        onChangeText={(text)=> this.props.updateParentState({companionName:text})}
-                           />
-      }
 
   if (this.state.loading){
     return(
@@ -84,6 +46,10 @@ render(){
       </View>
     );
 
+  }
+  let submitText =<Text style={{fontSize:20}}>Meld meg på</Text>
+  if(this.state.register_closed){
+    submitText =<Text style={{fontSize:20}}>Påmeldingsfrist har utløpt</Text>
   }
   return(
     <KeyboardAvoidingView
@@ -111,26 +77,13 @@ render(){
           </View>
         </View>
       </View>
-      <View style={styles.optionsConatainer}>
-
-        {companionInputText}
-        {compoanionHelpText}
-
-        <View style={styles.induvidualCheckboxContainer}>
-          {sleepoverCheckbox}
-          {sleepoverCheckboxTitle}
-        </View>
-        <View style={styles.induvidualCheckboxContainer}>
-          {snackCheckBox}
-          {snackCheckBoxTitle}
-        </View>
-      </View>
       <View style={styles.submitConatainer}>
         <TouchableOpacity
           style={styles.submitButton}
-          onPress={this.props.postEventStatusToAPI}
+          onPress={this.registerToEvent}
         >
-          <Text style={{fontSize:20}}>Meld meg på</Text>
+          {submitText}
+
 
         </TouchableOpacity>
       </View>

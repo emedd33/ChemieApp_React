@@ -26,27 +26,31 @@ export default class BedPresEvents extends React.Component{
     super(props);
     this.state = {
       event: null,
-      loading:true,
       AuthToken:'',
       httpStatus:null,
+      loading:props.loading,
       }
       this.getEventsFromAPI = this.getEventsFromAPI.bind(this);
       this.getMonth = this.getMonth.bind(this);
 
   }
+  componentWillUnmount(){
+
+  }
 
   getEventsFromAPI = async() => {
-    console.log("BedPres getEventsFromAPI");
-    let token = await AsyncStorage.getItem('AuthToken');
-    this.setState({
-      AuthToken:token,
-    });
-    let jsonResponse = await fetch(fetch_url,{
-      method:'GET',
-      headers:{
-        "Authorization": this.state.AuthToken,
-      },
-    })
+    try{
+      this.props.updateParentState({loading:true});
+      let token = await AsyncStorage.getItem('AuthToken');
+      this.setState({
+        AuthToken:token,
+      });
+      let jsonResponse = await fetch(fetch_url,{
+        method:'GET',
+        headers:{
+          "Authorization": this.state.AuthToken,
+        },
+      })
       .then((response) => {
         this.setState({
           httpStatus:response.status,
@@ -59,7 +63,7 @@ export default class BedPresEvents extends React.Component{
         return res;
       })
       .catch((error) => {
-         console.error(error);
+        console.error(error);
       });
 
       //If token is not valid, sends user to loginScreen,
@@ -91,12 +95,15 @@ export default class BedPresEvents extends React.Component{
           events:jsonResponse,
         });
       }
+      this.props.updateParentState({loading:false});
       this.setState({
-        loading:false,
+        loading:false
       })
+    } catch(error){
+      alert(error);
+    }
   }
   componentWillMount(){
-    console.log("Events componentWillMount");
     if (this.state.events == null){
       this.getEventsFromAPI();
     }
@@ -146,16 +153,15 @@ export default class BedPresEvents extends React.Component{
 
   detailNavigation(body){
 
-     this.props.navigation.navigate('EventDetailScreen', body);
+     this.props.navigation.navigate('EventDetailScreenBedPres', body);
   }
 render(){
   if(this.state.loading){
-    // TODO: This needs to be chacked to IOS, https://github.com/oblador/react-native-progress
     return(
       <View style={styles.loadingContainer}>
         <Progress.Circle size={80} indeterminate={true} color="black" />
       </View>
-    );
+    )
   }
   return(
     <ScrollView style={styles.container}>
@@ -212,7 +218,6 @@ const styles = StyleSheet.create({
     justifyContent:'center',
     alignItems:'center',
   },
-
   eventConatiner:{
     flex:1,
     margin:20,

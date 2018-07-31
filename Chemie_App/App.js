@@ -12,13 +12,9 @@ import SettingsScreen from './src/Settings/SettingsScreen';
 import EventScreen from './src/Events/EventScreen';
 import EventDetailScreenSocial from './src/Events/Social/EventDetailScreenSocial';
 import EventAttendScreenSocial from './src/Events/Social/EventAttend/EventAttendScreenSocial';
-//import EventDetailScreenBedPres from './src/Events/Social/EventDetailScreenBedPres';
-//import EventAttendScreenBedPres from './src/Events/Social/EventAttendScreenBedPres';
-
-const base_params = {
-    base_url:'http://192.168.0.5:8000',
-}
-
+import EventDetailScreenBedPres from './src/Events/BedPres/EventDetailScreenBedPres';
+import EventAttendScreenBedPres from './src/Events/BedPres/EventAttend/EventAttendScreenBedPres';
+                                    
 export default class App extends React.Component {
 
   render(){
@@ -45,8 +41,8 @@ const ChemieApp = createStackNavigator({
     Events: {screen: EventScreen},
     EventDetailScreenSocial: {screen: EventDetailScreenSocial},
     EventAttendSocial: {screen:EventAttendScreenSocial},
-  //  EventDetailScreenBedPres: {screen: EventDetailScreenBedPres},
-  //  EventAttendBedPres: {screen:EventAttendScreenBedPres},
+    EventDetailScreenBedPres: {screen: EventDetailScreenBedPres},
+    EventAttendBedPres: {screen:EventAttendScreenBedPres},
 
 
 

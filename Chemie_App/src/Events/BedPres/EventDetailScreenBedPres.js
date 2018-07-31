@@ -17,12 +17,15 @@ import {
 
 } from 'react-native';
 
+import getMonth from 'Chemie_App/src/Functions/getMonth';
+import HttpRequest from 'Chemie_App/src/Functions/HttpRequests';
 import base_params from 'Chemie_App/Params.js';
-const fetch_url = base_params.base_url.concat('/api/events/social/');
+
+const fetch_url = base_params.base_url.concat('/api/events/bedpres/');
 
 
 
-export default class EventDetailScreenSocial extends React.Component{
+export default class EventDetailScreenBedPres extends React.Component{
   static navigationOptions = ({ navigation }) => ({
    title: `${navigation.state.params.title}`,
     headerTitleStyle : {
@@ -38,140 +41,61 @@ export default class EventDetailScreenSocial extends React.Component{
       loading:true,
       event:null,
       AuthToken:null,
-      id:null,
-      fetch_url:null,
-      type:null,
+      id:this.props.navigation.state.params.id,
     }
-    this.getEventsFromAPI = this.getEventsFromAPI.bind(this);
-    this.getMonth = this.getMonth.bind(this);
+
+    this.setParameters = this.setParameters.bind(this);
+
 
   }
-  getMonth(month) {
-    result = month;
-    switch(parseInt(month)){
-      case 1:
-        result = 'Januar';
-        break;
-      case 2:
-        result = 'Februar';
-        break;
-      case 3:
-        result = 'Mars';
-        break;
-      case 4:
-        result = 'April';
-        break;
-      case 5:
-        result = 'Mai';
-        break;
-      case 6:
-        result = 'Juni';
-        break;
-      case 7:
-        result = 'Juli';
-        break;
-      case 8:
-        result = 'August';
-        break;
-      case 9:
-        result = 'September';
-        break;
-      case 10:
-        result = 'Oktober';
-        break;
-      case 11:
-        result = 'November';
-        break;
-      case 12:
-        result = 'Desember';
-        break;
-    }
-    return result;
-  }
+  setParameters = async()=>{
+    const url = fetch_url.concat(this.props.navigation.state.params.id).concat("/");
+    let jsonResponse = await HttpRequest.GetRequest(url);
 
-
-  getEventsFromAPI = async() => {
-
-    let token = await AsyncStorage.getItem('AuthToken');
     this.setState({
-      AuthToken:token,
-      fetch_url:this.props.navigation.state.params.fetch_url,
-      type:this.props.navigation.state.params.type,
-      id: this.props.navigation.state.params.id,
+      event:jsonResponse.response[0],
     });
-    const url = this.state.fetch_url.concat(this.props.navigation.state.params.id).concat("/");
+    if (jsonResponse.httpStatus == 401){
+      AsyncStorage.clear();
+      this.props.navigation.navigate('Login');
+    }
+    if (jsonResponse.httpStatus >= 200 && jsonResponse.httpStatus < 300) {
+      month = this.state.event.date.slice(5,7);
+      month_name = getMonth.getMonthFunction(month);
 
-    let jsonResponse = await fetch(url,{
-      method:'GET',
-      headers:{
-        "Authorization": this.state.AuthToken,
-      },
-    })
-      .then((response) => {
-        this.setState({
-          httpStatus:response.status,
-        })
-        return response.text();
-      })
-      .then((responseJson)  => {
-        let res = JSON.parse(responseJson);
-        return res[0];
-      })
-      .catch((error) => {
-         alert(error);
-      });
+      day = this.state.event.date.slice(8,10);
+      time = this.state.event.date.slice(11,16);
+      let date_String = day + " " + month_name + ' - ' + time;
+      this.state.event['string_date'] = date_String;
 
-      //If token is not valid, sends user to loginScreen,
-      if (this.state.httpStatus == 401){
-        AsyncStorage.clear();
-        this.props.navigation.navigate('Login');
-
-      }
-      if (this.state.httpStatus >= 200 && this.state.httpStatus < 300) {
-          month = jsonResponse.date.slice(5,7);
-          month_name = this.getMonth(month);
-
-          day = jsonResponse.date.slice(8,10);
-          time = jsonResponse.date.slice(11,16);
-          let date_String = day + " " + month_name + ' - ' + time;
-          jsonResponse['string_date'] = date_String;
-
-          //Adding an instance of number of spots to response
-          slut_spots = jsonResponse.attendees.length;
-          jsonResponse['slut_spots'] = slut_spots;
-          jsonResponse['progress_sluts'] = 100*(slut_spots/jsonResponse['sluts']);
-
-          if (this.state.type == "Social"){
-            if (jsonResponse.price_member == 0) {
-              jsonResponse['price_member'] = "Gratis"
-            } else {
-              var price_string = String(jsonResponse['price_member']);
-              price_string.concat(' kr.');
-              jsonResponse['price_member'] = price_string;
-            }
-          } else {
-              jsonResponse['price_member'] = "Gratis"
-              jsonResponse['payment_information'] = "Gratis arrangement. Husk at ved påmelding så forplikter du deg til å møte opp. Fravær vil føre til utestengelse fra arrangementer."
-          }
-      
-        this.setState({
-          event:jsonResponse,
-        });
+      //Adding an instance of number of spots to response
+      slut_spots = this.state.event.attendees.length;
+      this.state.event['slut_spots'] = slut_spots;
+      this.state.event['progress_sluts'] = 100*(slut_spots/this.state.event['sluts']);
+      this.state.event['price_member'] = "Gratis."
       }
       this.setState({
         loading:false,
       })
-  }
+
+    }
+
+
   attendEventNavigation(body){
-     this.props.navigation.navigate('EventAttendSocial', body);
+     this.props.navigation.navigate('EventAttendBedPres', body);
   }
 
   componentWillMount(){
-    this.getEventsFromAPI();
+    if (this.state.events == null){
+      this.setParameters()
+    }
 
   }
 render(){
+
+
   if(this.state.loading){
+
     // TODO: This needs to be chacked to IOS, https://github.com/oblador/react-native-progress
     return(
       <View style={styles.loadingContainer}>
@@ -179,8 +103,10 @@ render(){
       </View>
     );
   }
-
-
+  var numberOfAttendees = <Text>{this.state.event.slut_spots} av {this.state.event.sluts}</Text>
+  if (this.state.event.slut_spots >= this.state.event.sluts){
+    numberOfAttendees = <Text>Arrangementet er fult.</Text>
+  }
   return(
     <View style={styles.container}>
       <View style={styles.titleContainer}>
@@ -227,33 +153,17 @@ render(){
           </View>
           <View style={styles.eventSummaryItem}>
             <Text style={{fontWeight:'bold', marginRight:10}}>
-              Pris medlem:
+              Pris:
             </Text>
             <Text>
               {this.state.event.price_member}
-            </Text>
-            <Text>
-              kr.
-            </Text>
-          </View>
-          <View style={styles.eventSummaryItem}>
-            <Text style={{fontWeight:'bold', marginRight:10}}>
-              Pris ikke-medlem:
-            </Text>
-            <Text>
-              {this.state.event.price_not_member}
-            </Text>
-            <Text>
-              kr.
             </Text>
           </View>
           <View style={styles.eventSummaryItem}>
             <Text style={{fontWeight:'bold', marginRight:10}}>
               Påmeldte:
             </Text>
-            <Text>
-              {this.state.event.slut_spots} av {this.state.event.sluts}
-            </Text>
+            {numberOfAttendees}
 
           </View>
           <ProgressBarAnimated
@@ -271,10 +181,6 @@ render(){
             Beskrivelse:
           </Text>
           <HTML  html={this.state.event.description} imagesMaxWidth={Dimensions.get('window').width} />
-          <Text style={{fontWeight:'bold', paddingTop:10}}>
-            Betalingsinformasjon:
-          </Text>
-          <HTML  html={this.state.event.payment_information} imagesMaxWidth={Dimensions.get('window').width} />
         </View>
       </ScrollView>
 
