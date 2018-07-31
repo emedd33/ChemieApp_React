@@ -26,7 +26,7 @@ render(){
 
           <Text>
             Ditt klassetrinn er ikke invitert til dette arrangementet.
-            Du kan fortsatt melde din interesse dersom det åpnes plasser.
+            Du kan fortsatt melde din interesse på chemie.no dersom det åpnes plasser.
           </Text>
 
         </View>

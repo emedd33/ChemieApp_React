@@ -33,12 +33,12 @@ export default class News extends React.Component{
   }
 
   getNewsFromAPI = async() => {
-    console.log("News getNewsFromAPI");
+
     let token = await AsyncStorage.getItem('AuthToken');
     this.setState({
       AuthToken:token,
     });
-    console.log(token);
+
     let jsonResponse = await fetch(fetch_url,{
       method:'GET',
       headers:{
@@ -84,7 +84,7 @@ export default class News extends React.Component{
       })
   }
   componentWillMount(){
-    console.log("News componentWillMount");
+
     this.getNewsFromAPI()
   }
   componentDidMount(){

@@ -34,7 +34,7 @@ export default class HomeScreen extends React.Component{
   ),
   };
   componentWillMount(){
-    console.log("Home componentWillMount");
+
     //this.getToken()
   }
   componentDidMount() {

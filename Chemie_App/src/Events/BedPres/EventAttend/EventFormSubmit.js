@@ -83,8 +83,6 @@ render(){
           onPress={this.registerToEvent}
         >
           {submitText}
-
-
         </TouchableOpacity>
       </View>
 

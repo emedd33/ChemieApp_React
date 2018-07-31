@@ -1,4 +1,6 @@
 import React from 'react';
+import { Permissions, Notifications } from 'expo';
+
 import {
   View,
   Text,
@@ -17,13 +19,14 @@ import * as Progress from 'react-native-progress';
 import base_params from 'Chemie_App/Params.js';
 const fetch_url = base_params.base_url.concat('/api/api-auth/');
 const fetch_profile_url = base_params.base_url.concat('/api/profile/profile/');
+const fetch_push_notification_token =  base_params.base_url.concat('/api/profile/profile/token/');
 
 export default class LoginForm extends React.Component {
 
   constructor(props){
     super(props);
     this.loginHTTPRequest = this.loginHTTPRequest.bind(this);
-    this.getProfileSettingsHTTPrequest = this.getProfileSettingsHTTPrequest.bind(this);
+    this.registerForPushNotificationsAsync = this.registerForPushNotificationsAsync.bind(this);
     this.state = {
       username: '',
       password:'',
@@ -31,11 +34,12 @@ export default class LoginForm extends React.Component {
       loading: false,
       }
     }
-    getProfileSettingsHTTPrequest = async(token) =>{
+    getProfileSettingsHTTPrequest = async(AuthToken) =>{
+      console.log(AuthToken);
       let jsonResponse = await fetch(fetch_profile_url,{
         method:'GET',
         headers:{
-          "Authorization": token,
+          "Authorization": AuthToken,
         },
       })
         .then((response) => {
@@ -46,13 +50,14 @@ export default class LoginForm extends React.Component {
         })
         .then((responseJson)  => {
           let res = JSON.parse(responseJson);
-          console.log(res);
           return res[0];
         })
         .catch((error) => {
            console.error(error);
         });
-        AsyncStorage.setItem('AuthToken',token);
+
+
+        AsyncStorage.setItem('AuthToken',AuthToken);
         AsyncStorage.setItem('Firstname',jsonResponse.first_name);
         AsyncStorage.setItem('Lastname',jsonResponse.last_name);
         AsyncStorage.setItem('access_card',jsonResponse.profile.access_card);
@@ -60,6 +65,8 @@ export default class LoginForm extends React.Component {
         AsyncStorage.setItem('membership',jsonResponse.profile.membership);
         AsyncStorage.setItem('username',jsonResponse.username);
         AsyncStorage.setItem('id',String(jsonResponse.id));
+
+        await this.registerForPushNotificationsAsync(AuthToken);
 
         this.setState({
           loading:false,
@@ -88,8 +95,8 @@ export default class LoginForm extends React.Component {
           },
           timeout: 2000,
           body: JSON.stringify({
-            username:this.state.username,
-            password:this.state.password,
+            username:"emedd33",//this.state.username,
+            password:"123qweasd",//this.state.password,
           }),
         })
 
@@ -103,17 +110,23 @@ export default class LoginForm extends React.Component {
 
           if (this.state.httpStatus >= 200 && this.state.httpStatus < 300) {
 
-            let tokenObject = JSON.parse(responseJson)
-            let token = "token " + tokenObject.token
+            let AuthTokenObject = JSON.parse(responseJson)
+            let AuthToken = "token " + AuthTokenObject.token
 
             //
-            this.getProfileSettingsHTTPrequest(token);
+            this.getProfileSettingsHTTPrequest(AuthToken);
 
             //AsyncStorage.setItem('AuthToken', token);
             //
           } else if (this.state.httpStatus == 400) {
+            this.setState({
+              loading:false,
+              });
             Alert.alert("Ups!","Feil brukernavn eller passord");
           } else {
+            this.setState({
+              loading:false,
+              });
             throw this.state.httpStatus
           }
         })
@@ -121,11 +134,46 @@ export default class LoginForm extends React.Component {
           Alert.alert("Ups! Feil ved innlogging","Det har skjedd en feil med feilmelding: " + error);
         });
 
+
        }
 
     }
+    registerForPushNotificationsAsync = async(AuthToken)=>{
+      const { status: existingStatus } = await Permissions.getAsync(
+        Permissions.NOTIFICATIONS
+      );
 
+      let finalStatus = existingStatus;
+      console.log(finalStatus);
+      // only ask if permissions have not already been determined, because
+      // iOS won't necessarily prompt the user a second time.
+      if (existingStatus !== 'granted') {
 
+        // Android remote notification permissions are granted during the app
+        // install, so this will only ask on iOS
+        const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+        finalStatus = status;
+      }
+
+      // Stop here if the user did not grant permissions
+      if (finalStatus !== 'granted') {
+        return;
+      }
+      // Get the token that uniquely identifies this device
+      let expoToken = await Notifications.getExpoPushTokenAsync();
+
+      return fetch(fetch_push_notification_token, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization:AuthToken
+        },
+        body: JSON.stringify({
+          expo_token:expoToken,
+          }),
+        });
+    }
   render(){
     if(this.state.loading){
       // TODO: This needs to be chacked to IOS, https://github.com/oblador/react-native-progress
