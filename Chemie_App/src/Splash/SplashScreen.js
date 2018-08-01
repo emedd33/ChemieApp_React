@@ -24,8 +24,6 @@ export default class splashscreen extends React.Component{
   };
   checkAuthToken = async () => {
     try {
-      console.log('Splash checkAuthToken');
-      AsyncStorage.clear();
       let token = await AsyncStorage.getItem('AuthToken');
       // TODO: Find a better conditions to check if token is correct
       if (token !== null && token.length > 20){
@@ -62,10 +60,7 @@ export default class splashscreen extends React.Component{
             style={styles.logo}
             source={require('./images/hclogo.png')}
           />
-
         </View>
-
-
       </View>
       );
   }

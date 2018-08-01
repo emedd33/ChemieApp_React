@@ -1,5 +1,5 @@
 import React from 'react';
-import { Permissions, Notifications } from 'expo';
+//import { Permissions, Notifications } from 'expo';
 
 import {
   View,
@@ -66,7 +66,8 @@ export default class LoginForm extends React.Component {
         AsyncStorage.setItem('username',jsonResponse.username);
         AsyncStorage.setItem('id',String(jsonResponse.id));
 
-        await this.registerForPushNotificationsAsync(AuthToken);
+
+        //this.registerForPushNotificationsAsync();
 
         this.setState({
           loading:false,
@@ -79,8 +80,7 @@ export default class LoginForm extends React.Component {
       // TODO: Set timer for request
       // TODO: give toast massage for respons
       // TODO: prevent multiple request if server is not up
-      // TODO: save username and prefferences.
-      if(this.state.username != '' && this.state.password != ''){
+      if(this.state.username != 'kk' && this.state.password != 'kk'){
         this.setState({
           loading:true,
           });
@@ -95,8 +95,8 @@ export default class LoginForm extends React.Component {
           },
           timeout: 2000,
           body: JSON.stringify({
-            username:"emedd33",//this.state.username,
-            password:"123qweasd",//this.state.password,
+            username:this.state.username,
+            password:this.state.password,
           }),
         })
 
@@ -138,30 +138,30 @@ export default class LoginForm extends React.Component {
        }
 
     }
-    registerForPushNotificationsAsync = async(AuthToken)=>{
+    registerForPushNotificationsAsync =  async() => {
       const { status: existingStatus } = await Permissions.getAsync(
         Permissions.NOTIFICATIONS
       );
-
       let finalStatus = existingStatus;
-      console.log(finalStatus);
+
       // only ask if permissions have not already been determined, because
       // iOS won't necessarily prompt the user a second time.
       if (existingStatus !== 'granted') {
-
         // Android remote notification permissions are granted during the app
         // install, so this will only ask on iOS
         const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
         finalStatus = status;
       }
+      console.log(finalStatus);
 
       // Stop here if the user did not grant permissions
       if (finalStatus !== 'granted') {
         return;
       }
-      // Get the token that uniquely identifies this device
-      let expoToken = await Notifications.getExpoPushTokenAsync();
 
+      // Get the token that uniquely identifies this device
+      let token = await Notifications.getExpoPushTokenAsync();
+      console.log(token);
       return fetch(fetch_push_notification_token, {
         method: 'POST',
         headers: {

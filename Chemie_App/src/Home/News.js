@@ -22,13 +22,11 @@ export default class News extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      articles: [],
+      articles: null,
       loading:true,
       AuthToken:'',
       httpStatus:null,
       }
-
-    this.articles = ['Test', 'Test 2'];
     this.getNewsFromAPI = this.getNewsFromAPI.bind(this);
   }
 
@@ -56,7 +54,7 @@ export default class News extends React.Component{
         return res;
       })
       .catch((error) => {
-         console.error(error);
+          console.log(error);
       });
 
       //If token is not valid, sends user to loginScreen,
@@ -66,18 +64,22 @@ export default class News extends React.Component{
 
       }
       if (this.state.httpStatus >= 200 && this.state.httpStatus < 300) {
+        if (jsonResponse.length>= 1){
+          for (var i = 0; i<jsonResponse.length && i < 5; i++){
+            year = jsonResponse[i].published_date.slice(0,4);
+            month = jsonResponse[i].published_date.slice(5,7);
+            day = jsonResponse[i].published_date.slice(8,10);
+            let date_String = "Publisert " + day + "/" + month + "/" + year;
+            jsonResponse[i].published_date = date_String;
+          }
 
-        //Converting published_date to more readable format for user
-        for (var i = 0; i<jsonResponse.length && i < 5; i++){
-          year = jsonResponse[i].published_date.slice(0,4);
-          month = jsonResponse[i].published_date.slice(5,7);
-          day = jsonResponse[i].published_date.slice(8,10);
-          let date_String = "Publisert " + day + "/" + month + "/" + year;
-          jsonResponse[i].published_date = date_String;
+        } else {
+          jsonResponse = "empty"
         }
         this.setState({
           articles:jsonResponse,
         });
+        //Converting published_date to more readable format for user
       }
       this.setState({
         loading:false,
@@ -100,6 +102,21 @@ render(){
       </View>
     );
   }
+  if(this.state.articles == null){
+    return(
+      <View style={styles.loadingContainer}>
+        <Text>Ingen nettforbindelse</Text>
+      </View>
+    );
+  }
+  if(this.state.articles == "empty"){
+    return(
+      <View style={styles.loadingContainer}>
+        <Text>Ingen nyheter å hente</Text>
+      </View>
+    );
+  }
+  console.log("Articles");
   return(
     <ScrollView style={styles.container}>
       <View style={styles.newsContainer}>
