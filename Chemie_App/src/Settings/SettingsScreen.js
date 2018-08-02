@@ -108,24 +108,32 @@ export default class LoginScreen extends React.Component{
         </View>
       );
     }
-    let firstname = <Text style={styles.profileName}>{this.state.firstname}</Text>
-    let lastname = <Text style={styles.profileName}>{this.state.lastname}</Text>
+    let firstname = <Text style={{fontSize:20}}>{this.state.firstname}</Text>
+    let lastname = <Text style={{fontSize:20}}>{this.state.lastname}</Text>
     return (
       <View style={styles.container}>
-        <View style={{flexDirection:'row', height:70, alignItems:'center', alignItems:'center', justifyContent:'center'}}>
+        <View style={styles.nameContainer}>
           {firstname}
           {lastname}
         </View>
-        <TouchableOpacity style={{height:50,backgroundColor:'ghostwhite', justifyContent:'center'}}>
+        <TouchableOpacity style={styles.whiteNavigation}
+          onPress={()=>this.props.navigation.navigate('SettingsGeneral')}
+        >
           <Text style={{ marginLeft:20}}>Generelt</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{height:50, justifyContent:'center'}}>
+        <TouchableOpacity style={styles.greyNavigation}
+          onPress={()=>this.props.navigation.navigate('SettingsPushNotification')}
+        >
           <Text style={{ marginLeft:20}}>Push notification</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{height:50, backgroundColor:'ghostwhite',justifyContent:'center'}}>
+        <TouchableOpacity style={styles.whiteNavigation}
+          onPress={()=>this.props.navigation.navigate('SettingsEmail')}
+        >
           <Text style={{ marginLeft:20}}>E-poster til kommiteer</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{height:50, justifyContent:'center'}}>
+        <TouchableOpacity style={styles.greyNavigation}
+          onPress={()=>this.props.navigation.navigate('SettingsInfo')}
+        >
           <Text style={{ marginLeft:20}}>info</Text>
         </TouchableOpacity>
 
@@ -153,17 +161,25 @@ const styles = StyleSheet.create({
     justifyContent:'center',
     alignItems:'center',
   },
+  nameContainer:{
+    flexDirection:'row',
+    height:70,
+    alignItems:'center',
+    alignItems:'center',
+    justifyContent:'center'
+  },
   infoContainer:{
     flex:2,
     alignItems:'center',
   },
-  profileName:{
-    fontSize:20,
+  whiteNavigation:{
+      height:50,
+      backgroundColor:'ghostwhite',
+      justifyContent:'center',
   },
-  formContainer:{
-    flex:1,
+  greyNavigation:{
+    height:50,
     justifyContent:'center',
-    alignItems:'center',
   },
   logoutContainer:{
     flex:1,

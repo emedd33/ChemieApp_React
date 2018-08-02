@@ -8,13 +8,19 @@ import LoginScreen from './src/Login/LoginScreen';
 import NotificationScreen from './src/Notification/NotificationScreen';
 import SplashScreen from './src/Splash/SplashScreen';
 import SladderScreen from './src/Sladder/SladderScreen';
+
 import SettingsScreen from './src/Settings/SettingsScreen';
+import SettingsEmailScreen from './src/Settings/SettingsChildren/SettingsEmailScreen';
+import SettingsInfoScreen from './src/Settings/SettingsChildren/SettingsInfoScreen';
+import SettingsPushNotificationScreen from './src/Settings/SettingsChildren/SettingsPushNotificationScreen';
+import SettingsGeneralScreen from './src/Settings/SettingsChildren/SettingsGeneralScreen';
+
 import EventScreen from './src/Events/EventScreen';
 import EventDetailScreenSocial from './src/Events/Social/EventDetailScreenSocial';
 import EventAttendScreenSocial from './src/Events/Social/EventAttend/EventAttendScreenSocial';
 import EventDetailScreenBedPres from './src/Events/BedPres/EventDetailScreenBedPres';
 import EventAttendScreenBedPres from './src/Events/BedPres/EventAttend/EventAttendScreenBedPres';
-                                    
+
 export default class App extends React.Component {
 
   render(){
@@ -36,8 +42,14 @@ const ChemieApp = createStackNavigator({
     Login:{screen: LoginScreen},
     Home:{screen: HomeScreen},
     Sladder:{screen:SladderScreen},
-    Settings: {screen: SettingsScreen},
     Notification: {screen: NotificationScreen},
+
+    Settings: {screen: SettingsScreen},
+    SettingsGeneral: {screen: SettingsGeneralScreen},
+    SettingsEmail: {screen: SettingsEmailScreen},
+    SettingsInfo: {screen: SettingsInfoScreen},
+    SettingsPushNotification: {screen: SettingsPushNotificationScreen},
+
     Events: {screen: EventScreen},
     EventDetailScreenSocial: {screen: EventDetailScreenSocial},
     EventAttendSocial: {screen:EventAttendScreenSocial},
