@@ -1,4 +1,6 @@
 import React from 'react';
+import * as Progress from 'react-native-progress';
+
 import {
   StyleSheet,
   Text,
@@ -6,6 +8,7 @@ import {
   TouchableOpacity,
   Alert,
   AsyncStorage,
+  Switch,
 } from 'react-native';
 
 export default class LoginScreen extends React.Component{
@@ -13,27 +16,75 @@ export default class LoginScreen extends React.Component{
     super(props);
     this.logoutPress=this.logoutPress.bind(this);
     this.logoutSubmit=this.logoutSubmit.bind(this);
+    this.getProfileSettings = this.getProfileSettings.bind(this);
+    this.changePushNotificationSettings = this.changePushNotificationSettings.bind(this);
+    this.state = {
+      loading:true,
+      firstname:"",
+      lastname:"",
+      access_card:"",
+      membership:"",
+      pushNotification:false,
+    }
   }
   static navigationOptions = {
-    title: 'Settings',
+    title: 'Innstillinger',
     headerStyle: {
       backgroundColor: '#F9CF00'
     },
   };
+  componentWillMount(){
+    this.getProfileSettings();
+  }
+  changePushNotificationSettings = async()=>{
+
+        this.setState({
+          //loading:true,
+          pushNotification:!this.state.pushNotification,
+        })
+
+      }
   logoutPress(){
 
-  Alert.alert(
-  'Sign out',
-  'Sikker på at du vil logge ut?',
-  [
-    {text: 'Nei', style: 'cancel' },
-    {text: 'Ja', onPress: () => {
-    this.logoutSubmit()
-    .then(this.props.navigation.navigate('Login'))},
+    Alert.alert(
+    'Sign out',
+    'Sikker på at du vil logge ut?',
+    [
+      {text: 'Nei', style: 'cancel' },
+      {text: 'Ja', onPress: () => {
+      this.logoutSubmit()
+      .then(this.props.navigation.navigate('Login'))},
+      }
+    ],
+      { cancelable: true }
+    );
   }
-  ],
-  { cancelable: true }
-)
+  getProfileSettings = async() =>{
+    let AuthToken ="";
+    let firstname = "";
+    let lastname = "";
+    let access_card = "";
+    let membership = "";
+    try{
+      firstname = await AsyncStorage.getItem('Firstname');
+      firstname = firstname.concat(" ");
+      lastname = await AsyncStorage.getItem('Lastname');
+      access_card = await AsyncStorage.getItem('access_card');
+      membership = await AsyncStorage.getItem('membership');
+      //let pushNotification = await AsyncStorage.getItem('pushNotification');
+    } catch (error){
+      Alert.alert("Ups", "Klarte ikke å hente profilen din")
+    }
+    this.setState({
+      loading:false,
+      AuthToken:AuthToken,
+      firstname:firstname,
+      lastname:lastname,
+      access_card:access_card,
+      membership:membership,
+      //pushNotification:false,
+    });
+
   }
   logoutSubmit = async() => {
 
@@ -49,12 +100,35 @@ export default class LoginScreen extends React.Component{
     }
   }
   render(){
+    if(this.state.loading){
+      // TODO: This needs to be chacked to IOS, https://github.com/oblador/react-native-progress
+      return(
+        <View style={styles.loadingContainer}>
+          <Progress.Circle size={80} indeterminate={true} color="black" />
+        </View>
+      );
+    }
+    let firstname = <Text style={styles.profileName}>{this.state.firstname}</Text>
+    let lastname = <Text style={styles.profileName}>{this.state.lastname}</Text>
     return (
       <View style={styles.container}>
-        <View style={styles.formContainer}>
-          <Text
-          >SettingsForm</Text>
+        <View style={{flexDirection:'row', height:70, alignItems:'center', alignItems:'center', justifyContent:'center'}}>
+          {firstname}
+          {lastname}
         </View>
+        <TouchableOpacity style={{height:50,backgroundColor:'ghostwhite', justifyContent:'center'}}>
+          <Text style={{ marginLeft:20}}>Generelt</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={{height:50, justifyContent:'center'}}>
+          <Text style={{ marginLeft:20}}>Push notification</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={{height:50, backgroundColor:'ghostwhite',justifyContent:'center'}}>
+          <Text style={{ marginLeft:20}}>E-poster til kommiteer</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={{height:50, justifyContent:'center'}}>
+          <Text style={{ marginLeft:20}}>info</Text>
+        </TouchableOpacity>
+
         <View style={styles.logoutContainer}>
           <TouchableOpacity
             style={styles.logoutButton}
@@ -74,9 +148,20 @@ const styles = StyleSheet.create({
   container:{
     flex:1,
   },
-  formContainer:{
+  loadingContainer:{
+    marginTop:50,
+    justifyContent:'center',
+    alignItems:'center',
+  },
+  infoContainer:{
     flex:2,
-    backgroundColor:"skyblue",
+    alignItems:'center',
+  },
+  profileName:{
+    fontSize:20,
+  },
+  formContainer:{
+    flex:1,
     justifyContent:'center',
     alignItems:'center',
   },
@@ -84,6 +169,7 @@ const styles = StyleSheet.create({
     flex:1,
     justifyContent:'center',
     alignItems:'center',
+    backgroundColor:'ghostwhite',
   },
   logoutButton:{
     backgroundColor:'red',

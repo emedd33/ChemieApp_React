@@ -24,6 +24,7 @@ export default class News extends React.Component{
     this.state = {
       articles: null,
       loading:true,
+      connected:false,
       AuthToken:'',
       httpStatus:null,
       }
@@ -74,10 +75,11 @@ export default class News extends React.Component{
           }
 
         } else {
-          jsonResponse = "empty"
+          jsonResponse= "empty"
         }
         this.setState({
           articles:jsonResponse,
+          connected:true,
         });
         //Converting published_date to more readable format for user
       }
@@ -102,7 +104,7 @@ render(){
       </View>
     );
   }
-  if(this.state.articles == null){
+  if(!this.state.connected){
     return(
       <View style={styles.loadingContainer}>
         <Text>Ingen nettforbindelse</Text>

@@ -1,5 +1,6 @@
 import React from 'react';
 //import { Permissions, Notifications } from 'expo';
+import * as Progress from 'react-native-progress';
 
 import {
   View,
@@ -14,7 +15,6 @@ import {
 
 import {createStackNavigator} from 'react-navigation';
 
-import * as Progress from 'react-native-progress';
 
 import base_params from 'Chemie_App/Params.js';
 const fetch_url = base_params.base_url.concat('/api/api-auth/');
@@ -26,7 +26,7 @@ export default class LoginForm extends React.Component {
   constructor(props){
     super(props);
     this.loginHTTPRequest = this.loginHTTPRequest.bind(this);
-    this.registerForPushNotificationsAsync = this.registerForPushNotificationsAsync.bind(this);
+    //this.registerForPushNotificationsAsync = this.registerForPushNotificationsAsync.bind(this);
     this.state = {
       username: '',
       password:'',
@@ -138,7 +138,7 @@ export default class LoginForm extends React.Component {
        }
 
     }
-    registerForPushNotificationsAsync =  async() => {
+    /*registerForPushNotificationsAsync =  async() => {
       const { status: existingStatus } = await Permissions.getAsync(
         Permissions.NOTIFICATIONS
       );
@@ -173,7 +173,7 @@ export default class LoginForm extends React.Component {
           expo_token:expoToken,
           }),
         });
-    }
+    }*/
   render(){
     if(this.state.loading){
       // TODO: This needs to be chacked to IOS, https://github.com/oblador/react-native-progress

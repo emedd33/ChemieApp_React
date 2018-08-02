@@ -32,6 +32,7 @@ export default class SocialEvents extends React.Component{
       events: null,
       AuthToken:'',
       httpStatus:null,
+      connected:false,
       loading:props.loading,
       }
 
@@ -40,44 +41,45 @@ export default class SocialEvents extends React.Component{
 
   }
   setParameters = async()=>{
-    try{
       this.props.updateParentState({loading:true});
       let jsonResponse = await HttpRequest.GetRequest(fetch_url);
 
-      this.setState({
-        events:jsonResponse.response,
-      });
+
       if (jsonResponse.httpStatus == 401){
         AsyncStorage.clear();
         this.props.navigation.navigate('Login');
       }
 
       if (jsonResponse.httpStatus >= 200 && jsonResponse.httpStatus < 300) {
+        if (jsonResponse.response.length>=1){
+          for (var i = 0; i<jsonResponse.response.length && i < 5; i++){
 
-        //Converting date to more readable format for user
-        for (var i = 0; i<jsonResponse.response.length && i < 5; i++){
+            month = jsonResponse.response[i].date.slice(5,7);
+            month_name = getMonth.getMonthFunction(month);
 
-          month = jsonResponse.response[i].date.slice(5,7);
-          month_name = getMonth.getMonthFunction(month);
+            day = jsonResponse.response[i].date.slice(8,10);
+            time = jsonResponse.response[i].date.slice(11,16);
+            let date_String = day + " " + month_name + ' - ' + time;
+            jsonResponse.response[i].date = date_String;
 
-          day = jsonResponse.response[i].date.slice(8,10);
-          time = jsonResponse.response[i].date.slice(11,16);
-          let date_String = day + " " + month_name + ' - ' + time;
-          jsonResponse.response[i].date = date_String;
-
-          //Adding an instance of number of spots to response
-          slut_spots = jsonResponse.response[i].attendees.length;
-          jsonResponse.response[i]['slut_spots'] = slut_spots;
+            //Adding an instance of number of spots to response
+            slut_spots = jsonResponse.response[i].attendees.length;
+            jsonResponse.response[i]['slut_spots'] = slut_spots;
 
         }
+      } else {
+        jsonResponse.response = "empty";
+      }
+        this.setState({
+          events:jsonResponse.response,
+          connected:true,
+        });
+        //Converting date to more readable format for user
       }
       this.props.updateParentState({loading:false});
       this.setState({
         loading:false
       })
-    } catch(error){
-      alert(error)
-    }
   }
 
   componentWillMount(){
@@ -95,6 +97,20 @@ render(){
         <Progress.Circle size={80} indeterminate={true} color="black" />
       </View>
     )
+  }
+  if(!this.state.connected){
+    return(
+      <View style={styles.loadingContainer}>
+        <Text>Ingen nettforbindelse</Text>
+      </View>
+    );
+  }
+  if(this.state.events == "empty"){
+    return(
+      <View style={styles.loadingContainer}>
+        <Text>Ingen arrangementer å hente</Text>
+      </View>
+    );
   }
   return(
     <ScrollView style={styles.container}>

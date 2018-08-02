@@ -25,8 +25,9 @@ export default class BedPresEvents extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      event: null,
-      AuthToken:'',
+      events: "empty",
+      AuthToken:null,
+      connected:false,
       httpStatus:null,
       loading:props.loading,
       }
@@ -39,32 +40,30 @@ export default class BedPresEvents extends React.Component{
   }
 
   getEventsFromAPI = async() => {
-    try{
       this.props.updateParentState({loading:true});
       let token = await AsyncStorage.getItem('AuthToken');
       this.setState({
         AuthToken:token,
       });
-      let jsonResponse = await fetch(fetch_url,{
-        method:'GET',
-        headers:{
-          "Authorization": this.state.AuthToken,
-        },
-      })
-      .then((response) => {
-        this.setState({
-          httpStatus:response.status,
+      try{
+        let jsonResponse = await fetch(fetch_url,{
+          method:'GET',
+          headers:{
+            "Authorization": this.state.AuthToken,
+          },
         })
-        return response.text();
-      })
-      .then((responseJson)  => {
-        let res = JSON.parse(responseJson);
+        .then((response) => {
+          this.setState({
+            httpStatus:response.status,
+          })
+          return response.text();
+        })
+        .then((responseJson)  => {
+          let res = JSON.parse(responseJson);
 
-        return res;
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+          return res;
+        })
+
 
       //If token is not valid, sends user to loginScreen,
       if (this.state.httpStatus == 401){
@@ -73,38 +72,42 @@ export default class BedPresEvents extends React.Component{
 
       }
       if (this.state.httpStatus >= 200 && this.state.httpStatus < 300) {
+        if (jsonResponse.length>=1) {
+          //Converting date to more readable format for user
+          for (var i = 0; i<jsonResponse.length && i < 5; i++){
 
-        //Converting date to more readable format for user
-        for (var i = 0; i<jsonResponse.length && i < 5; i++){
+            month = jsonResponse[i].date.slice(5,7);
+            month_name = this.getMonth(month);
 
-          month = jsonResponse[i].date.slice(5,7);
-          month_name = this.getMonth(month);
+            day = jsonResponse[i].date.slice(8,10);
+            time = jsonResponse[i].date.slice(11,16);
+            let date_String = day + " " + month_name + ' - ' + time;
+            jsonResponse[i].date = date_String;
 
-          day = jsonResponse[i].date.slice(8,10);
-          time = jsonResponse[i].date.slice(11,16);
-          let date_String = day + " " + month_name + ' - ' + time;
-          jsonResponse[i].date = date_String;
+            //Adding an instance of number of spots to response
+            slut_spots = jsonResponse[i].attendees.length;
+            jsonResponse[i]['slut_spots'] = slut_spots;
 
-          //Adding an instance of number of spots to response
-          slut_spots = jsonResponse[i].attendees.length;
-          jsonResponse[i]['slut_spots'] = slut_spots;
-
-        }
-
-        this.setState({
-          events:jsonResponse,
-        });
+          }
+      } else {
+        jsonResponse = "empty";
       }
-      this.props.updateParentState({loading:false});
       this.setState({
-        loading:false
-      })
-    } catch(error){
-      alert(error);
+        events:jsonResponse,
+        connected:true,
+      });
     }
+    }
+    catch(error){
+
+    }
+    this.props.updateParentState({loading:false});
+    this.setState({
+      loading:false
+    });
   }
   componentWillMount(){
-    if (this.state.events == null){
+    if (this.state.events == "empty"){
       this.getEventsFromAPI();
     }
   }
@@ -156,12 +159,29 @@ export default class BedPresEvents extends React.Component{
      this.props.navigation.navigate('EventDetailScreenBedPres', body);
   }
 render(){
+  console.log("loading: ",this.state.loading);
   if(this.state.loading){
     return(
       <View style={styles.loadingContainer}>
         <Progress.Circle size={80} indeterminate={true} color="black" />
       </View>
     )
+  }
+  console.log("connected:",this.state.connected);
+  if(!this.state.connected){
+    return(
+      <View style={styles.loadingContainer}>
+        <Text>Ingen nettforbindelse</Text>
+      </View>
+    );
+  }
+  console.log("events:", this.state.events);
+  if(this.state.events == "empty"){
+    return(
+      <View style={styles.loadingContainer}>
+        <Text>Ingen arrangementer å hente</Text>
+      </View>
+    );
   }
   return(
     <ScrollView style={styles.container}>
