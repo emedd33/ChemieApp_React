@@ -4,6 +4,7 @@ import {
   StyleSheet,
   Text,
   View,
+  Switch,
 } from 'react-native';
 
 export default class SettingsPushNotificationScreen extends React.Component{
@@ -15,12 +16,23 @@ export default class SettingsPushNotificationScreen extends React.Component{
     };
   constructor(props){
     super(props);
+    this.state=this.props.navigation.state.params.state;
+
   }
 render(){
   return(
     <View style={styles.container}>
-
-      <Text>SettingsPushNotificationScreen</Text>
+      <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
+        <Text>
+          Skru av/på pushvarsler fra ChemieApp
+        </Text>
+        <Switch
+          value={this.state.pushNotification}
+          onValueChange={()=>{this.setState({
+            pushNotification:!this.state.pushNotification
+          })}}
+        />
+      </View>
     </View>
     );
   }

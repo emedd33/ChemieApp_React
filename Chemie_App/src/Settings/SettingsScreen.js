@@ -67,7 +67,7 @@ export default class LoginScreen extends React.Component{
       lastname:lastname,
       access_card:access_card,
       membership:membership,
-      //pushNotification:false,
+      pushNotification:false,
     });
 
   }
@@ -89,28 +89,31 @@ export default class LoginScreen extends React.Component{
           {firstname}
           {lastname}
         </View>
-        <TouchableOpacity style={styles.whiteNavigation}
+        <TouchableOpacity style={styles.greyNavigation}
           onPress={()=>this.props.navigation.navigate('SettingsGeneral',{
             state:this.state,
           })}
         >
           <Text style={{ marginLeft:20}}>Generelt</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.greyNavigation}
-          onPress={()=>this.props.navigation.navigate('SettingsPushNotification')}
+        <TouchableOpacity style={styles.whiteNavigation}
+          onPress={()=>this.props.navigation.navigate('SettingsPushNotification',{
+            state:this.state,
+          })}
         >
           <Text style={{ marginLeft:20}}>Push notification</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.whiteNavigation}
+        <TouchableOpacity style={styles.greyNavigation}
           onPress={()=>this.props.navigation.navigate('SettingsEmail')}
         >
           <Text style={{ marginLeft:20}}>E-poster til kommiteer</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.greyNavigation}
+        <TouchableOpacity style={styles.whiteNavigation}
           onPress={()=>this.props.navigation.navigate('SettingsInfo')}
         >
-          <Text style={{ marginLeft:20}}>info</Text>
+          <Text style={{ marginLeft:20}}>Info</Text>
         </TouchableOpacity>
+
 
 
       </View>
@@ -131,7 +134,8 @@ const styles = StyleSheet.create({
     height:70,
     alignItems:'center',
     alignItems:'center',
-    justifyContent:'center'
+    justifyContent:'center',
+    backgroundColor:'ghostwhite',
   },
   infoContainer:{
     flex:2,

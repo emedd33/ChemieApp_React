@@ -20,7 +20,7 @@ export default class SettingsInfoScreen extends React.Component{
     super(props);
     this.openEskildMail = this.openEskildMail.bind(this);
     this.openWebkomMail = this.openWebkomMail.bind(this);
-      this.handelUrlClick = this.handelUrlClick.bind(this);
+    this.handelUrlClick = this.handelUrlClick.bind(this);
   }
   openWebkomMail(){
   Linking.openURL('mailto:webkom@hc.ntnu.no?');
@@ -44,7 +44,7 @@ render(){
           Dette er en app som er ment som et alternativ til nettsidene til Høiskolens Chemikerforening.
           Siden appen er i tidlig fase vil ikke webkom garantere at appen er optimalisert
           og at alle funksjoner vil fungere for alle enheter. Samtidig oppfordrer vi til å sende
-          inn alle feilmeldinger med vedlagt skjermbilde og/eller forklaring til webkom så vi kan raskt kan komme med oppdateringer.
+          inn alle feilmeldinger med vedlagt skjermbilde og/eller forklaring til webkom så vi raskt kan komme med oppdateringer.
         </Text>
         <Text
           style={{color:'blue'}}
