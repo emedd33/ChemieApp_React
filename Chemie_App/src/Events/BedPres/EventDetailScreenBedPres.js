@@ -56,7 +56,7 @@ export default class EventDetailScreenBedPres extends React.Component{
       event:jsonResponse.response[0],
     });
     if (jsonResponse.httpStatus == 401){
-      AsyncStorage.clear();
+      AsyncStorage.removeItem('AuthToken');;
       this.props.navigation.navigate('Login');
     }
     if (jsonResponse.httpStatus >= 200 && jsonResponse.httpStatus < 300) {

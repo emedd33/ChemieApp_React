@@ -60,7 +60,7 @@ export default class News extends React.Component{
 
       //If token is not valid, sends user to loginScreen,
       if (this.state.httpStatus == 401){
-        AsyncStorage.clear();
+        AsyncStorage.removeItem('AuthToken');;
         this.props.navigation.navigate('Login');
 
       }

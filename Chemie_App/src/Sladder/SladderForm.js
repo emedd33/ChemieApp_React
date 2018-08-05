@@ -105,7 +105,7 @@ constructor(props){
        httpStatus:response.status,
      });
      if (this.state.httpStatus == 401){
-       AsyncStorage.clear();
+       AsyncStorage.removeItem('AuthToken');;
        this.props.navigation.navigate('Login');
      }
      if (this.state.httpStatus < 300 && this.state.httpStatus >= 200){

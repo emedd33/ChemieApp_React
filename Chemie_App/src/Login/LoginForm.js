@@ -1,5 +1,5 @@
 import React from 'react';
-//import { Permissions, Notifications } from 'expo';
+import { Permissions, Notifications } from 'expo';
 import * as Progress from 'react-native-progress';
 
 import {
@@ -26,13 +26,16 @@ export default class LoginForm extends React.Component {
   constructor(props){
     super(props);
     this.loginHTTPRequest = this.loginHTTPRequest.bind(this);
-    //this.registerForPushNotificationsAsync = this.registerForPushNotificationsAsync.bind(this);
+    this.registerForPushNotificationsAsync = this.registerForPushNotificationsAsync.bind(this);
     this.state = {
       username: '',
       password:'',
       httpStatus: null,
       loading: false,
       }
+    }
+    componentDidMount(){
+      this.registerForPushNotificationsAsync()
     }
     getProfileSettingsHTTPrequest = async(AuthToken) =>{
       console.log(AuthToken);
@@ -67,12 +70,12 @@ export default class LoginForm extends React.Component {
         AsyncStorage.setItem('id',String(jsonResponse.id));
 
 
-        //this.registerForPushNotificationsAsync();
+
 
         this.setState({
           loading:false,
         });
-
+        //this.registerForPushNotificationsAsync();
         this.props.navigation.navigate('Home');
     }
     // TODO: Make loginHTTPRequest a general fuction
@@ -138,12 +141,14 @@ export default class LoginForm extends React.Component {
        }
 
     }
-    /*registerForPushNotificationsAsync =  async() => {
+    registerForPushNotificationsAsync =  async() => {
+      console.log("registerForPushNotificationsAsync");
       const { status: existingStatus } = await Permissions.getAsync(
         Permissions.NOTIFICATIONS
       );
+      console.log(existingStatus);
       let finalStatus = existingStatus;
-
+      console.log(finalStatus);
       // only ask if permissions have not already been determined, because
       // iOS won't necessarily prompt the user a second time.
       if (existingStatus !== 'granted') {
@@ -152,17 +157,18 @@ export default class LoginForm extends React.Component {
         const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
         finalStatus = status;
       }
-      console.log(finalStatus);
-
       // Stop here if the user did not grant permissions
       if (finalStatus !== 'granted') {
         return;
       }
 
       // Get the token that uniquely identifies this device
-      let token = await Notifications.getExpoPushTokenAsync();
-      console.log(token);
-      return fetch(fetch_push_notification_token, {
+      Notifications.addListener("coffee");
+      console.log("getExpoPushTokenAsync");
+
+      var token = await Notifications.getExpoPushTokenAsync()
+      .then(console.log(token));
+      /*return fetch(fetch_push_notification_token, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -174,6 +180,8 @@ export default class LoginForm extends React.Component {
           }),
         });
     }*/
+  }
+
   render(){
     if(this.state.loading){
       // TODO: This needs to be chacked to IOS, https://github.com/oblador/react-native-progress

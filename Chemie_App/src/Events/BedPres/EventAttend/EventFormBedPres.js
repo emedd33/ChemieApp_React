@@ -77,7 +77,7 @@ export default class EventFormBedPres extends React.Component{
 
     // 401 means token is not valid and user is forced to log out.
     if (httpStatus == 401){
-      AsyncStorage.clear();
+      AsyncStorage.removeItem('AuthToken');;
       this.props.navigation.navigate('Login');
     } else {
       this.setState({
@@ -160,7 +160,7 @@ export default class EventFormBedPres extends React.Component{
 
         // 401 means token is not valid and user is forced to log out.
         if (this.state.httpStatus == 401){
-          AsyncStorage.clear();
+          AsyncStorage.removeItem('AuthToken');;
           this.props.navigation.navigate('Login');
         } else {
           // Valid POST-request.

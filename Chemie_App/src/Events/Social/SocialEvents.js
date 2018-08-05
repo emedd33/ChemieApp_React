@@ -46,7 +46,7 @@ export default class SocialEvents extends React.Component{
 
 
       if (jsonResponse.httpStatus == 401){
-        AsyncStorage.clear();
+        AsyncStorage.removeItem('AuthToken');;
         this.props.navigation.navigate('Login');
       }
 
