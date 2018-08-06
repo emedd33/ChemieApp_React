@@ -1,7 +1,6 @@
 import React from 'react';
 import * as Progress from 'react-native-progress';
 
-
 import {
   StyleSheet,
   Text,
@@ -14,88 +13,63 @@ import {
 
 import HTML from 'react-native-render-html';
 
+import httpRequests from 'ChemieApp/src/Functions/HttpRequests'
+import clearAsyncStorage from 'ChemieApp/src/Functions/clearAsyncStorage'
 import base_params from 'ChemieApp/Params.js';
-const fetch_url = base_params.base_url.concat('/api/news/articles/');
+const FETCH_NEWS_URL = base_params.base_url.concat('/api/news/articles/');
 
 
 export default class News extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      articles: null,
+      articles: "empty",
       loading:true,
       connected:false,
-      AuthToken:'',
+      AuthToken:this.props.navigation.state.params.authToken,
       httpStatus:null,
       }
     this.getNewsFromAPI = this.getNewsFromAPI.bind(this);
   }
 
   getNewsFromAPI = async() => {
+    this.setState({loading:true});
+    let httpResponse = await httpRequests.GetRequest(FETCH_NEWS_URL, this.state.AuthToken);
 
-    let token = await AsyncStorage.getItem('AuthToken');
-    this.setState({
-      AuthToken:token,
-    });
-
-    let jsonResponse = await fetch(fetch_url,{
-      method:'GET',
-      headers:{
-        "Authorization": this.state.AuthToken,
-      },
-    })
-      .then((response) => {
-        this.setState({
-          httpStatus:response.status,
-        })
-        return response.text();
-      })
-      .then((responseJson)  => {
-        let res = JSON.parse(responseJson);
-        return res;
-      })
-      .catch((error) => {
-          console.log(error);
-      });
-
-      //If token is not valid, sends user to loginScreen,
-      if (this.state.httpStatus == 401){
-        AsyncStorage.removeItem('AuthToken');;
-        this.props.navigation.navigate('Login');
-
-      }
-      if (this.state.httpStatus >= 200 && this.state.httpStatus < 300) {
-        if (jsonResponse.length>= 1){
-          for (var i = 0; i<jsonResponse.length && i < 5; i++){
-            year = jsonResponse[i].published_date.slice(0,4);
-            month = jsonResponse[i].published_date.slice(5,7);
-            day = jsonResponse[i].published_date.slice(8,10);
-            let date_String = "Publisert " + day + "/" + month + "/" + year;
-            jsonResponse[i].published_date = date_String;
-          }
-
-        } else {
-          jsonResponse= "empty"
+    //If token is not valid, sends user to loginScreen,
+    if (httpResponse.httpStatus == 401){
+      clearAsyncStorage.clearAll();
+    }
+    if (httpResponse.httpStatus >= 200 && httpResponse.httpStatus < 300) {
+      if (httpResponse.response.length>= 1){
+        for (var i = 0; i<httpResponse.response.length && i < 5; i++){
+          year = httpResponse.response[i].published_date.slice(0,4);
+          month = httpResponse.response[i].published_date.slice(5,7);
+          day = httpResponse.response[i].published_date.slice(8,10);
+          let date_String = "Publisert " + day + "/" + month + "/" + year;
+          httpResponse.response[i].published_date = date_String;
         }
-        this.setState({
-          articles:jsonResponse,
-          connected:true,
-        });
-        //Converting published_date to more readable format for user
+
+      } else {
+        httpResponse.response= "empty"
       }
       this.setState({
-        loading:false,
-      })
+        articles:httpResponse.response,
+        connected:true,
+      });
+        //Converting published_date to more readable format for user
+      }
+    this.setState({
+      loading:false,
+    });
   }
   componentWillMount(){
-
     this.getNewsFromAPI()
   }
-  componentDidMount(){
 
-  }
 
 render(){
+
   if(this.state.loading){
     // TODO: This needs to be chacked to IOS, https://github.com/oblador/react-native-progress
     return(
@@ -118,7 +92,7 @@ render(){
       </View>
     );
   }
-  console.log("Articles");
+  console.log(this.state.articles);
   return(
     <ScrollView style={styles.container}>
       <View style={styles.newsContainer}>
@@ -131,10 +105,8 @@ render(){
                 <Image
                   resizeMode='contain'
                   style={styles.newsImage}
-                  source={{uri:item.image}} />
+                  source={{uri:"http://192.168.1.34:8000/media/news/IMG_20180401_160545521_XHMic9V.jpg"}} />
                 <HTML style={styles.contentText} html={item.content} imagesMaxWidth={Dimensions.get('window').width} />
-
-
                 <View style = { styles.newsSeparator }/>
               </View>
             ))

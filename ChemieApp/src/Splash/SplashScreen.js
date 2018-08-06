@@ -20,6 +20,7 @@ export default class splashscreen extends React.Component{
     this.state={
       profile:null,
       isAuthenticated:false,
+      authToken:null,
     }
 
     this.checkAuthToken = this.checkAuthToken.bind(this);
@@ -29,7 +30,6 @@ export default class splashscreen extends React.Component{
   checkAuthToken = async () => {
     try {
       let isAuthenticated = await AsyncStorage.getItem('isAuthenticated');
-      console.log(isAuthenticated);
       // TODO: Find a better conditions to check if token is correct
       if (isAuthenticated){
           await this.getAsyncStorageSettings();
@@ -47,7 +47,7 @@ export default class splashscreen extends React.Component{
     let username = await AsyncStorage.getItem('username');
     let id = await AsyncStorage.getItem('id');
     profile = {
-      authToken:authToken,
+
       firstname:firstname,
       lastname:lastname,
       access_card:access_card,
@@ -58,6 +58,7 @@ export default class splashscreen extends React.Component{
     this.setState({
       profile:profile,
       isAuthenticated:true,
+      authToken:authToken,
     });
   }
     componentDidMount = () =>{
@@ -67,7 +68,7 @@ export default class splashscreen extends React.Component{
     setTimeout(()=>{
 
       if (this.state.isAuthenticated){
-        this.props.navigation.navigate("Home", {profile:this.state.profile});
+        this.props.navigation.navigate("Home", {profile:this.state.profile, authToken:this.state.authToken});
       } else {
         this.props.navigation.navigate("Login");
       }

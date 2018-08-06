@@ -31,7 +31,7 @@ export default class LoginForm extends React.Component {
       loading: false,
       profile:null,
       image_visiable:true,
-      AuthToken:null,
+      authToken:null,
       }
     }
   //Addings listener to when user presses TextInput
@@ -73,10 +73,10 @@ export default class LoginForm extends React.Component {
           //Success
           if (responseState.httpStatus >= 200 && responseState.httpStatus < 300) {
               //Combining the token string with "token" to create the AuthToken
-              let AuthToken = "token " + responseState.response.token;
+              let authToken = "token " + responseState.response.token;
 
               // Requesting profile settings from website
-              this.getProfileSettingsHTTPrequest(AuthToken);
+              this.getProfileSettingsHTTPrequest(authToken);
               }
           // password and username is not correct
           else if (responseState.httpStatus == 400) {
@@ -98,17 +98,17 @@ export default class LoginForm extends React.Component {
           });
       }
     }
-  getProfileSettingsHTTPrequest = async(AuthToken) =>{
+  getProfileSettingsHTTPrequest = async(authToken) =>{
 
       //fetching userprofile from website by HttpRequests
-      let httpResponse = await httpRequests.GetRequest(FETCH_PROFILE_URL, AuthToken)
+      let httpResponse = await httpRequests.GetRequest(FETCH_PROFILE_URL, authToken)
 
       //extracting profile from response
       profile = httpResponse.response[0];
 
       //Store the user profile in AsyncStorage so it's already loaded when the app is re-started
       AsyncStorage.setItem('isAuthenticated', JSON.stringify(true));
-      AsyncStorage.setItem('AuthToken',AuthToken);
+      AsyncStorage.setItem('AuthToken',authToken);
       AsyncStorage.setItem('firstname',profile.first_name);
       AsyncStorage.setItem('lastname',profile.last_name);
       AsyncStorage.setItem('access_card',profile.profile.access_card);
@@ -126,10 +126,11 @@ export default class LoginForm extends React.Component {
       this.setState({
         loading:false,
         profile:profileState,
-        AuthToken:AuthToken
+        authToken:authToken
       });
       this.props.navigation.navigate('Home',{
-
+        profile:this.state.profile,
+        authToken:this.state.authToken,
       });
     }
     // TODO: Make loginHTTPRequest a general fuction

@@ -7,19 +7,13 @@ import {View,
   BackHandler,
   ScrollView,
   AsyncStorage,
+  YellowBox,
 } from 'react-native';
 
+YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 import News from './News';
 
 export default class HomeScreen extends React.Component{
-  constructor(props){
-    super(props);
-    //this.getToken = this.getToken.bind(this);
-    this.state = {
-      loading:false
-    }
-
-  }
   static navigationOptions = {
     title: 'Home',
     headerLeft: null,
@@ -33,13 +27,25 @@ export default class HomeScreen extends React.Component{
       />
   ),
   };
-  componentWillMount(){
+  constructor(props){
+    super(props);
+    this.state = {
+      loading:false,
+    }
 
-    //this.getToken()
   }
+
+  //Adding listener to hardware backpress arrow on android devices
   componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
   }
+
+   //removing backpress listener
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+  }
+
+   //returning true prevents device to go back to splash screen
   handleBackButton() {
     return true;
   }
@@ -116,9 +122,6 @@ export default class HomeScreen extends React.Component{
         elevation: 2,
 
     },
-    headerImage:{
-
-    },
     submitContainer:{
       margin:10,
       flex:1,
@@ -146,7 +149,7 @@ export default class HomeScreen extends React.Component{
       height:70,
     },
     newsContainer:{
-      flex:3.5,
+      flex:4,
     },
 
   });
