@@ -9,133 +9,130 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
-  KeyboardAvoidingView,
+  Keyboard,
+  Image,
+
 } from 'react-native';
 
-import {createStackNavigator} from 'react-navigation';
-
-
+import httpRequests from 'ChemieApp/src/Functions/HttpRequests'
 import base_params from 'ChemieApp/Params.js';
-const fetch_url = base_params.base_url.concat('/api/api-auth/');
-const fetch_profile_url = base_params.base_url.concat('/api/profile/profile/');
-const fetch_push_notification_token =  base_params.base_url.concat('/api/profile/profile/token/');
+const FETCH_PROFILE_URL = base_params.base_url.concat('/api/profile/profile/');
 
 export default class LoginForm extends React.Component {
-
   constructor(props){
     super(props);
     this.loginHTTPRequest = this.loginHTTPRequest.bind(this);
+    this._keyboardDidShow = this._keyboardDidShow.bind(this);
+    this._keyboardDidHide = this._keyboardDidHide.bind(this);
     this.state = {
       username: '',
       password:'',
       httpStatus: null,
       loading: false,
+      profile:null,
+      image_visiable:true,
+      AuthToken:null,
       }
     }
-    getProfileSettingsHTTPrequest = async(AuthToken) =>{
-      console.log(AuthToken);
-      let jsonResponse = await fetch(fetch_profile_url,{
-        method:'GET',
-        headers:{
-          "Authorization": AuthToken,
-        },
-      })
-        .then((response) => {
+  //Addings listener to when user presses TextInput
+  componentDidMount () {
+     this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
+     this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
+  }
+  //Removing listener for textinput press
+  componentWillUnmount () {
+     this.keyboardDidShowListener.remove();
+     this.keyboardDidHideListener.remove();
+   }
+
+   //Removing HC-logo when Keyboard is shown
+  _keyboardDidShow () {
+     this.setState({
+       image_visiable:false,
+     });
+   }
+
+   //re-renders HC-logo when keyboard is hidden
+  _keyboardDidHide () {
+     this.setState({
+       image_visiable:true,
+     })
+   }
+
+  loginHTTPRequest = async() => {
+    //If user has edited both fields
+    if(this.state.username != '' && this.state.password != ''){
+        try{
           this.setState({
-            httpStatus:response.status,
-          })
-          return response.text();
-        })
-        .then((responseJson)  => {
-          let res = JSON.parse(responseJson);
-          return res[0];
-        })
-        .catch((error) => {
-           console.error(error);
-        });
-
-
-        AsyncStorage.setItem('AuthToken',AuthToken);
-        AsyncStorage.setItem('Firstname',jsonResponse.first_name);
-        AsyncStorage.setItem('Lastname',jsonResponse.last_name);
-        AsyncStorage.setItem('access_card',jsonResponse.profile.access_card);
-        AsyncStorage.setItem('grade',String(jsonResponse.profile.grade));
-        AsyncStorage.setItem('membership',jsonResponse.profile.membership);
-        AsyncStorage.setItem('username',jsonResponse.username);
-        AsyncStorage.setItem('id',String(jsonResponse.id));
-
-
-
-
-        this.setState({
-          loading:false,
-        });
-        this.props.navigation.navigate('Home');
-    }
-    // TODO: Make loginHTTPRequest a general fuction
-    loginHTTPRequest = async() => {
-      // TODO: Set timer for request
-      // TODO: give toast massage for respons
-      // TODO: prevent multiple request if server is not up
-      if(this.state.username != 'kk' && this.state.password != 'kk'){
-        this.setState({
-          loading:true,
+            loading:true,
           });
 
-        await fetch(fetch_url,{
-          method:'POST',
-          headers:{
-            Accept:'application/json',
-            'Content-Type': 'application/json',
-            credentials: 'same-origin',
-            mode: 'same-origin',
-          },
-          timeout: 2000,
-          body: JSON.stringify({
-            username:this.state.username,
-            password:this.state.password,
-          }),
-        })
+          //Fetching response from website by function in httpRequests
+          let responseState = await httpRequests.PostLoginRequest(this.state.username, this.state.password);
 
-        .then((response)=>{
-          this.setState({
-            httpStatus:response.status,
-          })
-          return response.text()
-        })
-        .then((responseJson)  => {
+          //Success
+          if (responseState.httpStatus >= 200 && responseState.httpStatus < 300) {
+              //Combining the token string with "token" to create the AuthToken
+              let AuthToken = "token " + responseState.response.token;
 
-          if (this.state.httpStatus >= 200 && this.state.httpStatus < 300) {
-
-            let AuthTokenObject = JSON.parse(responseJson)
-            let AuthToken = "token " + AuthTokenObject.token
-
-            //
-            this.getProfileSettingsHTTPrequest(AuthToken);
-
-            //AsyncStorage.setItem('AuthToken', token);
-            //
-          } else if (this.state.httpStatus == 400) {
-            this.setState({
-              loading:false,
-              });
-            Alert.alert("Ups!","Feil brukernavn eller passord");
-          } else {
-            this.setState({
-              loading:false,
-              });
-            throw this.state.httpStatus
+              // Requesting profile settings from website
+              this.getProfileSettingsHTTPrequest(AuthToken);
+              }
+          // password and username is not correct
+          else if (responseState.httpStatus == 400) {
+              Alert.alert("Ups!","Feil brukernavn eller passord");
+            }
+          //if httpstatus is something else: throw the error or the http status
+          else if (responseState.httpStatus != null){
+              throw responseState.httpStatus
+            } else {
+              throw responseState.error
+            }
           }
-        })
-        .catch((error) => {
-          Alert.alert("Ups! Feil ved innlogging","Det har skjedd en feil med feilmelding: " + error);
-        });
-
-
-       }
-
+          //Catching errors from httprequest and alert user
+          catch(error) {
+            Alert.alert("Ups! Feil ved innlogging","Det har skjedd en feil med feilmelding: " + error);
+          }
+          this.setState({
+            loading:false,
+          });
+      }
     }
-    
+  getProfileSettingsHTTPrequest = async(AuthToken) =>{
+
+      //fetching userprofile from website by HttpRequests
+      let httpResponse = await httpRequests.GetRequest(FETCH_PROFILE_URL, AuthToken)
+
+      //extracting profile from response
+      profile = httpResponse.response[0];
+
+      //Store the user profile in AsyncStorage so it's already loaded when the app is re-started
+      AsyncStorage.setItem('isAuthenticated', JSON.stringify(true));
+      AsyncStorage.setItem('AuthToken',AuthToken);
+      AsyncStorage.setItem('firstname',profile.first_name);
+      AsyncStorage.setItem('lastname',profile.last_name);
+      AsyncStorage.setItem('access_card',profile.profile.access_card);
+      AsyncStorage.setItem('grade',String(profile.profile.grade));
+      AsyncStorage.setItem('username',profile.username);
+      AsyncStorage.setItem('id',String(profile.id));
+      profileState = {
+        id:profile.id,
+        username:profile.username,
+        firstname:profile.first_name,
+        lastname:profile.last_name,
+        access_card:profile.profile.access_card,
+        grade:profile.profile.grade,
+      }
+      this.setState({
+        loading:false,
+        profile:profileState,
+        AuthToken:AuthToken
+      });
+      this.props.navigation.navigate('Home',{
+
+      });
+    }
+    // TODO: Make loginHTTPRequest a general fuction
   render(){
     if(this.state.loading){
       // TODO: This needs to be chacked to IOS, https://github.com/oblador/react-native-progress
@@ -145,10 +142,21 @@ export default class LoginForm extends React.Component {
         </View>
       );
     }
-    return (
-      <KeyboardAvoidingView style={styles.container} behavior="padding">
 
-        <View style={styles.loginFormContainer}>
+    let image = <Image
+      resizeMode='contain'
+      style={styles.logo}
+      source={require('./images/hclogo.png')} />
+    if (!this.state.image_visiable){
+      image = <Text></Text>
+    }
+
+    return (
+      <View style={styles.container}>
+        <View style={styles.loginFormContainer} behavior="padding">
+          <View style={styles.loginImageContainer}>
+            {image}
+          </View>
           <TextInput
             style={styles.input}
             autoCapitalize = 'none'
@@ -179,19 +187,28 @@ export default class LoginForm extends React.Component {
             </Text>
           </TouchableOpacity>
         </View>
-      </KeyboardAvoidingView>
+
+      </View>
       );
   }
 }
 const styles = StyleSheet.create({
   container: {
-    flex:1
+    flex:3
     },
     loginFormContainer:{
       flex:2,
       justifyContent:'center',
       alignItems:'center',
-
+    },
+    loginImageContainer:{
+        alignItems: 'center',
+        flex: 3,
+        justifyContent: 'center',
+    },
+    logo: {
+        width: 300,
+        height: 150,
     },
     input: {
       height:50,

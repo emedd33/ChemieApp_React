@@ -27,9 +27,9 @@ export default class splashscreen extends React.Component{
   }
 
   checkAuthToken = async () => {
-    console.log("this");
     try {
       let isAuthenticated = await AsyncStorage.getItem('isAuthenticated');
+      console.log(isAuthenticated);
       // TODO: Find a better conditions to check if token is correct
       if (isAuthenticated){
           await this.getAsyncStorageSettings();
@@ -44,7 +44,6 @@ export default class splashscreen extends React.Component{
     let lastname = await AsyncStorage.getItem('Lastname');
     let access_card = await AsyncStorage.getItem('access_card');
     let grade = await AsyncStorage.getItem('grade');
-    let membershit = await AsyncStorage.getItem('membership');
     let username = await AsyncStorage.getItem('username');
     let id = await AsyncStorage.getItem('id');
     profile = {
@@ -53,7 +52,6 @@ export default class splashscreen extends React.Component{
       lastname:lastname,
       access_card:access_card,
       grade:grade,
-      membership:membershipm,
       username:username,
       id:id,
     }

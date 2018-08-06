@@ -1,12 +1,12 @@
 import React from 'react';
-import {View,
+import {
+  View,
   Text,
-  Image,
   StyleSheet,
   TouchableOpacity,
   KeyboardAvoidingView,
-  BackHandler,
   Linking,
+  BackHandler,
 } from 'react-native';
 
 import LoginForm from './LoginForm'
@@ -15,37 +15,41 @@ export default class LoginScreen extends React.Component{
   static navigationOptions = {
     title: 'Login',
     header: null,
-    };
+  };
+
+    //Adding listener to hardware backpress arrow on android devices
   componentDidMount() {
-        BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
   }
+
+   //removing backpress listener
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+  }
+
+   //returning true prevents device to go back to splash screen
   handleBackButton() {
-        return true;
+    return true;
   }
+
   openMail(){
-  Linking.openURL('mailto:Sugepumpa@hc.ntnu.no?');
+    Linking.openURL('mailto:Sugepumpa@hc.ntnu.no?');
   }
+
   render(){
     return (
-      <View
+      <KeyboardAvoidingView
         style={styles.container}
       >
-        <View style={styles.loginImageContainer}>
-          <Image
-            resizeMode='contain'
-            style={styles.logo}
-            source={require('./images/hclogo.png')} />
-
-        </View>
         <LoginForm navigation={this.props.navigation}/>
         <View style={styles.helpContainer}>
-          <Text>For spørsmål kontakt </Text>
+          <Text>Glemt passord eller brukernavn? Ta kontakt: </Text>
           <Text
-            style={styles.mailText}
+            style={{color:'blue'}}
             onPress={this.openMail}
           > webkom@hc.ntnu.no</Text>
         </View>
-      </View>
+      </KeyboardAvoidingView>
       );
   }
 }
@@ -56,10 +60,8 @@ const styles = StyleSheet.create({
     },
     loginImageContainer:{
         alignItems: 'center',
-        flex: 0.7,
-        marginTop:20,
+        flex: 2,
         justifyContent: 'center',
-
     },
     logingHelpContainer:{
       flex:0.5,
@@ -73,10 +75,8 @@ const styles = StyleSheet.create({
     },
     helpContainer:{
       flex:0.3,
+      marginTop:60,
       alignItems:'center',
       justifyContent: 'center',
-    },
-    mailText:{
-      color:'blue',
     },
 });

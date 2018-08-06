@@ -58,7 +58,7 @@ export default class splashscreen extends React.Component{
       lastname:lastname,
       access_card:access_card,
       grade:grade,
-      membership:membershipm,
+      membership:membership,
       username:username,
       id:id,
     }

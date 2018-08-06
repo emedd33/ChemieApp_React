@@ -1,7 +1,9 @@
 
 import React, { Component } from 'react';
-
+import base_params from 'ChemieApp/Params.js';
 import { StyleSheet, View, Alert, Platform, Button, AsyncStorage } from 'react-native';
+
+const FETCH_LOGIN_URL = base_params.base_url.concat('/api/api-auth/');
 class HttpRequests extends Component {
   constructor(props){
     super(props);
@@ -12,12 +14,11 @@ class HttpRequests extends Component {
       httpStatus:null,
     }
   }
-  GetRequest=async(fetch_url)=>{
-    let token = await AsyncStorage.getItem('AuthToken');
+  GetRequest=async(fetch_url, AuthToken)=>{
     let jsonResponse = await fetch(fetch_url,{
       method:'GET',
       headers:{
-        "Authorization": token,
+        "Authorization": AuthToken,
       },
     })
       .then((response) => {
@@ -28,7 +29,6 @@ class HttpRequests extends Component {
       .then((responseJson)  => {
         let res = JSON.parse(responseJson);
         this.state.response = res;
-
       })
       .catch((error) => {
          let err = error;
@@ -36,6 +36,38 @@ class HttpRequests extends Component {
       });
       return this.state;
   }
+  PostLoginRequest=async(username, password)=>{
+
+    await fetch(FETCH_LOGIN_URL,{
+    method:'POST',
+    headers:{
+      Accept:'application/json',
+      'Content-Type': 'application/json',
+      credentials: 'same-origin',
+      mode: 'same-origin',
+    },
+    timeout: 2000,
+    body: JSON.stringify({
+      username:username,
+      password:password,
+    }),
+  })
+  .then((response) => {
+    let httpStatus = response.status;
+    this.state.httpStatus = httpStatus;
+    return response.text();
+  })
+  .then((responseJson)  => {
+    let res = JSON.parse(responseJson);
+    this.state.response = res;
+  })
+  .catch((error) => {
+    console.log(error);
+     let err = error;
+     this.state.error = err
+  });
+  return this.state;
+  }
 }
-const HttpRequest = new HttpRequests()
-export default HttpRequest
+const httpRequests = new HttpRequests()
+export default httpRequests
