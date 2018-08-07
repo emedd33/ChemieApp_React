@@ -1,4 +1,6 @@
 import React from 'react';
+import * as Progress from 'react-native-progress';
+var ImagePicker = require('react-native-image-picker');
 
 import {
   StyleSheet,
@@ -6,9 +8,16 @@ import {
   View,
   TouchableOpacity,
   Image,
+  Alert,
 } from 'react-native';
 
-import * as Progress from 'react-native-progress';
+var options = {
+  title: 'Velg bilde',
+  storageOptions: {
+    skipBackup: true,
+    path: 'images'
+  }
+};
 
 export default class UploadImage extends React.Component{
   constructor(props){
@@ -17,16 +26,36 @@ export default class UploadImage extends React.Component{
     this.deleteImage = this.deleteImage.bind(this);
     this.state = {
       imageSelected:null,
-      imageName: '',
       loading:false,
+      imageSource:null,
     }
   }
   updateParentState(data) {
       this.props.updateParentState(data);
   }
   selectImageFromDevice = async() => {
-    // TODO: Select image for sladder
+    // TODO: Change text of alert text to norwegian.
+    ImagePicker.showImagePicker(options, (response) => {
+    if (response.didCancel) {
+      console.log('User cancelled image picker');
+    }
+    else if (response.error) {
+      console.log('ImagePicker Error: ', response.error);
+    }
+    else {
+      this.setState({loading:true})
+      let source = { uri: response.uri };
+      console.log(source.uri);
+      this.setState({
+        imageSource: source.uri,
+        imageSelected:true,
+        loading:false,
+      });
+      this.updateParentState({image:source.uri})
+      }
+    });
   }
+
   deleteImage(){
     this.setState({
       loading:true,
@@ -36,6 +65,7 @@ export default class UploadImage extends React.Component{
     this.setState({
       loading:false,
       imageSelected:false,
+      imageSource:null,
     });
   }
 render(){
