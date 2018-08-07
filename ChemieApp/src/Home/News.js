@@ -31,9 +31,10 @@ export default class News extends React.Component{
       }
     this.getNewsFromAPI = this.getNewsFromAPI.bind(this);
   }
-
+  // fething articles from website.
   getNewsFromAPI = async() => {
     this.setState({loading:true});
+    // http GET-request from httpRequests
     let httpResponse = await httpRequests.GetRequest(FETCH_NEWS_URL, this.state.AuthToken);
 
     //If token is not valid, sends user to loginScreen,
@@ -41,7 +42,9 @@ export default class News extends React.Component{
       clearAsyncStorage.clearAll();
     }
     if (httpResponse.httpStatus >= 200 && httpResponse.httpStatus < 300) {
+      //an non-emty response is of length 1, while an empty response i of zero.
       if (httpResponse.response.length>= 1){
+        //looping over all articlas and reformating strings for readability
         for (var i = 0; i<httpResponse.response.length && i < 5; i++){
           year = httpResponse.response[i].published_date.slice(0,4);
           month = httpResponse.response[i].published_date.slice(5,7);
@@ -50,15 +53,17 @@ export default class News extends React.Component{
           httpResponse.response[i].published_date = date_String;
         }
 
-      } else {
+      }
+      //Empty response from HttpRequest
+      else {
         httpResponse.response= "empty"
       }
+
       this.setState({
         articles:httpResponse.response,
         connected:true,
       });
-        //Converting published_date to more readable format for user
-      }
+    }
     this.setState({
       loading:false,
     });
@@ -69,15 +74,15 @@ export default class News extends React.Component{
 
 
 render(){
-
+  //while functions are running
   if(this.state.loading){
-    // TODO: This needs to be chacked to IOS, https://github.com/oblador/react-native-progress
     return(
       <View style={styles.loadingContainer}>
         <Progress.Circle size={80} indeterminate={true} color="black" />
       </View>
     );
   }
+  //The httprequest failed, with no 200 status
   if(!this.state.connected){
     return(
       <View style={styles.loadingContainer}>
@@ -85,6 +90,7 @@ render(){
       </View>
     );
   }
+  //The HttpRequest feched no news articlas
   if(this.state.articles == "empty"){
     return(
       <View style={styles.loadingContainer}>
@@ -96,8 +102,9 @@ render(){
   return(
     <ScrollView style={styles.container}>
       <View style={styles.newsContainer}>
-        {
+        { //Looping over all articles in state and deploying them as HTML, with image and title
           this.state.articles.map(( item, key ) =>
+            //Each article is now the iterative item.
             (
               <View key = { key } style = { styles.item }>
                 <Text style = { styles.titleText }>{ item.title }</Text>
@@ -105,14 +112,13 @@ render(){
                 <Image
                   resizeMode='contain'
                   style={styles.newsImage}
-                  source={{uri:"http://192.168.1.34:8000/media/news/IMG_20180401_160545521_XHMic9V.jpg"}} />
+                  source={{uri:item.image}} />
                 <HTML style={styles.contentText} html={item.content} imagesMaxWidth={Dimensions.get('window').width} />
                 <View style = { styles.newsSeparator }/>
               </View>
             ))
         }
       </View>
-
     </ScrollView>
     );
   }

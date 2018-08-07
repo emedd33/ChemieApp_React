@@ -10,6 +10,7 @@ import {View,
   YellowBox,
 } from 'react-native';
 
+//A bug from React-native side prompts this warning.
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 import News from './News';
 
@@ -20,6 +21,7 @@ export default class HomeScreen extends React.Component{
     headerStyle: {
       backgroundColor: '#F9CF00'
     },
+    //Adding HC_icon to title bar
     headerTitle: (
       <Image
         source={require('./images/hclogo_headerIcon.png')}
@@ -30,7 +32,8 @@ export default class HomeScreen extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      loading:false,
+      profile:props.navigation.state.params.profile,
+      AuthToken:props.navigation.state.params.authToken,
     }
 
   }
@@ -56,8 +59,12 @@ export default class HomeScreen extends React.Component{
         <View style={styles.container}>
           <View style={styles.navigationContainer}>
             <TouchableOpacity
+              //button for navigation to sladder
               style={styles.submitContainer}
-              onPress={()=>this.props.navigation.navigate('Sladder')}
+              onPress={()=>this.props.navigation.navigate('Sladder',{
+                profile:this.state.profile,
+                authToken:this.state.authToken,
+              })}
             >
               <Image
                 resizeMode='contain'
@@ -67,8 +74,12 @@ export default class HomeScreen extends React.Component{
             </TouchableOpacity>
 
             <TouchableOpacity
+              //button for navigation to Notification
               style={styles.submitContainer}
-              onPress={()=>this.props.navigation.navigate('Notification')}
+              onPress={()=>this.props.navigation.navigate('Notification',{
+                profile:this.state.profile,
+                authToken:this.state.authToken,
+              })}
             >
               <Image
                 resizeMode='contain'
@@ -78,8 +89,12 @@ export default class HomeScreen extends React.Component{
             </TouchableOpacity>
 
             <TouchableOpacity
+              //button for navigation to Events
               style={styles.submitContainer}
-              onPress={()=>this.props.navigation.navigate('Events')}
+              onPress={()=>this.props.navigation.navigate('Events',{
+                profile:this.state.profile,
+                authToken:this.state.authToken,
+              })}
             >
               <Image
                 resizeMode='contain'
@@ -89,8 +104,12 @@ export default class HomeScreen extends React.Component{
             </TouchableOpacity>
 
             <TouchableOpacity
+              //button for navigation to Settings
               style={styles.submitContainer}
-              onPress={()=>this.props.navigation.navigate('Settings')}
+              onPress={()=>this.props.navigation.navigate('Settings',{
+                profile:this.state.profile,
+                authToken:this.state.authToken,
+              })}
             ><Image
               resizeMode='contain'
               style={styles.SladderLogo}
