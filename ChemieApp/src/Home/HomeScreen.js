@@ -31,9 +31,10 @@ export default class HomeScreen extends React.Component{
   };
   constructor(props){
     super(props);
+    this.navigateToScreen = this.navigateToScreen.bind(this);
     this.state = {
       profile:props.navigation.state.params.profile,
-      AuthToken:props.navigation.state.params.authToken,
+      authToken:props.navigation.state.params.authToken,
     }
 
   }
@@ -52,6 +53,9 @@ export default class HomeScreen extends React.Component{
   handleBackButton() {
     return true;
   }
+  navigateToScreen(screen){
+    this.props.navigation.navigate(screen, {profile:this.state.profile,authToken:this.state.authToken})
+  }
 
 
   render(){
@@ -61,10 +65,7 @@ export default class HomeScreen extends React.Component{
             <TouchableOpacity
               //button for navigation to sladder
               style={styles.submitContainer}
-              onPress={()=>this.props.navigation.navigate('Sladder',{
-                profile:this.state.profile,
-                authToken:this.state.authToken,
-              })}
+              onPress={()=>this.navigateToScreen("Sladder")}
             >
               <Image
                 resizeMode='contain'
@@ -76,10 +77,7 @@ export default class HomeScreen extends React.Component{
             <TouchableOpacity
               //button for navigation to Notification
               style={styles.submitContainer}
-              onPress={()=>this.props.navigation.navigate('Notification',{
-                profile:this.state.profile,
-                authToken:this.state.authToken,
-              })}
+              onPress={()=>this.navigateToScreen("Notification")}
             >
               <Image
                 resizeMode='contain'
@@ -91,10 +89,7 @@ export default class HomeScreen extends React.Component{
             <TouchableOpacity
               //button for navigation to Events
               style={styles.submitContainer}
-              onPress={()=>this.props.navigation.navigate('Events',{
-                profile:this.state.profile,
-                authToken:this.state.authToken,
-              })}
+              onPress={()=>this.navigateToScreen("Events")}
             >
               <Image
                 resizeMode='contain'
@@ -106,10 +101,7 @@ export default class HomeScreen extends React.Component{
             <TouchableOpacity
               //button for navigation to Settings
               style={styles.submitContainer}
-              onPress={()=>this.props.navigation.navigate('Settings',{
-                profile:this.state.profile,
-                authToken:this.state.authToken,
-              })}
+              onPress={()=>this.navigateToScreen("Settings")}
             ><Image
               resizeMode='contain'
               style={styles.SladderLogo}

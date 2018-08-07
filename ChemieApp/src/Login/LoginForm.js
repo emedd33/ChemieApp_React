@@ -30,7 +30,7 @@ export default class LoginForm extends React.Component {
       httpStatus: null,
       loading: false,
       profile:null,
-      image_visiable:true,
+      keyboardShown:true,
       authToken:null,
       }
     }
@@ -48,14 +48,14 @@ export default class LoginForm extends React.Component {
    //Removing HC-logo when Keyboard is shown
   _keyboardDidShow () {
      this.setState({
-       image_visiable:false,
+       keyboardShown:true,
      });
    }
 
    //re-renders HC-logo when keyboard is hidden
   _keyboardDidHide () {
      this.setState({
-       image_visiable:true,
+       keyboardShown:false,
      })
    }
 
@@ -144,11 +144,12 @@ export default class LoginForm extends React.Component {
       );
     }
 
+    // setting visibility of image to on and of depending if keyboard is shown.
     let image = <Image
       resizeMode='contain'
       style={styles.logo}
       source={require('./images/hclogo.png')} />
-    if (!this.state.image_visiable){
+    if (this.state.keyboardShown){
       image = <Text></Text>
     }
 

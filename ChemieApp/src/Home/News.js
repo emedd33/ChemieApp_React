@@ -98,7 +98,6 @@ render(){
       </View>
     );
   }
-  console.log(this.state.articles);
   return(
     <ScrollView style={styles.container}>
       <View style={styles.newsContainer}>
