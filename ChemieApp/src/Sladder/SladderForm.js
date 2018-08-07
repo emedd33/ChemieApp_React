@@ -12,24 +12,26 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
+  Image,
 
 } from 'react-native';
 
 import UploadImage from './UploadImage';
+import httpRequests from 'ChemieApp/src/Functions/HttpRequests';
+import clearAsyncStorage from 'ChemieApp/src/Functions/clearAsyncStorage';
 
 import base_params from 'ChemieApp/Params.js';
-const fetch_url = base_params.base_url.concat('/api/sladreboks/submission/');
+const FETCH_URL = base_params.base_url.concat('/api/sladreboks/submission/');
 
 export default class SladderForm extends React.Component{
 constructor(props){
     super(props);
     this.sendSladder = this.sendSladder.bind(this);
-    this.checkAuthToken = this.checkAuthToken.bind(this);
 
     this.state = {
       loading: false,
       sladderText: '',
-      AuthToken: 'token ',
+      authToken: props.authToken,
       httpStatus: null,
       image:null,
       uploadingImage:false,
@@ -37,88 +39,43 @@ constructor(props){
     }
   }
   updateState (data) {
-        console.log("UploadImage updateState");
         this.setState(data);
   }
-  checkAuthToken = async () => {
-    try {
-      console.log('SladderForm checkAuthToken');
-      this.setState({
-        loading:true,
-      });
-      let token = await AsyncStorage.getItem('AuthToken');
-      console.log(token);
-      // TODO: Find a better conditions to check if token is correct
-
-          this.setState({
-            AuthToken:token,
-            loading:false,
-      })
-    } catch (error) {
-      alert(error);
-    }
-
-
-  }
-  componentWillMount(){
-    console.log('SladderForm componentWillMount');
-    this.checkAuthToken();
-  }
-
-
 
   sendSladder = async() =>{
-    // TODO: add sendImage
-    console.log("SladderForm sendSladder");
-
     if(this.state.sladderText != '' || this.state.image != null){
       this.setState({
         loading:true
       });
-      let image64 = null
-
-      //Making requestbody with or without uploaded image,
+      let body = {content:this.state.sladderText}
       if (this.state.image != null){
-        const image64 = this.state.image.base64;
-        this.state.body = {content:this.state.sladderText, image:image64}
-      } else {
-        this.state.body = {content:this.state.sladderText}
+        console.log("image:",this.state.image);
+        // TODO: convert image to base64
+        body = {content:this.state.sladderText}
       }
 
-      console.log("SladderForm fetch");
-      let response = await fetch(fetch_url,{
-        method:'POST',
-        headers:{
-          "Authorization": this.state.AuthToken,
-          Accept: "application/json",
-          "Content-Type":"application/json",
-        },
-        body: JSON.stringify(this.state.body),
-      })
-      .catch((error) => {
-        Alert.alert(
-        "Noe gikk galt",
-        "Feilmelding: " + error);
-     });
-     console.log(response);
-     this.setState({
-       httpStatus:response.status,
-     });
-     if (this.state.httpStatus == 401){
-       AsyncStorage.removeItem('AuthToken');;
-       this.props.navigation.navigate('Login');
+      let response = await httpRequests.PostRequest(FETCH_URL, body, this.state.authToken)
+
+     if (response.httpStatus == 401){
+       clearAsyncStorage.clearAll();
      }
-     if (this.state.httpStatus < 300 && this.state.httpStatus >= 200){
+     else if (response.httpStatus < 300 && response.httpStatus >= 200){
        Alert.alert("Sladder sent!", "Sugepumpa takker deg");
-     } else {
+     }
+     else if (response.error != null){
        Alert.alert(
        "Noe gikk galt",
-       "http Status: " + this.state.httpStatus);
+       "error: " + response.error);
+     }
+     }
+     else {
+       Alert.alert(
+       "Noe gikk galt",
+       "http Status: " + response.httpStatus);
      }
      this.setState({
        loading:false,
      });
-   }
   }
   render(){
     if(this.state.loading){
@@ -161,6 +118,7 @@ constructor(props){
         </TouchableOpacity>
 
       </KeyboardAvoidingView>
+
 
     );
   }

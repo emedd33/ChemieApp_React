@@ -20,6 +20,7 @@ class HttpRequests extends Component {
       headers:{
         "Authorization": AuthToken,
       },
+      timeout: 5000,
     })
       .then((response) => {
         let httpStatus = response.status;
@@ -37,20 +38,49 @@ class HttpRequests extends Component {
       return this.state;
   }
   PostLoginRequest=async(username, password)=>{
-
-    await fetch(FETCH_LOGIN_URL,{
+      await fetch(FETCH_LOGIN_URL,{
+      method:'POST',
+      headers:{
+        Accept:'application/json',
+        'Content-Type': 'application/json',
+        credentials: 'same-origin',
+        mode: 'same-origin',
+      },
+      timeout: 2000,
+      body: JSON.stringify({
+        username:username,
+        password:password,
+      }),
+    })
+    .then((response) => {
+      let httpStatus = response.status;
+      this.state.httpStatus = httpStatus;
+      return response.text();
+    })
+    .then((responseJson)  => {
+      let res = JSON.parse(responseJson);
+      this.state.response = res;
+    })
+    .catch((error) => {
+      console.log(error);
+       let err = error;
+       this.state.error = err
+    });
+    return this.state;
+  }
+  PostRequest=async(fetch_url, body, authToken)=>{
+    console.log(authToken);
+    await fetch(fetch_url,{
     method:'POST',
     headers:{
       Accept:'application/json',
       'Content-Type': 'application/json',
       credentials: 'same-origin',
+      "Authorization": authToken,
       mode: 'same-origin',
     },
-    timeout: 2000,
-    body: JSON.stringify({
-      username:username,
-      password:password,
-    }),
+    timeout: 5000,
+    body: JSON.stringify(body),
   })
   .then((response) => {
     let httpStatus = response.status;
