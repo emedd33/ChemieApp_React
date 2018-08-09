@@ -13,10 +13,13 @@ import {
   ImageBackground
 } from 'react-native';
 
-//import EventDetailScreen from './EventDetailScreen';
+import getMonth from 'ChemieApp/src/Functions/getMonth';
+import HttpRequest from 'ChemieApp/src/Functions/HttpRequests';
 
+import EventDetailScreenBedPres from './EventDetailScreenBedPres';
+import clearAsyncStorage from 'ChemieApp/src/Functions/clearAsyncStorage'
 import base_params from 'ChemieApp/Params.js';
-const fetch_url = base_params.base_url.concat('/api/events/bedpres/');
+const FETCH_URL = base_params.base_url.concat('/api/events/bedpres/');
 
 
 export default class BedPresEvents extends React.Component{
@@ -25,13 +28,12 @@ export default class BedPresEvents extends React.Component{
     super(props);
     this.state = {
       events: "empty",
-      AuthToken:null,
+      authToken:props.state.authToken,
       connected:false,
       httpStatus:null,
       loading:props.loading,
       }
       this.getEventsFromAPI = this.getEventsFromAPI.bind(this);
-      this.getMonth = this.getMonth.bind(this);
 
   }
   componentWillUnmount(){
@@ -40,125 +42,62 @@ export default class BedPresEvents extends React.Component{
 
   getEventsFromAPI = async() => {
       this.props.updateParentState({loading:true});
-      let token = await AsyncStorage.getItem('AuthToken');
-      this.setState({
-        AuthToken:token,
-      });
-      try{
-        let jsonResponse = await fetch(fetch_url,{
-          method:'GET',
-          headers:{
-            "Authorization": this.state.AuthToken,
-          },
-        })
-        .then((response) => {
-          this.setState({
-            httpStatus:response.status,
-          })
-          return response.text();
-        })
-        .then((responseJson)  => {
-          let res = JSON.parse(responseJson);
-
-          return res;
-        })
-
+      let jsonResponse = await HttpRequest.GetRequest(FETCH_URL,this.state.authToken);
 
       //If token is not valid, sends user to loginScreen,
-      if (this.state.httpStatus == 401){
-        AsyncStorage.removeItem('AuthToken');
+      if (jsonResponse.httpStatus == 401){
+        // TODO: Check this clearAsyncStorage
+        await clearAsyncStorage.clearAll();
+        Alert.alert("Ups","Det var noe feil ved autorisering, venligst log inn igjen");
         this.props.navigation.navigate('Login');
 
       }
-      if (this.state.httpStatus >= 200 && this.state.httpStatus < 300) {
-        if (jsonResponse.length>=1) {
+      if (jsonResponse.httpStatus >= 200 && jsonResponse.httpStatus < 300) {
+        
+        if (jsonResponse.response.length>=1) {
           //Converting date to more readable format for user
-          for (var i = 0; i<jsonResponse.length && i < 5; i++){
+          for (var i = 0; i<jsonResponse.response.length && i < 5; i++){
 
-            month = jsonResponse[i].date.slice(5,7);
-            month_name = this.getMonth(month);
+            month = jsonResponse.response[i].date.slice(5,7);
+            month_name = getMonth.getMonthFunction(month);
 
-            day = jsonResponse[i].date.slice(8,10);
-            time = jsonResponse[i].date.slice(11,16);
+
+            day = jsonResponse.response[i].date.slice(8,10);
+            time = jsonResponse.response[i].date.slice(11,16);
             let date_String = day + " " + month_name + ' - ' + time;
-            jsonResponse[i].date = date_String;
+            jsonResponse.response[i].date = date_String;
 
             //Adding an instance of number of spots to response
-            slut_spots = jsonResponse[i].attendees.length;
-            jsonResponse[i]['slut_spots'] = slut_spots;
-
+            slut_spots = jsonResponse.response[i].attendees.length;
+            jsonResponse.response[i]['slut_spots'] = slut_spots;
           }
       } else {
-        jsonResponse = "empty";
+        jsonResponse.response = "empty";
       }
+      console.log(jsonResponse.response);
       this.setState({
-        events:jsonResponse,
+        events:jsonResponse.response,
         connected:true,
       });
-    }
-    }
-    catch(error){
-
     }
     this.props.updateParentState({loading:false});
     this.setState({
       loading:false
     });
   }
+
   componentWillMount(){
     if (this.state.events == "empty"){
       this.getEventsFromAPI();
     }
   }
-  getMonth(month) {
-    result = month;
-    switch(parseInt(month)){
-      case 1:
-        result = 'Januar';
-        break;
-      case 2:
-        result = 'Februar';
-        break;
-      case 3:
-        result = 'Mars';
-        break;
-      case 4:
-        result = 'April';
-        break;
-      case 5:
-        result = 'Mai';
-        break;
-      case 6:
-        result = 'Juni';
-        break;
-      case 7:
-        result = 'Juli';
-        break;
-      case 8:
-        result = 'August';
-        break;
-      case 9:
-        result = 'September';
-        break;
-      case 10:
-        result = 'Oktober';
-        break;
-      case 11:
-        result = 'November';
-        break;
-      case 12:
-        result = 'Desember';
-        break;
-    }
-    return result;
-  }
+
 
   detailNavigation(body){
 
      this.props.navigation.navigate('EventDetailScreenBedPres', body);
   }
 render(){
-  console.log("loading: ",this.state.loading);
   if(this.state.loading){
     return(
       <View style={styles.loadingContainer}>
@@ -204,7 +143,6 @@ render(){
                       {item.title}
                     </Text>
                   </View>
-
                   <View style={styles.infoContainer}>
                     <Text style={styles.titleDate}>
                       {item.date}

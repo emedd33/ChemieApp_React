@@ -30,7 +30,7 @@ export default class LoginForm extends React.Component {
       httpStatus: null,
       loading: false,
       profile:null,
-      keyboardShown:true,
+      keyboardShown:false,
       authToken:null,
       }
     }

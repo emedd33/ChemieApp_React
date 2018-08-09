@@ -20,9 +20,6 @@ import base_params from 'ChemieApp/Params.js';
 const fetch_url = base_params.base_url.concat('/api/events/social/');
 
 
-
-// TODO: Filter out events which are overdue
-
 export default class EventScreen extends React.Component{
   static navigationOptions = {
     header:null,
@@ -33,6 +30,8 @@ export default class EventScreen extends React.Component{
     this.state = {
       screen:'Social',
       loading:true,
+      profile:props.navigation.state.params.profile,
+      authToken:props.navigation.state.params.authToken,
     }
     this.updateState = this.updateState.bind(this);
     this.getLoadingStatus=this.getLoadingStatus.bind(this);
@@ -66,13 +65,13 @@ render(){
           updateParentState={this.updateState}
           navigation={this.props.navigation}
           loading={this.state.loading}
+          state={this.state}
         />
 
 
       </View>
       );
   } else if (this.state.screen=="BedPres" ) {
-    console.log(this.state.loading);
       return(
       <View style={styles.container}>
         <EventHeader
@@ -86,6 +85,7 @@ render(){
           updateParentState={this.updateState}
           navigation={this.props.navigation}
           loading={this.state.loading}
+          state={this.state}
         />
 
       </View>

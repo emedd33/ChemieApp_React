@@ -76,7 +76,7 @@ export default class SladderScreen extends React.Component{
             Send gjerne inn sitater, rykter eller tilbakemeldinger til NTNUs beste linjeforeningsavis.
           </Text>
         </View>
-        
+
         <SladderForm authToken={this.state.authToken}/>
         <View style={styles.helpContainer}>
           {helpText}

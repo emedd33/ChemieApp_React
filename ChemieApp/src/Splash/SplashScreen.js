@@ -29,7 +29,7 @@ export default class splashscreen extends React.Component{
 
   checkAuthToken = async () => {
     try {
-      let isAuthenticated = await AsyncStorage.getItem('isAuthenticated');
+      let isAuthenticated = await AsyncStorage.getItem('isAuthenticated');      
       // TODO: Find a better conditions to check if token is correct
       if (isAuthenticated){
           await this.getAsyncStorageSettings();

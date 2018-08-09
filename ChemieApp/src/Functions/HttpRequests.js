@@ -9,7 +9,6 @@ class HttpRequests extends Component {
     super(props);
     this.state={
       response:null,
-      AuthToken:null,
       error:null,
       httpStatus:null,
     }

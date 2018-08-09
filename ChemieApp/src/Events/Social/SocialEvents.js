@@ -15,11 +15,12 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
-  ImageBackground
+  ImageBackground,
+  Alert,
 } from 'react-native';
 
 import EventDetailScreenSocial from './EventDetailScreenSocial';
-
+import clearAsyncStorage from 'ChemieApp/src/Functions/clearAsyncStorage'
 import base_params from 'ChemieApp/Params.js';
 const fetch_url = base_params.base_url.concat('/api/events/social/');
 
@@ -29,23 +30,22 @@ export default class SocialEvents extends React.Component{
     super(props);
     this.state = {
       events: null,
-      AuthToken:'',
+      authToken:props.state.authToken,
       httpStatus:null,
       connected:false,
       loading:props.loading,
       }
-
       this.setParameters = this.setParameters.bind(this);
-
 
   }
   setParameters = async()=>{
       this.props.updateParentState({loading:true});
-      let jsonResponse = await HttpRequest.GetRequest(fetch_url);
-
+      let jsonResponse = await HttpRequest.GetRequest(fetch_url,this.state.authToken);
 
       if (jsonResponse.httpStatus == 401){
-        AsyncStorage.removeItem('AuthToken');;
+        // TODO: Check this clearAsyncStorage
+        await clearAsyncStorage.clearAll();
+        Alert.alert("Ups","Det var noe feil ved autorisering, venligst log inn igjen");
         this.props.navigation.navigate('Login');
       }
 
@@ -128,6 +128,7 @@ render(){
                     title:item.title,
                     fetch_url:fetch_url,
                     type:'Social',
+                    authToken:this.state.authToken,
                   })}
                 >
                   <View style={ styles.titleContainer }>
