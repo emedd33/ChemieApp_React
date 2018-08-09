@@ -11,6 +11,7 @@ import {
   Alert,
 } from 'react-native';
 
+//Alert box, which is shown when user is prompt to pick image
 var options = {
   title: 'Velg bilde',
   storageOptions: {
@@ -29,6 +30,7 @@ export default class UploadImage extends React.Component{
       imagePath:null,
     }
   }
+  //Updating Sladderform with image data when image is selected
   updateParentState(data) {
       this.props.updateParentState(data);
   }
@@ -36,23 +38,26 @@ export default class UploadImage extends React.Component{
     // TODO: Change text of alert text to norwegian.
     ImagePicker.showImagePicker(options, (response) => {
     if (response.didCancel) {
-      console.log('User cancelled image picker');
+
     }
     else if (response.error) {
-      console.log('ImagePicker Error: ', response.error);
+
     }
-    else {
-
+    else //Image is picked from either camera or gallery
+    {
+      //getting image data as base64 format
       let imageData = { uri: 'data:image/jpeg;base64,' + response.data };
-      console.log(imageData.uri);
 
+      //updaging eventForm with image data
+      this.updateParentState({image:imageData})
       this.setState({
         imageData:imageData,
         imageSelected:true,
+      });
+      }
+      this.setState({
         loading:false,
       });
-      this.updateParentState({image:imageData})
-      }
     });
   }
 
@@ -61,11 +66,12 @@ export default class UploadImage extends React.Component{
       loading:true,
     });
 
+    //clears all image data from parents state.
     this.updateParentState({image:null});
     this.setState({
-      loading:false,
       imageSelected:false,
-      imageSource:null,
+      imageData:null,
+      loading:false,
     });
   }
 render(){
@@ -84,7 +90,7 @@ render(){
           onPress={this.selectImageFromDevice}
         >
           <Text>
-            Klart for opplasting
+            Klart
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -123,11 +129,11 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     height:50,
     flex:1,
+    backgroundColor:'ghostwhite',
     marginBottom:10,
-    marginLeft:50,
+    marginLeft:40,
     marginRight:50,
     borderRadius:10,
-
     borderWidth: 1,
     borderColor:'#000',
     alignItems:'center',
@@ -149,7 +155,8 @@ const styles = StyleSheet.create({
     flex:1,
     alignSelf: 'stretch',
     height:50,
-    marginLeft:50,
+    backgroundColor:'red',
+    marginLeft:40,
     marginRight:50,
     borderRadius:10,
     borderWidth: 1,

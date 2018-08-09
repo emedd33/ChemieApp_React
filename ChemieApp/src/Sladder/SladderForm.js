@@ -49,19 +49,15 @@ constructor(props){
       });
       let body = {content:this.state.sladderText}
       if (this.state.image != null){
-        console.log("image:",this.state.image.uri);
         // TODO: convert image to base64
         let content = this.state.sladderText;
-        console.log("content:", content);
         if (content == null || content == ''){
           content = "image";
         }
         body = {content:content, image:this.state.image.uri}
-        console.log(body);
       }
 
       let response = await httpRequests.PostRequest(FETCH_URL, body, this.state.authToken)
-      console.log(response);
      if (response.httpStatus == 401){
        clearAsyncStorage.clearAll();
      }
