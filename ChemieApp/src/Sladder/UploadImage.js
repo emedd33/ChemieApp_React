@@ -18,7 +18,6 @@ var options = {
     path: 'images'
   }
 };
-
 export default class UploadImage extends React.Component{
   constructor(props){
     super(props);
@@ -27,7 +26,7 @@ export default class UploadImage extends React.Component{
     this.state = {
       imageSelected:null,
       loading:false,
-      imageSource:null,
+      imagePath:null,
     }
   }
   updateParentState(data) {
@@ -43,15 +42,16 @@ export default class UploadImage extends React.Component{
       console.log('ImagePicker Error: ', response.error);
     }
     else {
-      this.setState({loading:true})
-      let source = { uri: response.uri };
-      console.log(source.uri);
+
+      let imageData = { uri: 'data:image/jpeg;base64,' + response.data };
+      console.log(imageData.uri);
+
       this.setState({
-        imageSource: source.uri,
+        imageData:imageData,
         imageSelected:true,
         loading:false,
       });
-      this.updateParentState({image:source.uri})
+      this.updateParentState({image:imageData})
       }
     });
   }
@@ -95,7 +95,7 @@ render(){
             source={require('./images/Delete_icon.png')}
             style={styles.Picture_icon}
           />
-        </TouchableOpacity>
+        </TouchableOpacity><Image source={this.state.avatarSource} style={styles.uploadAvatar} />
       </View>
     );
   }

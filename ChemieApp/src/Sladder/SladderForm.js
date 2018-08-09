@@ -49,13 +49,19 @@ constructor(props){
       });
       let body = {content:this.state.sladderText}
       if (this.state.image != null){
-        console.log("image:",this.state.image);
+        console.log("image:",this.state.image.uri);
         // TODO: convert image to base64
-        body = {content:this.state.sladderText}
+        let content = this.state.sladderText;
+        console.log("content:", content);
+        if (content == null || content == ''){
+          content = "image";
+        }
+        body = {content:content, image:this.state.image.uri}
+        console.log(body);
       }
 
       let response = await httpRequests.PostRequest(FETCH_URL, body, this.state.authToken)
-
+      console.log(response);
      if (response.httpStatus == 401){
        clearAsyncStorage.clearAll();
      }
@@ -79,6 +85,7 @@ constructor(props){
   }
   render(){
     if(this.state.loading){
+
       // TODO: This needs to be chacked to IOS, https://github.com/oblador/react-native-progress
       return(
         <View style={styles.loadingContainer}>
