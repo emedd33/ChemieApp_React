@@ -22,7 +22,7 @@ import {
 import EventDetailScreenSocial from './EventDetailScreenSocial';
 import clearAsyncStorage from 'ChemieApp/src/Functions/clearAsyncStorage'
 import base_params from 'ChemieApp/Params.js';
-const fetch_url = base_params.base_url.concat('/api/events/social/');
+const FETCH_SOCIAL_URL = base_params.base_url.concat('/api/events/social/');
 
 export default class SocialEvents extends React.Component{
 
@@ -40,13 +40,14 @@ export default class SocialEvents extends React.Component{
   }
   setParameters = async()=>{
       this.props.updateParentState({loading:true});
-      let jsonResponse = await HttpRequest.GetRequest(fetch_url,this.state.authToken);
+      let jsonResponse = await HttpRequest.GetRequest(FETCH_SOCIAL_URL,this.state.authToken);
 
       if (jsonResponse.httpStatus == 401){
         // TODO: Check this clearAsyncStorage
-        await clearAsyncStorage.clearAll();
+        //await clearAsyncStorage.clearAll();
         Alert.alert("Ups","Det var noe feil ved autorisering, venligst log inn igjen");
-        this.props.navigation.navigate('Login');
+
+        //this.props.navigation.navigate('Login');
       }
 
       if (jsonResponse.httpStatus >= 200 && jsonResponse.httpStatus < 300) {
@@ -87,7 +88,7 @@ export default class SocialEvents extends React.Component{
     }
   }
   detailNavigation(body){
-     this.props.navigation.navigate('EventDetailScreenSocial', body);
+    this.props.navigation.navigate('EventDetailScreenSocial', body);
   }
 render(){
   if(this.state.loading){
@@ -125,10 +126,8 @@ render(){
                   style={styles.eventConatiner}
                   onPress={this.detailNavigation.bind(this,{
                     id:item.id,
-                    title:item.title,
-                    fetch_url:fetch_url,
-                    type:'Social',
                     authToken:this.state.authToken,
+                    title:item.title,
                   })}
                 >
                   <View style={ styles.titleContainer }>
@@ -173,11 +172,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.8,
     shadowRadius: 3,
     elevation: 3,
-    borderColor:'#F9CF00',
+    borderColor:'transparent',
     borderRadius:10,
     borderWidth: 1,
     height:170,
-    backgroundColor:'#F9CF00',
+    backgroundColor:'ghostwhite',
 
   },
 

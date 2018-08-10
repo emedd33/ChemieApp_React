@@ -77,9 +77,7 @@ export default class EventHeader extends Component {
               <Text>
                 BedPres
               </Text>
-
             </TouchableOpacity>
-
           </View>
 
        );
@@ -91,8 +89,8 @@ const styles = StyleSheet.create({
     justifyContent:'center',
     flexDirection:'row',
     alignItems:'center',
-    height:Header.HEIGHT + 40,
-    paddingTop:20,
+    height:Header.HEIGHT + 10,
+    paddingTop:5,
     backgroundColor:"#F9CF00",
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },

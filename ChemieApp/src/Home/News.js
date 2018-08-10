@@ -40,7 +40,7 @@ export default class News extends React.Component{
     //If token is not valid, sends user to loginScreen,
     if (httpResponse.httpStatus == 401){
       // TODO: Check this clearAsyncStorage
-      clearAsyncStorage.clearAll();
+      //clearAsyncStorage.clearAll();
     }
     if (httpResponse.httpStatus >= 200 && httpResponse.httpStatus < 300) {
       //an non-emty response is of length 1, while an empty response i of zero.

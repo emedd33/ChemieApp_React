@@ -21,7 +21,7 @@ import getMonth from 'ChemieApp/src/Functions/getMonth';
 import HttpRequest from 'ChemieApp/src/Functions/HttpRequests';
 import base_params from 'ChemieApp/Params.js';
 
-const fetch_url = base_params.base_url.concat('/api/events/social/');
+const FETCH_SOCIAL_URL = base_params.base_url.concat('/api/events/social/');
 
 
 
@@ -40,24 +40,23 @@ export default class EventDetailScreenSocial extends React.Component{
     this.state={
       loading:true,
       event:null,
-      AuthToken:null,
-      id:this.props.navigation.state.params.id,
+      AuthToken:props.navigation.state.params.authToken,
+      id:props.navigation.state.params.id,
     }
-    //this.getEventsFromAPI = this.getEventsFromAPI.bind(this);
     this.setParameters = this.setParameters.bind(this);
 
 
   }
   setParameters = async()=>{
-    const url = fetch_url.concat(this.props.navigation.state.params.id).concat("/");
-    let jsonResponse = await HttpRequest.GetRequest(url);
+    const url = FETCH_SOCIAL_URL.concat(this.props.navigation.state.params.id).concat("/");
+    let jsonResponse = await HttpRequest.GetRequest(url, this.props.navigation.state.params.authToken);
 
     this.setState({
       event:jsonResponse.response[0],
     });
     if (jsonResponse.httpStatus == 401){
-      AsyncStorage.removeItem('AuthToken');;
-      this.props.navigation.navigate('Login');
+      //AsyncStorage.removeItem('AuthToken');;
+      //this.props.navigation.navigate('Login');
     }
     if (jsonResponse.httpStatus >= 200 && jsonResponse.httpStatus < 300) {
       month = this.state.event.date.slice(5,7);
@@ -142,8 +141,6 @@ render(){
           onPress={this.attendEventNavigation.bind(this,{
             id:this.state.id,
             event:this.state.event,
-            fetch_url:this.state.fetch_url,
-            type:this.state.type,
             AuthToken:this.state.AuthToken,
           })}
         >

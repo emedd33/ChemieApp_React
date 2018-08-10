@@ -21,7 +21,7 @@ import getMonth from 'ChemieApp/src/Functions/getMonth';
 import HttpRequest from 'ChemieApp/src/Functions/HttpRequests';
 import base_params from 'ChemieApp/Params.js';
 
-const fetch_url = base_params.base_url.concat('/api/events/bedpres/');
+const FETCH_BEDPRES_URL = base_params.base_url.concat('/api/events/bedpres/');
 
 
 
@@ -40,8 +40,8 @@ export default class EventDetailScreenBedPres extends React.Component{
     this.state={
       loading:true,
       event:null,
-      AuthToken:null,
-      id:this.props.navigation.state.params.id,
+      authToken:props.navigation.state.params.authToken,
+      event_id:this.props.navigation.state.params.id,
     }
 
     this.setParameters = this.setParameters.bind(this);
@@ -49,15 +49,16 @@ export default class EventDetailScreenBedPres extends React.Component{
 
   }
   setParameters = async()=>{
-    const url = fetch_url.concat(this.props.navigation.state.params.id).concat("/");
-    let jsonResponse = await HttpRequest.GetRequest(url);
+    const url = FETCH_BEDPRES_URL.concat(this.props.navigation.state.params.id).concat("/");
+    let jsonResponse = await HttpRequest.GetRequest(url, this.state.authToken);
 
     this.setState({
       event:jsonResponse.response[0],
     });
     if (jsonResponse.httpStatus == 401){
-      AsyncStorage.removeItem('AuthToken');;
-      this.props.navigation.navigate('Login');
+      //clearAsyncStorage.clearAll();
+      //AsyncStorage.removeItem('AuthToken');;
+      //this.props.navigation.navigate('Login');
     }
     if (jsonResponse.httpStatus >= 200 && jsonResponse.httpStatus < 300) {
       month = this.state.event.date.slice(5,7);
@@ -125,8 +126,6 @@ render(){
           onPress={this.attendEventNavigation.bind(this,{
             id:this.state.id,
             event:this.state.event,
-            fetch_url:this.state.fetch_url,
-            type:this.state.type,
             AuthToken:this.state.AuthToken,
           })}
         >

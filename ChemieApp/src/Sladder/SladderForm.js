@@ -59,7 +59,7 @@ constructor(props){
 
       let response = await httpRequests.PostRequest(FETCH_URL, body, this.state.authToken)
      if (response.httpStatus == 401){
-       clearAsyncStorage.clearAll();
+       //clearAsyncStorage.clearAll();
      }
      else if (response.httpStatus < 300 && response.httpStatus >= 200){
        Alert.alert("Sladder sent!", "Sugepumpa takker deg");

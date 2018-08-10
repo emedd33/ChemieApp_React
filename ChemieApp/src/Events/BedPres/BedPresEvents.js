@@ -19,7 +19,7 @@ import HttpRequest from 'ChemieApp/src/Functions/HttpRequests';
 import EventDetailScreenBedPres from './EventDetailScreenBedPres';
 import clearAsyncStorage from 'ChemieApp/src/Functions/clearAsyncStorage'
 import base_params from 'ChemieApp/Params.js';
-const FETCH_URL = base_params.base_url.concat('/api/events/bedpres/');
+const FETCH_BEDPRES_URL = base_params.base_url.concat('/api/events/bedpres/');
 
 
 export default class BedPresEvents extends React.Component{
@@ -42,18 +42,18 @@ export default class BedPresEvents extends React.Component{
 
   getEventsFromAPI = async() => {
       this.props.updateParentState({loading:true});
-      let jsonResponse = await HttpRequest.GetRequest(FETCH_URL,this.state.authToken);
+      console.log(FETCH_BEDPRES_URL);
+      let jsonResponse = await HttpRequest.GetRequest(FETCH_BEDPRES_URL,this.state.authToken);
 
       //If token is not valid, sends user to loginScreen,
       if (jsonResponse.httpStatus == 401){
         // TODO: Check this clearAsyncStorage
-        await clearAsyncStorage.clearAll();
+        //await clearAsyncStorage.clearAll();
         Alert.alert("Ups","Det var noe feil ved autorisering, venligst log inn igjen");
-        this.props.navigation.navigate('Login');
+        //this.props.navigation.navigate('Login');
 
       }
       if (jsonResponse.httpStatus >= 200 && jsonResponse.httpStatus < 300) {
-        
         if (jsonResponse.response.length>=1) {
           //Converting date to more readable format for user
           for (var i = 0; i<jsonResponse.response.length && i < 5; i++){
@@ -133,8 +133,7 @@ render(){
                   onPress={this.detailNavigation.bind(this,{
                     id:item.id,
                     title:item.title,
-                    fetch_url:fetch_url,
-                    type:'BedPres',
+                    authToken:this.state.authToken,
                   })}
                 >
 
@@ -186,7 +185,8 @@ const styles = StyleSheet.create({
     borderColor:'transparent',
     borderRadius:10,
     borderWidth: 1,
-    height:200,
+    height:170,
+    backgroundColor:'ghostwhite',
 
   },
 
