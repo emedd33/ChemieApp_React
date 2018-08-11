@@ -22,7 +22,8 @@ export default class EventFormRegistered extends React.Component{
     Linking.canOpenURL(url).then(supported => {
         if (supported) {
           Linking.openURL(url);
-        
+        }
+
       });
     }
 render(){
