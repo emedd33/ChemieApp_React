@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   AsyncStorage,
 } from 'react-native';
-
+import clearAsyncStorage from 'ChemieApp/src/Functions/clearAsyncStorage'
 export default class SettingsGeneralScreen extends React.Component{
   static navigationOptions = {
     title: 'generelt',
@@ -24,17 +24,26 @@ export default class SettingsGeneralScreen extends React.Component{
     this.logoutSubmit=this.logoutSubmit.bind(this);
   }
   logoutSubmit = async() => {
+    console.log("logging out");
     this.setState({
       loading:true
     })
     try{
       // TODO: remove other prefferences
-      await AsyncStorage.removeItem('AuthToken');
-      await AsyncStorage.removeItem('AuthToken');
+
+      await AsyncStorage.removeItem('isAuthenticated');
+      console.log("removed isAuthenticated");
+      await AsyncStorage.removeItem('authToken');
+      console.log("removed authToken");
       await AsyncStorage.removeItem('firstname');
+      console.log("removed firstname");
       await AsyncStorage.removeItem('lastname');
+      console.log("removed lastname");
       await AsyncStorage.removeItem('access_card');
+      console.log("removed access_card");
       await AsyncStorage.removeItem('membership')
+      console.log("removed membership");
+      this.props.navigation.navigate('Login')
     } catch (error) {
       alert(error);
     }
@@ -50,7 +59,7 @@ export default class SettingsGeneralScreen extends React.Component{
       {text: 'Nei', style: 'cancel' },
       {text: 'Ja', onPress: () => {
       this.logoutSubmit()
-      .then(this.props.navigation.navigate('Login'))},
+      },
       }
     ],
       { cancelable: true }
@@ -67,10 +76,11 @@ export default class SettingsGeneralScreen extends React.Component{
       );
   }
 
-  let firstname = <Text style={{fontSize:20}}>{this.state.firstname}</Text>
-  let lastname = <Text style={{fontSize:20}}>{this.state.lastname}</Text>
-  let membership = <Text style={{fontSize:15}}>{this.state.membership}</Text>
-  let access_card = <Text style={{fontSize:15}}>{this.state.access_card}</Text>
+  let firstname = <Text style={{fontSize:20}}>{this.state.profile.firstname} </Text>
+  let lastname = <Text style={{fontSize:20}}>{this.state.profile.lastname}</Text>
+  let membership = <Text style={{fontSize:15}}>{this.state.profile.membership}</Text>
+  let access_card = <Text style={{fontSize:15}}>{this.state.profile.access_card}</Text>
+  let grade = <Text style={{fontSize:15}}>{this.state.profile.grade}</Text>
   return(
     <View style={styles.container}>
       <View style={styles.infoContainer}>
@@ -88,6 +98,10 @@ export default class SettingsGeneralScreen extends React.Component{
         <View style={{flexDirection:'row', margin:10}}>
           <Text style={{fontSize:15,  fontWeight:'bold'}}>Adgangskort: </Text>
           {access_card}
+        </View>
+        <View style={{flexDirection:'row', margin:10}}>
+          <Text style={{fontSize:15,  fontWeight:'bold'}}>Registrert klassetrinn: </Text>
+          {grade}
         </View>
       </View>
 

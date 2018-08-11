@@ -46,8 +46,8 @@ export default class splashscreen extends React.Component{
   }
   getAsyncStorageSettings = async() => {
     let authToken = await AsyncStorage.getItem('authToken');
-    let firstname = await AsyncStorage.getItem('Firstname');
-    let lastname = await AsyncStorage.getItem('Lastname');
+    let firstname = await AsyncStorage.getItem('firstname');
+    let lastname = await AsyncStorage.getItem('lastname');
     let access_card = await AsyncStorage.getItem('access_card');
     let grade = await AsyncStorage.getItem('grade');
     let username = await AsyncStorage.getItem('username');
@@ -60,6 +60,7 @@ export default class splashscreen extends React.Component{
       username:username,
       id:id,
     }
+    console.log(profile);
     this.setState({
       profile:profile,
       isAuthenticated:true,
