@@ -42,6 +42,7 @@ export default class EventDetailScreenBedPres extends React.Component{
       event:null,
       authToken:props.navigation.state.params.authToken,
       event_id:this.props.navigation.state.params.id,
+      profile:props.navigation.state.params.profile,
     }
 
     this.setParameters = this.setParameters.bind(this);
@@ -126,7 +127,8 @@ render(){
           onPress={this.attendEventNavigation.bind(this,{
             id:this.state.id,
             event:this.state.event,
-            AuthToken:this.state.AuthToken,
+            authToken:this.state.authToken,
+            profile:this.state.profile,
           })}
         >
           <Text>Gå til påmelding</Text>

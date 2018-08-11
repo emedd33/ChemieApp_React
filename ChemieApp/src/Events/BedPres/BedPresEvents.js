@@ -32,6 +32,7 @@ export default class BedPresEvents extends React.Component{
       connected:false,
       httpStatus:null,
       loading:props.loading,
+      profile:props.state.profile,
       }
       this.getEventsFromAPI = this.getEventsFromAPI.bind(this);
 
@@ -42,7 +43,6 @@ export default class BedPresEvents extends React.Component{
 
   getEventsFromAPI = async() => {
       this.props.updateParentState({loading:true});
-      console.log(FETCH_BEDPRES_URL);
       let jsonResponse = await HttpRequest.GetRequest(FETCH_BEDPRES_URL,this.state.authToken);
 
       //If token is not valid, sends user to loginScreen,
@@ -74,7 +74,6 @@ export default class BedPresEvents extends React.Component{
       } else {
         jsonResponse.response = "empty";
       }
-      console.log(jsonResponse.response);
       this.setState({
         events:jsonResponse.response,
         connected:true,
@@ -105,7 +104,6 @@ render(){
       </View>
     )
   }
-  console.log("connected:",this.state.connected);
   if(!this.state.connected){
     return(
       <View style={styles.loadingContainer}>
@@ -113,7 +111,6 @@ render(){
       </View>
     );
   }
-  console.log("events:", this.state.events);
   if(this.state.events == "empty"){
     return(
       <View style={styles.loadingContainer}>
@@ -134,6 +131,7 @@ render(){
                     id:item.id,
                     title:item.title,
                     authToken:this.state.authToken,
+                    profile:this.state.profile,
                   })}
                 >
 

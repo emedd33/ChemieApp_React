@@ -1,7 +1,6 @@
 import React from 'react';
 import * as Progress from 'react-native-progress';
 
-
 import {
   StyleSheet,
   Text,
@@ -43,8 +42,8 @@ render(){
           </View>
 
           <View style={{flex:1.5  , width:300, justifyContent:'center', alignItems:'center'}}>
-            <Text></Text>
-            <Text style={{marginTop:10, fontSize:20}}>Åpner {this.state.timeTillopen}</Text>
+            <Text style={{marginTop:10, fontSize:20}}>Åpner {this.state.time_until_open}</Text>
+
           </View>
         </View>
         <View style={styles.defaultDeniedLower}>

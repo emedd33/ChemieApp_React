@@ -40,8 +40,9 @@ export default class EventDetailScreenSocial extends React.Component{
     this.state={
       loading:true,
       event:null,
-      AuthToken:props.navigation.state.params.authToken,
+      authToken:props.navigation.state.params.authToken,
       id:props.navigation.state.params.id,
+      profile:props.navigation.state.params.profile,
     }
     this.setParameters = this.setParameters.bind(this);
 
@@ -108,8 +109,6 @@ export default class EventDetailScreenSocial extends React.Component{
 
   }
 render(){
-
-
   if(this.state.loading){
 
     // TODO: This needs to be chacked to IOS, https://github.com/oblador/react-native-progress
@@ -141,7 +140,8 @@ render(){
           onPress={this.attendEventNavigation.bind(this,{
             id:this.state.id,
             event:this.state.event,
-            AuthToken:this.state.AuthToken,
+            authToken:this.state.authToken,
+            profile:this.state.profile
           })}
         >
           <Text>Gå til påmelding</Text>

@@ -34,6 +34,7 @@ export default class SocialEvents extends React.Component{
       httpStatus:null,
       connected:false,
       loading:props.loading,
+      profile:props.state.profile,
       }
       this.setParameters = this.setParameters.bind(this);
 
@@ -128,6 +129,7 @@ render(){
                     id:item.id,
                     authToken:this.state.authToken,
                     title:item.title,
+                    profile:this.state.profile,
                   })}
                 >
                   <View style={ styles.titleContainer }>

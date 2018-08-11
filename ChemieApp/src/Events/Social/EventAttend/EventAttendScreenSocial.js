@@ -2,7 +2,7 @@ import React from 'react';
 import * as Progress from 'react-native-progress';
 
 var moment = require('moment'); //time package used to determine ETA and dates.
-import 'moment/locale/nb'; //Norwegian language package used with moment()
+//import 'moment/locale/nb'; //Norwegian language package used with moment()
 
 import {
   StyleSheet,
@@ -18,6 +18,7 @@ import EventNotAllowed from 'ChemieApp/src/Events/Components/EventNotAllowed';
 import EventFormSocial from './EventFormSocial';
 
 import HttpRequest from 'ChemieApp/src/Functions/HttpRequests';
+import timeAndDate from 'ChemieApp/src/Functions/TimeAndDate';
 import base_params from 'ChemieApp/Params.js';
 
 //GET request
@@ -36,29 +37,27 @@ export default class EventAttendScreenSocial extends React.Component{
     super(props);
     this.state={
       loading:true,
-      event_id: props.navigation.state.params.id,
-      type:props.navigation.state.params.type,
-      register_open:false,
+      event:props.navigation.state.params.event,
+
+      profile:props.navigation.state.params.profile,
+      authToken:props.navigation.state.params.authToken,
+      allowed:true,
+      user_registered:false,
+      user_payed:false,
+
       register_open_date:null,
-      register_closed:false,
       register_closed_date:null,
       register_deadline_date:null,
-      registered:false,
-      screen:null,
-      closed_text:null,
-      allowed:true,
-      payed:false,
-      user_id:null,
-      grade: null,
-      event:props.navigation.state.params.event,
-      AuthToken:props.navigation.state.params.AuthToken,
-      timeTillopen:null,
+      time_until_open:null,
+
+      event_register_open:false,
+      event_register_closed:false,
+      event_deregister_closed:false,
+      componentScreen:"OPEN",
+      user_can_register:true,
+
     }
     this.setParameters = this.setParameters.bind(this);
-    this.getregisterDateString = this.getregisterDateString.bind(this);
-    this.getAsyncProfile = this.getAsyncProfile.bind(this);
-    this.checkDates = this.checkDates.bind(this);
-    this.checkAllowed = this.checkAllowed.bind(this);
   }
 
   componentWillMount(){
@@ -66,95 +65,57 @@ export default class EventAttendScreenSocial extends React.Component{
   }
   //Main function when loading component.
   setParameters = () =>{
+
       this.setState({
-        loading:true
+        loading:true,
       })
-
-      // fetching user id and users class grade
-      //checking if user is allowed for event
-      this.getAsyncProfile();
-
-
       //tranforming and adding readable dates and ETA to the state
       //checking if screen should render form, closed or not allowed.
-      this.getregisterDateString()
+      let convertedStrings = timeAndDate.getReadableDateStringsSocialEvents(
+        this.state.event.register_startdate,
+        this.state.event.register_deadline,
+        this.state.event.deregister_deadline
+      );
 
-  }
-  getAsyncProfile = async() =>{
-    let grade = await AsyncStorage.getItem('grade');
-    let user_id = await AsyncStorage.getItem('id');
-    this.setState({
-      grade:grade,
-      user_id:user_id,
-    });
+      if (!this.state.event.allowed_grades.includes(Number(this.state.profile.grade))){
+        this.setState({
+          allowed:false
+        });
+      }
+      let componentScreen = "OPEN";
+      let user_can_register = true;
+      if (!convertedStrings.event_register_open) {
+        componentScreen = "BEFORE_REGISTRATIONS";
+        user_can_register=false;
+      }
+      if (convertedStrings.event_register_open && !convertedStrings.register_deadline_date){
+        componentScreen = "AFTER_REGISTRATION";
+        user_can_register = false;
+      }
 
-
-    this.checkAllowed()
-  }
-  checkAllowed(){
-    //checking if user is allowed for event
-    var grade = Number(this.state.grade);
-    var allowed_grades = this.state.event.allowed_grades;
-    if (!allowed_grades.includes(grade)){
       this.setState({
-        allowed:false
-      });
-    }
+        register_open_date:convertedStrings.register_open_date,
+        register_closed_date:convertedStrings.register_deadline_date,
+        register_deadline_date:convertedStrings.deregister_deadline_date,
 
-  }
-  getregisterDateString(){
-    // tranforming dates to readable strings
+        event_register_open:convertedStrings.event_register_open,
+        event_register_closed:convertedStrings.event_register_closed,
+        event_deregister_closed:convertedStrings.event_deregister_closed,
+        time_until_open:convertedStrings.time_until_open,
+        componentScreen:componentScreen,
+        user_can_register:user_can_register,
 
-    let register_open_date = moment(this.state.event.register_startdate).calendar()
-    let register_closed_date = moment(this.state.event.register_deadline).calendar()
-    let register_deadline_date = moment(this.state.event.deregister_deadline).calendar()
-
-    this.setState({
-      register_open_date:register_open_date,
-      register_closed_date:register_closed_date,
-      register_deadline_date:register_deadline_date
-    });
-    this.checkDates();
-
-  }
-  checkDates(){
-    //depending on the date and event, the state is changed
-
-    let screen = "Open";
-    let closed_text = "Arrangmentet er ikke åpent for påmelding enda.";
-    let register_open = false;
-    let register_closed = false;
-
-    if (moment().isAfter(this.state.event.register_startdate)){
-      register_open = true
-    }else {
-      var register_date = moment(this.state.event.register_startdate);
-      var now = moment();
-      screen = "Closed";
-      this.setState({
-        timeTillopen:register_date.from(now)
-      });
-    }
-    if (moment().isAfter(this.state.event.register_deadline)){
-      console.log("Registered close");
-      this.setState({
-        register_closed:true,
-        closed_text:"Deadlinen for avmelding er forbi, du kan ikke melde deg av arrangementet.",
       })
-    }
-
-
       setTimeout(()=>{
         this.setState({
           loading:false
         })
       },500);
 
-
   }
 
-
 render(){
+  //console.log(this.props.navigation);
   //Render progress circle if loading
   if (this.state.loading) {
     return(
@@ -163,10 +124,14 @@ render(){
       </View>
     );
   }
+  if(!this.state.allowed){
+    return(
+        <EventNotAllowed eventState={this.state}/>
+      );
+  }
   //render Closed screen if registration is not open
-  console.log(this.state);
-  if(this.state.screen =="Closed"){
-
+  if(!this.state.user_can_register){
+    console.log(this.state);
     return(
         <View style={styles.container}>
           <EventClosed
@@ -188,11 +153,7 @@ render(){
   }
 
   // renders if user is not allowed to attend event,
-  if(!this.state.allowed){
-    return(
-        <EventNotAllowed eventState={this.state}/>
-      );
-  }
+
   // default render which sets up the registration form for the user.
   return(
         <EventFormSocial
