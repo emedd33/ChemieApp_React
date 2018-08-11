@@ -41,12 +41,44 @@ export default class EventDetailScreenSocial extends React.Component{
       loading:true,
       event:null,
       authToken:props.navigation.state.params.authToken,
-      id:props.navigation.state.params.id,
+      event_id:props.navigation.state.params.id,
       profile:props.navigation.state.params.profile,
     }
     this.setParameters = this.setParameters.bind(this);
+    this.convertEventStringsFromJsonResponse = this.convertEventStringsFromJsonResponse.bind(this);
 
+  }
+  convertEventStringsFromJsonResponse(){
+    month = this.state.event.date.slice(5,7);
+    month_name = getMonth.getMonthFunction(month);
 
+    day = this.state.event.date.slice(8,10);
+    time = this.state.event.date.slice(11,16);
+    let date_String = day + " " + month_name + ' - ' + time;
+    this.state.event['string_date'] = date_String;
+
+    //Adding an instance of number of spots to response
+    slut_spots = this.state.event.attendees.length;
+    this.state.event['slut_spots'] = slut_spots;
+    this.state.event['progress_sluts'] = 100*(slut_spots/this.state.event['sluts']);
+
+    if (this.state.event.price_member == 0) {
+        this.state.event['price_member'] = "Gratis."
+      } else {
+        var price_string = String(this.state.event['price_member']);
+        price_string= price_string.concat(' kr.');
+        this.state.event['price_member'] = price_string;
+      }
+    if (this.state.event.price_not_member == 0) {
+        this.state.event['price_not_member'] = "Gratis."
+
+      } else {
+
+        var price_string = String(this.state.event['price_not_member']);
+        price_string= price_string.concat(' kr.');
+        this.state.event['price_not_member'] = price_string;
+
+        }
   }
   setParameters = async()=>{
     const url = FETCH_SOCIAL_URL.concat(this.props.navigation.state.params.id).concat("/");
@@ -60,36 +92,7 @@ export default class EventDetailScreenSocial extends React.Component{
       //this.props.navigation.navigate('Login');
     }
     if (jsonResponse.httpStatus >= 200 && jsonResponse.httpStatus < 300) {
-      month = this.state.event.date.slice(5,7);
-      month_name = getMonth.getMonthFunction(month);
-
-      day = this.state.event.date.slice(8,10);
-      time = this.state.event.date.slice(11,16);
-      let date_String = day + " " + month_name + ' - ' + time;
-      this.state.event['string_date'] = date_String;
-
-      //Adding an instance of number of spots to response
-      slut_spots = this.state.event.attendees.length;
-      this.state.event['slut_spots'] = slut_spots;
-      this.state.event['progress_sluts'] = 100*(slut_spots/this.state.event['sluts']);
-
-      if (this.state.event.price_member == 0) {
-          this.state.event['price_member'] = "Gratis."
-        } else {
-          var price_string = String(this.state.event['price_member']);
-          price_string= price_string.concat(' kr.');
-          this.state.event['price_member'] = price_string;
-        }
-      if (this.state.event.price_not_member == 0) {
-          this.state.event['price_not_member'] = "Gratis."
-
-        } else {
-
-          var price_string = String(this.state.event['price_not_member']);
-          price_string= price_string.concat(' kr.');
-          this.state.event['price_not_member'] = price_string;
-
-          }
+      this.convertEventStringsFromJsonResponse();
       }
       this.setState({
         loading:false,
@@ -138,7 +141,7 @@ render(){
         <TouchableOpacity
           style={styles.goToFormButton}
           onPress={this.attendEventNavigation.bind(this,{
-            id:this.state.id,
+            event_id:this.state.event_id,
             event:this.state.event,
             authToken:this.state.authToken,
             profile:this.state.profile

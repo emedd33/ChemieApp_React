@@ -57,7 +57,7 @@ render(){
           paymentStatus = <Text>Betalt</Text>
       }
         }
-
+  console.log(this.state);
   return(
     // TODO: The dates and time in the deniedContainer are off.
     <View style={styles.container}>
@@ -79,7 +79,7 @@ render(){
             <Text>Påmeldingsfrist:</Text><Text style={{position:'absolute', right:0}}>{this.props.eventState.register_closed_date}</Text>
           </View>
           <View style={{flexDirection:'row'}}>
-            <Text>Avmeldingsfrist:</Text><Text style={{position:'absolute', right:0}}>{this.props.eventState.register_deadline_date}</Text>
+            <Text>Avmeldingsfrist:</Text><Text style={{position:'absolute', right:0}}>{this.props.eventState.deregister_deadline_date}</Text>
           </View>
         </View>
       </View>

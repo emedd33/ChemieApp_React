@@ -20,11 +20,8 @@ import base_params from 'ChemieApp/Params.js';
 import EventFormRegistered from './EventFormRegistered';
 import EventFormSubmit from './EventFormSubmit';
 
-const social_url = base_params.base_url.concat('/api/events/social/register/');
-const social_register_url = base_params.base_url.concat('/api/events/social/register/post/');
-
-const bedpres_url = base_params.base_url.concat('/api/events/bedpres/register/');
-const bedpres_register_url = base_params.base_url.concat('/api/events/bedpres/register/post/');
+const SOCIAL_URL = base_params.base_url.concat('/api/events/social/register/');
+const SOCIAL_REGISTER_URL = base_params.base_url.concat('/api/events/social/register/post/');
 
 export default class EventFormSocial extends React.Component{
 
@@ -33,16 +30,17 @@ export default class EventFormSocial extends React.Component{
     this.state={
       loading:true,
 
-      register_open:props.eventState.register_open,
-      register_open_date:props.eventState.register_open_date,
-      register_closed:props.eventState.register_closed,
-      register_closed_date:props.eventState.register_closed_date,
-      register_deadline_date:props.eventState.register_deadline_date,
+      register_open:props.eventState.event_register_open,
+      register_closed:props.eventState.event_register_closed,
+      deregister_deadline:props.eventState.event_deregister_closed,
 
-      event_type:props.eventState.type,
+      register_open_date:props.eventState.register_open_date,
+      register_closed_date:props.eventState.register_closed_date,
+      deregister_deadline_date:props.eventState.register_deadline_date,
+
       event_id:props.eventState.event_id,
 
-      AuthToken:props.eventState.AuthToken,
+      authToken:props.eventState.authToken,
       httpStatus:null,
       response:null,
       responseText:null,
@@ -70,6 +68,7 @@ export default class EventFormSocial extends React.Component{
 
   }
   componentWillMount(){
+
     this.setParameters()
   }
 
@@ -78,27 +77,22 @@ export default class EventFormSocial extends React.Component{
     this.setState({
       loading:true
     })
-    fetch_url = social_url.concat(this.state.event_id);
+    const FETCH_URL = SOCIAL_URL.concat(this.state.event_id);
 
     // fetching data from url to see if user is registered or not
-    let jsonResponse = await HttpRequest.GetRequest(fetch_url);
-    let httpStatus = jsonResponse.httpStatus;
-
-    //extracting the response from a inner layour to increase readability
-    jsonResponse= jsonResponse.response;
+    let jsonResponse = await HttpRequest.GetRequest(FETCH_URL, this.state.authToken);
 
     // 401 means token is not valid and user is forced to log out.
-    if (httpStatus == 401){
-      AsyncStorage.removeItem('AuthToken');;
-      this.props.navigation.navigate('Login');
+    if (jsonResponse.httpStatus == 401){
+      //AsyncStorage.removeItem('AuthToken');;
+      //this.props.navigation.navigate('Login');
     } else {
       this.setState({
-        event:jsonResponse,
-        httpStatus:httpStatus
+        httpStatus:jsonResponse.httpStatus
       })
 
       // a succesful GET-request satiesfies this confition
-      if (this.state.httpStatus >= 200 && this.state.httpStatus < 300){
+      if (jsonResponse.httpStatus >= 200 && jsonResponse.httpStatus < 300){
 
         /*
         The Response from the GET-request gives an emty array if user is not registered
@@ -106,30 +100,30 @@ export default class EventFormSocial extends React.Component{
         in the RESTAPI the user is determined by the unique auth token thus
         only two options of array length, 1 or 0.
         */
-        if (jsonResponse.length==1){
-
-          let payed = jsonResponse[0].payment_status
+        if (jsonResponse.response.length==1){
+          let response = jsonResponse.response[0];
+          let payed = jsonResponse.payment_status
 
           //an event which have 0 kr payment requirement will be set to free.
-          if (jsonResponse[0].event.price_member + jsonResponse[0].event.price_not_member == 0){
+          if (response.event.price_member + response.event.price_not_member == 0){
             payed = true;
           }
+
           this.setState({
             registered:true,
-            registered_status:jsonResponse[0].status,
+            registered_status:response.status,
             payment_status:payed,
-            price_member:jsonResponse[0].event.price_member,
-            sleepover_checked:jsonResponse[0].sleepover,
-            snack_checked:jsonResponse[0].night_snack,
+            price_member:response.event.price_member,
+            sleepover_checked:response.sleepover,
+            snack_checked:response.night_snack,
           });
 
-          if (jsonResponse[0].companion != null && jsonResponse[0].companion != ''){
+          if (response.companion != null && response.companion != ''){
             this.setState({
-              companionName:jsonResponse[0].companion,
-              companionNamePlaceholder:jsonResponse[0].companion,
+              companionName:response.companion,
+              companionNamePlaceholder:response.companion,
             })
           }
-
         }
       }
     }
@@ -144,11 +138,7 @@ export default class EventFormSocial extends React.Component{
       this.setState({loading:true});
 
       // Formatting the url
-      let fetch_url = '';
-      fetch_url = social_register_url.concat(this.state.event_id);
-      fetch_url = fetch_url.concat('/');
-
-      let token = await AsyncStorage.getItem('AuthToken');
+      let FETCH_URL = SOCIAL_REGISTER_URL.concat(this.state.event_id).concat("/");
 
       if (this.state.companionName == ''){
         this.setState({
@@ -156,54 +146,32 @@ export default class EventFormSocial extends React.Component{
         });
       }
       // Posting to the website with prefferences.
-      let jsonResponse = await fetch(fetch_url,{
-        method:'POST',
-        headers:{
-          "Authorization": token,
-          Accept: "application/json",
-          "Content-Type":"application/json",
-        },
-        body:JSON.stringify({
-          event:this.state.event_id,
-          // TODO: Check that status i 1 or must be waiting
-          status:1,
-          sleepover:this.state.sleepover_checked,
-          night_snack:this.state.snack_checked,
-          companion:this.state.companionName,
-        })
-      })
-        .then((response) => {
-          console.log(response);
-            this.setState({
-            response:response,
-            httpStatus:response.status,
-            responseText:response.statusText,
-          })
-          return response.text();
-        })
-        .then((responseJson)  => {
-          let res = JSON.parse(responseJson);
-          return res;
-        })
-        .catch((error) => {
-           console.error(error);
-           Alert.alert("Ups", "det har skjedd en feil: " + error);
-        });
+      let body = {
+        event:this.state.event_id,
+        // TODO: Check that status i 1 or must be waiting
+        status:1,
+        sleepover:this.state.sleepover_checked,
+        night_snack:this.state.snack_checked,
+        companion:this.state.companionName,
+      }
+
+      let jsonResponse = await HttpRequest.PostRequest(FETCH_URL, body, this.state.authToken);
+
 
         // 401 means token is not valid and user is forced to log out.
-        if (this.state.httpStatus == 401){
-          AsyncStorage.removeItem('AuthToken');;
-          this.props.navigation.navigate('Login');
+        if (jsonResponse.httpStatus == 401){
+          //AsyncStorage.removeItem('AuthToken');;
+          //this.props.navigation.navigate('Login');
         } else {
           // Valid POST-request.
-          if (this.state.httpStatus > 200 && this.state.httpStatus <= 300){
+          if (jsonResponse.httpStatus > 200 && jsonResponse.httpStatus <= 300){
             this.setState({
               registered:true
             })
             //refreshing page
             this.setParameters();
           } else {
-            Alert.alert("Ups", "det skjedde en feil: " + this.responseText);
+            Alert.alert("Ups", "det skjedde en feil: " + jsonResponse.httpStatus);
           }
         }
       this.setState({loading:false})
@@ -240,6 +208,7 @@ render(){
   }
 
   if (this.state.registered){
+    console.log(this.state);
     return(
       <EventFormRegistered
         eventState={this.state}

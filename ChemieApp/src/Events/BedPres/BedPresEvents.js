@@ -128,7 +128,7 @@ render(){
                 <TouchableOpacity
                   style={styles.eventConatiner}
                   onPress={this.detailNavigation.bind(this,{
-                    id:item.id,
+                    event_id:item.id,
                     title:item.title,
                     authToken:this.state.authToken,
                     profile:this.state.profile,

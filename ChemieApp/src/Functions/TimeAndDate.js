@@ -30,8 +30,8 @@ class TimeAndDate extends Component{
 
     let convertedStrings={
       register_open_date:register_open_date,
-      register_closed_date:register_deadline_date,
-      register_deadline_date:deregister_deadline_date,
+      register_deadline_date:register_deadline_date,
+      deregister_deadline_date:deregister_deadline_date,
 
       event_register_open:event_register_open,
       event_register_closed:event_register_closed,
@@ -42,6 +42,7 @@ class TimeAndDate extends Component{
     return convertedStrings;
 
   }
+
 }
 
 const timeAndDate = new TimeAndDate();

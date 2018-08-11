@@ -41,13 +41,28 @@ export default class EventDetailScreenBedPres extends React.Component{
       loading:true,
       event:null,
       authToken:props.navigation.state.params.authToken,
-      event_id:this.props.navigation.state.params.id,
+      event_id:this.props.navigation.state.params.event_id,
       profile:props.navigation.state.params.profile,
     }
 
     this.setParameters = this.setParameters.bind(this);
+    this.convertEventStringsFromJsonResponse = this.convertEventStringsFromJsonResponse.bind(this);
 
+  }
+  convertEventStringsFromJsonResponse(){
+    month = this.state.event.date.slice(5,7);
+    month_name = getMonth.getMonthFunction(month);
 
+    day = this.state.event.date.slice(8,10);
+    time = this.state.event.date.slice(11,16);
+    let date_String = day + " " + month_name + ' - ' + time;
+    this.state.event['string_date'] = date_String;
+
+    //Adding an instance of number of spots to response
+    slut_spots = this.state.event.attendees.length;
+    this.state.event['slut_spots'] = slut_spots;
+    this.state.event['progress_sluts'] = 100*(slut_spots/this.state.event['sluts']);
+    this.state.event['price_member'] = "Gratis."
   }
   setParameters = async()=>{
     const url = FETCH_BEDPRES_URL.concat(this.props.navigation.state.params.id).concat("/");
@@ -62,19 +77,7 @@ export default class EventDetailScreenBedPres extends React.Component{
       //this.props.navigation.navigate('Login');
     }
     if (jsonResponse.httpStatus >= 200 && jsonResponse.httpStatus < 300) {
-      month = this.state.event.date.slice(5,7);
-      month_name = getMonth.getMonthFunction(month);
-
-      day = this.state.event.date.slice(8,10);
-      time = this.state.event.date.slice(11,16);
-      let date_String = day + " " + month_name + ' - ' + time;
-      this.state.event['string_date'] = date_String;
-
-      //Adding an instance of number of spots to response
-      slut_spots = this.state.event.attendees.length;
-      this.state.event['slut_spots'] = slut_spots;
-      this.state.event['progress_sluts'] = 100*(slut_spots/this.state.event['sluts']);
-      this.state.event['price_member'] = "Gratis."
+      this.convertEventStringsFromJsonResponse();
       }
       this.setState({
         loading:false,
@@ -125,7 +128,7 @@ render(){
         <TouchableOpacity
           style={styles.goToFormButton}
           onPress={this.attendEventNavigation.bind(this,{
-            id:this.state.id,
+            event_id:this.state.event_id,
             event:this.state.event,
             authToken:this.state.authToken,
             profile:this.state.profile,

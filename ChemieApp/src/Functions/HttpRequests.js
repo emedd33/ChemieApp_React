@@ -74,9 +74,7 @@ class HttpRequests extends Component {
     headers:{
       Accept:'application/json',
       'Content-Type': 'application/json',
-      credentials: 'same-origin',
       "Authorization": authToken,
-      mode: 'same-origin',
     },
     timeout: 5000,
     body: JSON.stringify(body),
@@ -95,6 +93,7 @@ class HttpRequests extends Component {
      let err = error;
      this.state.error = err
   });
+  console.log(this.state);
   return this.state;
   }
 }

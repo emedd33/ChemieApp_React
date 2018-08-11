@@ -38,7 +38,7 @@ export default class EventAttendScreenSocial extends React.Component{
     this.state={
       loading:true,
       event:props.navigation.state.params.event,
-
+      event_id: props.navigation.state.params.event_id,
       profile:props.navigation.state.params.profile,
       authToken:props.navigation.state.params.authToken,
       allowed:true,
@@ -131,7 +131,6 @@ render(){
   }
   //render Closed screen if registration is not open
   if(!this.state.user_can_register){
-    console.log(this.state);
     return(
         <View style={styles.container}>
           <EventClosed
