@@ -30,10 +30,10 @@ export default class EventFormSubmit extends React.Component{
     this.props.updateParentState(body)
   }
   registerToEvent(){
-    if(!this.state.register_closed){
-      this.props.postEventStatusToAPI()
-    } else {
+    if(this.state.register_closed){
       Alert.alert("Ups","Arrangementets påmeldingsfrist har utløpts.")
+    } else {
+      this.props.postEventStatusToAPI()
     }
 
   }

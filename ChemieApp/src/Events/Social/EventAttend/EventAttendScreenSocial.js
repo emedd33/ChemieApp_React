@@ -2,7 +2,7 @@ import React from 'react';
 import * as Progress from 'react-native-progress';
 
 var moment = require('moment'); //time package used to determine ETA and dates.
-//import 'moment/locale/nb'; //Norwegian language package used with moment()
+
 
 import {
   StyleSheet,
@@ -20,9 +20,6 @@ import EventFormSocial from './EventFormSocial';
 import HttpRequest from 'ChemieApp/src/Functions/HttpRequests';
 import timeAndDate from 'ChemieApp/src/Functions/TimeAndDate';
 import base_params from 'ChemieApp/Params.js';
-
-
-const social_url = base_params.base_url.concat('/api/events/social/');
 
 export default class EventAttendScreenSocial extends React.Component{
   static navigationOptions = ({ navigation }) => ({

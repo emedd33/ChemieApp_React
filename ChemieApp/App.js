@@ -18,7 +18,7 @@ import EventScreen from './src/Events/EventScreen';
 import EventDetailScreenSocial from './src/Events/Social/EventDetailScreenSocial';
 import EventAttendScreenSocial from './src/Events/Social/EventAttend/EventAttendScreenSocial';
 import EventDetailScreenBedPres from './src/Events/BedPres/EventDetailScreenBedPres';
-//import EventAttendScreenBedPres from './src/Events/BedPres/EventAttend/EventAttendScreenBedPres';
+import EventAttendScreenBedPres from './src/Events/BedPres/EventAttend/EventAttendScreenBedPres';
 
 export default class App extends React.Component {
 
@@ -53,7 +53,7 @@ const ChemieApp = createStackNavigator({
     EventDetailScreenSocial: {screen: EventDetailScreenSocial},
     EventAttendSocial: {screen:EventAttendScreenSocial},
     EventDetailScreenBedPres: {screen: EventDetailScreenBedPres},
-    //EventAttendBedPres: {screen:EventAttendScreenBedPres},
+    EventAttendBedPres: {screen:EventAttendScreenBedPres},
 
 
 

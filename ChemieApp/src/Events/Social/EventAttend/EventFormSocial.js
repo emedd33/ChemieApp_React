@@ -80,9 +80,9 @@ export default class EventFormSocial extends React.Component{
     const FETCH_URL = SOCIAL_URL.concat(this.state.event_id);
 
     // fetching data from url to see if user is registered or not
-    console.log("AUTHTOKEN:",this.state.authToken);
+
     let jsonResponse = await HttpRequest.GetRequest(FETCH_URL, this.state.authToken);
-    console.log(jsonResponse);
+
     // 401 means token is not valid and user is forced to log out.
     if (jsonResponse.httpStatus == 401){
       //AsyncStorage.removeItem('AuthToken');;
@@ -201,7 +201,6 @@ render(){
   }
 
   if (this.state.registered){
-    console.log(this.state);
     return(
       <EventFormRegistered
         eventState={this.state}

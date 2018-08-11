@@ -87,6 +87,7 @@ export default class EventDetailScreenBedPres extends React.Component{
 
 
   attendEventNavigation(body){
+    console.log(body);
      this.props.navigation.navigate('EventAttendBedPres', body);
   }
 
@@ -128,7 +129,7 @@ render(){
         <TouchableOpacity
           style={styles.goToFormButton}
           onPress={this.attendEventNavigation.bind(this,{
-            event_id:this.state.event_id,
+            event_id:this.props.navigation.state.params.id,
             event:this.state.event,
             authToken:this.state.authToken,
             profile:this.state.profile,
@@ -156,12 +157,6 @@ render(){
             </Text>
           </View>
           <View style={styles.eventSummaryItem}>
-            <Text style={{fontWeight:'bold', marginRight:10}}>
-              Pris:
-            </Text>
-            <Text>
-              {this.state.event.price_member}
-            </Text>
           </View>
           <View style={styles.eventSummaryItem}>
             <Text style={{fontWeight:'bold', marginRight:10}}>
