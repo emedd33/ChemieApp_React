@@ -9,9 +9,11 @@ import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 
 import com.imagepicker.ImagePickerPackage;
+import com.evollu.react.fcm.FIRMessagingPackage;
 
 import java.util.Arrays;
 import java.util.List;
+
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -25,9 +27,11 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-          new ImagePickerPackage() 
-      );
-    }
+          new ImagePickerPackage(),
+          new FIRMessagingPackage()
+    );
+  }
+    
 
     @Override
     protected String getJSMainModuleName() {

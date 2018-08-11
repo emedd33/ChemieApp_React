@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "849121999684",
+    "firebase_url": "https://chemieapp-bea6e.firebaseio.com",
+    "project_id": "chemieapp-bea6e",
+    "storage_bucket": "chemieapp-bea6e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:849121999684:android:79ca6ff0680d4085",
+        "android_client_info": {
+          "package_name": "com.chemieapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "849121999684-b0dkg9qh53jfbojaih6j3a0pl873ct7b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDb-xYoXprSGOI4JcPohX8qzHm1FW3YZPQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

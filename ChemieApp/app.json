@@ -2,4 +2,5 @@
   "name": "ChemieApp",
   "displayName": "ChemieApp",
   "orientation": "portrait",
+  "sdkVersion":26.0.0,
 }
