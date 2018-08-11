@@ -48,6 +48,32 @@ export default class EventDetailScreenSocial extends React.Component{
     this.convertEventStringsFromJsonResponse = this.convertEventStringsFromJsonResponse.bind(this);
 
   }
+
+  //Formatting response from server for readability to user
+
+  //Main function which get the events specifics
+  setParameters = async()=>{
+    const url = FETCH_SOCIAL_URL.concat(this.props.navigation.state.params.id).concat("/");
+    let jsonResponse = await HttpRequest.GetRequest(url, this.props.navigation.state.params.authToken);
+
+    this.setState({
+      event:jsonResponse.response[0],
+    });
+
+    //user is not authenticated
+    if (jsonResponse.httpStatus == 401){
+      //AsyncStorage.removeItem('AuthToken');;
+      //this.props.navigation.navigate('Login');
+    }
+    if (jsonResponse.httpStatus >= 200 && jsonResponse.httpStatus < 300) {
+      this.convertEventStringsFromJsonResponse();
+      }
+    this.setState({
+      loading:false,
+    })
+
+    }
+
   convertEventStringsFromJsonResponse(){
     month = this.state.event.date.slice(5,7);
     month_name = getMonth.getMonthFunction(month);
@@ -79,28 +105,9 @@ export default class EventDetailScreenSocial extends React.Component{
         this.state.event['price_not_member'] = price_string;
 
         }
-  }
-  setParameters = async()=>{
-    const url = FETCH_SOCIAL_URL.concat(this.props.navigation.state.params.id).concat("/");
-    let jsonResponse = await HttpRequest.GetRequest(url, this.props.navigation.state.params.authToken);
-
-    this.setState({
-      event:jsonResponse.response[0],
-    });
-    if (jsonResponse.httpStatus == 401){
-      //AsyncStorage.removeItem('AuthToken');;
-      //this.props.navigation.navigate('Login');
-    }
-    if (jsonResponse.httpStatus >= 200 && jsonResponse.httpStatus < 300) {
-      this.convertEventStringsFromJsonResponse();
-      }
-      this.setState({
-        loading:false,
-      })
-
     }
 
-
+  //Navigation to screen for registration
   attendEventNavigation(body){
      this.props.navigation.navigate('EventAttendSocial', body);
   }
@@ -121,6 +128,8 @@ render(){
       </View>
     );
   }
+
+  //checking if events is full
   var numberOfAttendees = <Text>{this.state.event.slut_spots} av {this.state.event.sluts}</Text>
   if (this.state.event.slut_spots >= this.state.event.sluts){
     numberOfAttendees = <Text>Arrangementet er fult.</Text>
@@ -132,10 +141,7 @@ render(){
           style={styles.eventImage}
           source={{uri:this.state.event.image}}
         >
-
         </Image>
-
-
       </View>
       <View style={styles.formContainer}>
         <TouchableOpacity

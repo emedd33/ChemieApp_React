@@ -2,8 +2,6 @@ import React from 'react';
 import ImageResizer from 'react-native-image-resizer';
 import * as Progress from 'react-native-progress';
 
-
-
 import getMonth from 'ChemieApp/src/Functions/getMonth';
 import HttpRequest from 'ChemieApp/src/Functions/HttpRequests';
 
@@ -39,6 +37,7 @@ export default class SocialEvents extends React.Component{
       this.setParameters = this.setParameters.bind(this);
 
   }
+  //Main function which loads all events.
   setParameters = async()=>{
       this.props.updateParentState({loading:true});
       let jsonResponse = await HttpRequest.GetRequest(FETCH_SOCIAL_URL,this.state.authToken);
@@ -51,8 +50,13 @@ export default class SocialEvents extends React.Component{
         //this.props.navigation.navigate('Login');
       }
 
+      //successful httpRequests
       if (jsonResponse.httpStatus >= 200 && jsonResponse.httpStatus < 300) {
+
+        //if length is longer than 1, then we have events to display.
         if (jsonResponse.response.length>=1){
+
+          //formatting each events for readability
           for (var i = 0; i<jsonResponse.response.length && i < 5; i++){
 
             month = jsonResponse.response[i].date.slice(5,7);
@@ -75,8 +79,8 @@ export default class SocialEvents extends React.Component{
           events:jsonResponse.response,
           connected:true,
         });
-        //Converting date to more readable format for user
       }
+
       this.props.updateParentState({loading:false});
       this.setState({
         loading:false
@@ -84,10 +88,10 @@ export default class SocialEvents extends React.Component{
   }
 
   componentWillMount(){
-    if (this.state.events == null){
-      this.setParameters();
-    }
+    this.setParameters();
   }
+
+  //navigating to specific event
   detailNavigation(body){
     this.props.navigation.navigate('EventDetailScreenSocial', body);
   }
@@ -99,6 +103,8 @@ render(){
       </View>
     )
   }
+
+  //No connection to server.
   if(!this.state.connected){
     return(
       <View style={styles.loadingContainer}>
@@ -116,6 +122,7 @@ render(){
   return(
     <ScrollView style={styles.container}>
       {
+        //Looping over all events and displaying each one as a navigation button.
         this.state.events.map(( item, key ) =>
           (
             // TODO: Add image to background,

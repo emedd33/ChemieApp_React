@@ -42,6 +42,7 @@ export default class HomeScreen extends React.Component{
   //Adding listener to hardware backpress arrow on android devices
   componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+    console.log(this.state);
   }
 
    //removing backpress listener

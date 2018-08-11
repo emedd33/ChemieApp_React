@@ -36,14 +36,16 @@ export default class EventScreen extends React.Component{
     this.updateState = this.updateState.bind(this);
     this.getLoadingStatus=this.getLoadingStatus.bind(this);
     }
+  //used by child component to update EventScreen
   updateState(data){
-      this.setState(data);
-    }
+    this.setState(data);
+  }
+
+  //used by child components to get loading status.
   getLoadingStatus(){
     return this.state.loading;
   }
-  componentWillMount(){
-  }
+
   componentDidMount(){
     this.setState({
       loading:false
@@ -51,6 +53,12 @@ export default class EventScreen extends React.Component{
   }
 
 render(){
+  /*
+    This screen is divided into Social and Bedpres, thus two different components are loaded
+    EventHeader is a custom header which have added navigation buttons
+  */
+
+  //Social events are selected
   if (this.state.screen=="Social" ) {
       return(
       <View style={styles.container}>
@@ -71,7 +79,8 @@ render(){
 
       </View>
       );
-  } else if (this.state.screen=="BedPres" ) {
+  } //Bedpres is selected
+  else if (this.state.screen=="BedPres" ) {
       return(
       <View style={styles.container}>
         <EventHeader

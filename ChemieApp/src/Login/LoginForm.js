@@ -69,12 +69,10 @@ export default class LoginForm extends React.Component {
 
           //Fetching response from website by function in httpRequests
           let responseState = await httpRequests.PostLoginRequest(this.state.username, this.state.password);
-
           //Success
           if (responseState.httpStatus >= 200 && responseState.httpStatus < 300) {
               //Combining the token string with "token" to create the AuthToken
               let authToken = "token " + responseState.response.token;
-
               // Requesting profile settings from website
               this.getProfileSettingsHTTPrequest(authToken);
               }
@@ -108,7 +106,7 @@ export default class LoginForm extends React.Component {
 
       //Store the user profile in AsyncStorage so it's already loaded when the app is re-started
       AsyncStorage.setItem('isAuthenticated', JSON.stringify(true));
-      AsyncStorage.setItem('AuthToken',authToken);
+      AsyncStorage.setItem('authToken',authToken);
       AsyncStorage.setItem('firstname',profile.first_name);
       AsyncStorage.setItem('lastname',profile.last_name);
       AsyncStorage.setItem('access_card',profile.profile.access_card);
@@ -129,8 +127,8 @@ export default class LoginForm extends React.Component {
         authToken:authToken
       });
       this.props.navigation.navigate('Home',{
-        profile:this.state.profile,
-        authToken:this.state.authToken,
+        profile:profileState,
+        authToken:authToken,
       });
     }
     // TODO: Make loginHTTPRequest a general fuction

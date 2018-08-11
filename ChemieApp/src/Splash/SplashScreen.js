@@ -29,17 +29,23 @@ export default class splashscreen extends React.Component{
 
   checkAuthToken = async () => {
     try {
-      let isAuthenticated = await AsyncStorage.getItem('isAuthenticated');      
+      let isAuthenticated = await AsyncStorage.getItem('isAuthenticated');
       // TODO: Find a better conditions to check if token is correct
       if (isAuthenticated){
           await this.getAsyncStorageSettings();
+      } else {
+        setTimeout(()=>{
+          this.props.navigation.navigate("Login");
+        }, 2000);
       }
-    } catch (error) {
+
+    }
+     catch (error) {
       alert(error);
     }
   }
   getAsyncStorageSettings = async() => {
-    let authToken = await AsyncStorage.getItem('AuthToken');
+    let authToken = await AsyncStorage.getItem('authToken');
     let firstname = await AsyncStorage.getItem('Firstname');
     let lastname = await AsyncStorage.getItem('Lastname');
     let access_card = await AsyncStorage.getItem('access_card');
@@ -47,7 +53,6 @@ export default class splashscreen extends React.Component{
     let username = await AsyncStorage.getItem('username');
     let id = await AsyncStorage.getItem('id');
     profile = {
-
       firstname:firstname,
       lastname:lastname,
       access_card:access_card,
@@ -60,19 +65,14 @@ export default class splashscreen extends React.Component{
       isAuthenticated:true,
       authToken:authToken,
     });
+    console.log(profile, authToken);
+    this.props.navigation.navigate("Home", {profile:profile, authToken:authToken});
   }
     componentDidMount = () =>{
     this.checkAuthToken();
 
     // TODO: find better way to wait for checkAuthToken.
-    setTimeout(()=>{
 
-      if (this.state.isAuthenticated){
-        this.props.navigation.navigate("Home", {profile:this.state.profile, authToken:this.state.authToken});
-      } else {
-        this.props.navigation.navigate("Login");
-      }
-    }, 2000);
 
   }
   render = ()=>{

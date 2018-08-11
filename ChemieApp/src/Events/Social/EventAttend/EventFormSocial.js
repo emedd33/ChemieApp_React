@@ -80,8 +80,9 @@ export default class EventFormSocial extends React.Component{
     const FETCH_URL = SOCIAL_URL.concat(this.state.event_id);
 
     // fetching data from url to see if user is registered or not
+    console.log("AUTHTOKEN:",this.state.authToken);
     let jsonResponse = await HttpRequest.GetRequest(FETCH_URL, this.state.authToken);
-
+    console.log(jsonResponse);
     // 401 means token is not valid and user is forced to log out.
     if (jsonResponse.httpStatus == 401){
       //AsyncStorage.removeItem('AuthToken');;
@@ -145,7 +146,7 @@ export default class EventFormSocial extends React.Component{
           companionName:null,
         });
       }
-      // Posting to the website with prefferences.
+
       let body = {
         event:this.state.event_id,
         // TODO: Check that status i 1 or must be waiting
@@ -156,7 +157,6 @@ export default class EventFormSocial extends React.Component{
       }
 
       let jsonResponse = await HttpRequest.PostRequest(FETCH_URL, body, this.state.authToken);
-
 
         // 401 means token is not valid and user is forced to log out.
         if (jsonResponse.httpStatus == 401){
@@ -189,13 +189,6 @@ render(){
       default:
         registerTextStatus = <Text style={{color:'green', fontSize:20}}>Du er påmeldt</Text>
     }
-    deregistrationButton =
-    <TouchableOpacity
-      style={styles.submitButton}
-      onPress={this.forceUpdateHandler}
-    >
-      <Text style={{color:'red'}}>Meld meg av</Text>
-    </TouchableOpacity>
 
   }
 

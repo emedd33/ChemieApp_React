@@ -21,7 +21,7 @@ import HttpRequest from 'ChemieApp/src/Functions/HttpRequests';
 import timeAndDate from 'ChemieApp/src/Functions/TimeAndDate';
 import base_params from 'ChemieApp/Params.js';
 
-//GET request
+
 const social_url = base_params.base_url.concat('/api/events/social/');
 
 export default class EventAttendScreenSocial extends React.Component{
@@ -69,14 +69,15 @@ export default class EventAttendScreenSocial extends React.Component{
       this.setState({
         loading:true,
       })
-      //tranforming and adding readable dates and ETA to the state
-      //checking if screen should render form, closed or not allowed.
+
+      //Formatting dates for readability
       let convertedStrings = timeAndDate.getReadableDateStringsSocialEvents(
         this.state.event.register_startdate,
         this.state.event.register_deadline,
         this.state.event.deregister_deadline
       );
 
+      //checking if user is allowed to register for event
       if (!this.state.event.allowed_grades.includes(Number(this.state.profile.grade))){
         this.setState({
           allowed:false
@@ -136,6 +137,7 @@ render(){
           <EventClosed
             eventState={this.state}
           />
+          {/* Refresh button which reloads page */}
           <View style={{justifyContent:'center', alignItems:'center'}}>
             <TouchableOpacity
               onPress={this.setParameters}
@@ -150,10 +152,6 @@ render(){
         </View>
       );
   }
-
-  // renders if user is not allowed to attend event,
-
-  // default render which sets up the registration form for the user.
   return(
         <EventFormSocial
           eventState={this.state}

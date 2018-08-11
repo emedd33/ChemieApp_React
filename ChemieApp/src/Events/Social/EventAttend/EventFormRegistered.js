@@ -17,17 +17,18 @@ export default class EventFormRegistered extends React.Component{
     this.paymentcolor = 'firebrick';
     this.handelUrlClick = this.handelUrlClick.bind(this);
   }
+  //opening link for chemie.no/events/social
   handelUrlClick(){
     let url = base_params.social_event_url;
     Linking.canOpenURL(url).then(supported => {
         if (supported) {
           Linking.openURL(url);
-        } else {
-          console.log("Don't know how to open URI: ");
         }
       });
     }
 render(){
+
+  //Component which is determined by registered status.
   var registerstatus = <Text style={{fontSize:20, color:'green', marginTop:10}}>Du er påmeldt</Text>
   switch (this.state.registered_status) {
     case 2:
