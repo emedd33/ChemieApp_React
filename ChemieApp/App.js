@@ -10,8 +10,8 @@ import {
 import {createStackNavigator} from 'react-navigation';
 import FCM, { NotificationActionType } from "react-native-fcm";
 
-import { registerKilledListener, registerAppListener } from "./Listeners";
-import firebaseClient from "./FirebaseClient";
+import { registerKilledListener, registerAppListener } from "./FCM/Listeners";
+import firebaseClient from "./FCM/FirebaseClient";
 
 
 import HomeScreen from './src/Home/HomeScreen';
@@ -81,7 +81,7 @@ export default class App extends React.Component {
      });
    }
 
-   
+
  }
   render(){
     return (

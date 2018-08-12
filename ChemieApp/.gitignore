@@ -27,6 +27,7 @@ project.xcworkspace
 build/
 .idea
 .gradle
+google-services.json
 local.properties
 *.iml
 

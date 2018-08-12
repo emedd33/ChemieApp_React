@@ -54,7 +54,7 @@ render(){
 
       <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
         <Text style={{fontWeight:'bold'}}>
-          Laget av og eier av opphavsrett:
+          Laget av:
         </Text>
         <Text style={{marginTop:10}}>
           Eskild Ruud Mageli

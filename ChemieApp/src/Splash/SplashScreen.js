@@ -52,6 +52,10 @@ export default class splashscreen extends React.Component{
     let grade = await AsyncStorage.getItem('grade');
     let username = await AsyncStorage.getItem('username');
     let id = await AsyncStorage.getItem('id');
+    let infoSubscription = await AsyncStorage.getItem('fcmINFO');
+    let kaffeSubscription = await AsyncStorage.getItem('fcmKAFFE');
+    let eventSubscription = await AsyncStorage.getItem('fcmEVENT');
+
     profile = {
       firstname:firstname,
       lastname:lastname,
@@ -59,8 +63,10 @@ export default class splashscreen extends React.Component{
       grade:grade,
       username:username,
       id:id,
+      kaffeSubscription:kaffeSubscription,
+      eventSubscription:eventSubscription,
+      infoSubscription:infoSubscription,
     }
-    console.log(profile);
     this.setState({
       profile:profile,
       isAuthenticated:true,

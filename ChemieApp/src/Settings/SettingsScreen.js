@@ -32,9 +32,7 @@ export default class LoginScreen extends React.Component{
     console.log(this.state);
     return (
       <View style={styles.container}>
-        <View style={styles.imageContainer}>
-
-        </View>
+        
         <TouchableOpacity style={styles.greyNavigation}
           onPress={()=>this.props.navigation.navigate('SettingsGeneral',{
             state:this.state,

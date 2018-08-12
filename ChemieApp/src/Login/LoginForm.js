@@ -113,6 +113,15 @@ export default class LoginForm extends React.Component {
       AsyncStorage.setItem('grade',String(profile.profile.grade));
       AsyncStorage.setItem('username',profile.username);
       AsyncStorage.setItem('id',String(profile.id));
+
+      FCM.subscribeToTopic('KAFFE');
+      FCM.subscribeToTopic('INFO');
+      FCM.subscribeToTopic('EVENT');
+
+      AsyncStorage.setItem('fcmKAFFE', JSON.stringify(true));
+      AsyncStorage.setItem('fcmEVENT', JSON.stringify(true));
+      AsyncStorage.setItem('fcmINFO', JSON.stringify(true));
+
       profileState = {
         id:profile.id,
         username:profile.username,
@@ -120,16 +129,15 @@ export default class LoginForm extends React.Component {
         lastname:profile.last_name,
         access_card:profile.profile.access_card,
         grade:profile.profile.grade,
+        kaffeSubscription:true,
+        eventSubscription:true,
+        infoSubscription:true,
       }
       this.setState({
         loading:false,
         profile:profileState,
         authToken:authToken
       });
-      // topic example
-      FCM.subscribeToTopic('KAFFE');
-      FCM.subscribeToTopic('INFO');
-      FCM.subscribeToTopic('EVENT');
 
 
       this.props.navigation.navigate('Home',{
