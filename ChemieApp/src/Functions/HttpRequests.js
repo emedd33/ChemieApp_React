@@ -42,10 +42,8 @@ class HttpRequests extends Component {
       headers:{
         Accept:'application/json',
         'Content-Type': 'application/json',
-        credentials: 'same-origin',
-        mode: 'same-origin',
       },
-      timeout: 2000,
+      timeout: 5000,
       body: JSON.stringify({
         username:username,
         password:password,

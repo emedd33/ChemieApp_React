@@ -1,5 +1,6 @@
 import React from 'react';
 import * as Progress from 'react-native-progress';
+import FCM, { NotificationActionType } from "react-native-fcm";
 
 import {
   View,
@@ -11,7 +12,6 @@ import {
   Alert,
   Keyboard,
   Image,
-
 } from 'react-native';
 
 import httpRequests from 'ChemieApp/src/Functions/HttpRequests'
@@ -126,12 +126,20 @@ export default class LoginForm extends React.Component {
         profile:profileState,
         authToken:authToken
       });
+      // topic example
+      FCM.subscribeToTopic('KAFFE');
+      FCM.subscribeToTopic('INFO');
+      FCM.subscribeToTopic('EVENT');
+
+
       this.props.navigation.navigate('Home',{
         profile:profileState,
         authToken:authToken,
       });
     }
     // TODO: Make loginHTTPRequest a general fuction
+
+
   render(){
     if(this.state.loading){
       // TODO: This needs to be chacked to IOS, https://github.com/oblador/react-native-progress

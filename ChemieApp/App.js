@@ -1,6 +1,18 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Clipboard,
+  Platform,
+  Listeners,
+} from 'react-native';
 import {createStackNavigator} from 'react-navigation';
+import FCM, { NotificationActionType } from "react-native-fcm";
+
+import { registerKilledListener, registerAppListener } from "./Listeners";
+import firebaseClient from "./FirebaseClient";
+
 
 import HomeScreen from './src/Home/HomeScreen';
 import LoginScreen from './src/Login/LoginScreen';
@@ -21,7 +33,56 @@ import EventDetailScreenBedPres from './src/Events/BedPres/EventDetailScreenBedP
 import EventAttendScreenBedPres from './src/Events/BedPres/EventAttend/EventAttendScreenBedPres';
 
 export default class App extends React.Component {
+  constructor(props) {
+   super(props);
 
+   this.state = {
+     token: "",
+     tokenCopyFeedback: ""
+   };
+ }
+  async componentDidMount() {
+   FCM.createNotificationChannel({
+     id: 'default',
+     name: 'Default',
+     description: 'used for example',
+     priority: 'high'
+   })
+   registerAppListener(this.props.navigation);
+   FCM.getInitialNotification().then(notif => {
+     this.setState({
+       initNotif: notif
+     });
+     if (notif && notif.targetScreen === "detail") {
+       setTimeout(() => {
+         this.props.navigation.navigate("Detail");
+       }, 500);
+     }
+   });
+
+   try {
+     let result = await FCM.requestPermissions({
+       badge: false,
+       sound: true,
+       alert: true
+     });
+   } catch (e) {
+     console.error(e);
+   }
+
+   FCM.getFCMToken().then(token => {
+     console.log("TOKEN (getFCMToken)", token);
+     this.setState({ token: token || "" });
+   });
+
+   if (Platform.OS === "ios") {
+     FCM.getAPNSToken().then(token => {
+       console.log("APNS TOKEN (getFCMToken)", token);
+     });
+   }
+
+   
+ }
   render(){
     return (
       <ChemieApp/>
