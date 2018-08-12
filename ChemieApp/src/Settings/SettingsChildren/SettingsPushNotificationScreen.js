@@ -91,37 +91,37 @@ render(){
       <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
         <Text style={{textAlign:'center', fontSize:15}}>Endre på knappene og trykk på submit for å endre innstillinger for pushnotification</Text>
       </View>
-      <View style={styles.switchContainer}>
-        <Text style={{flex:1, fontWeight:'bold'}}>
+      <View style={styles.switchWhiteContainer}>
+        <Text style={{flex:1, fontWeight:'bold', marginLeft:20}}>
           Vasler om kaffe
         </Text>
         <Switch
           value={this.state.subscribedToKaffe}
-          style={{flex:1}}
+          style={{flex:1, marginRight:20}}
           onValueChange={()=>{this.setState({
             subscribedToKaffe:!this.state.subscribedToKaffe
           })}}
         />
       </View>
-      <View style={styles.switchContainer}>
-        <Text style={{flex:1,  fontWeight:'bold'}}>
+      <View style={styles.switchGrayContainer}>
+        <Text style={{flex:1,  fontWeight:'bold',marginLeft:20}}>
           Vasler om arrangementer
         </Text>
         <Switch
           value={this.state.subscribedToEvent}
-          style={{flex:1}}
+          style={{flex:1, marginRight:20}}
           onValueChange={()=>{this.setState({
             subscribedToEvent:!this.state.subscribedToEvent
           })}}
         />
       </View>
-      <View style={styles.switchContainer}>
-        <Text style={{flex:1,  fontWeight:'bold'}}>
+      <View style={styles.switchWhiteContainer}>
+        <Text style={{flex:1,  fontWeight:'bold', marginLeft:20}}>
           Generelle vasler
         </Text>
         <Switch
           value={this.state.subscribedToInfo}
-          style={{flex:1}}
+          style={{flex:1, marginRight:20}}
           onValueChange={()=>{this.setState({
             subscribedToInfo:!this.state.subscribedToInfo
           })}}
@@ -146,13 +146,18 @@ const styles = StyleSheet.create({
   container:{
     flex:1
   },
-  switchContainer:{
+  switchGrayContainer:{
     flex:1,
     flexDirection:'row',
     justifyContent:'center',
     alignItems:'center',
-    marginLeft:50,
-    marginRight:50,
+    },
+  switchWhiteContainer:{
+    flex:1,
+    flexDirection:'row',
+    justifyContent:'center',
+    alignItems:'center',
+    backgroundColor:'ghostwhite'
   },
   submitContainer:{
     marginRight:20,

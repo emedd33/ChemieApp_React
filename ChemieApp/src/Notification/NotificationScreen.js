@@ -69,9 +69,10 @@ render(){
         </Text>
       </View>
       <View style={{flex:2}}>
-        <View style={styles.switchContainer}>
+        <View style={styles.switchWhiteContainer}>
           <Switch
             value={this.state.sendCoffee}
+            style={{marginLeft:10}}
             onValueChange={()=>{this.setState({
               sendCoffee:!this.state.sendCoffee
             })}}
@@ -80,9 +81,10 @@ render(){
             Kaffe
           </Text>
         </View>
-        <View style={styles.switchContainer}>
+        <View style={styles.switchGrayContainer}>
           <Switch
             value={this.state.sendVaffler}
+            style={{marginLeft:10}}
             onValueChange={()=>{this.setState({
               sendVaffler:!this.state.sendVaffler
             })}}
@@ -91,9 +93,10 @@ render(){
             Vaffler
           </Text>
         </View>
-        <View style={styles.switchContainer}>
+        <View style={styles.switchWhiteContainer}>
           <Switch
             value={this.state.sendGoodies}
+            style={{marginLeft:10}}
             onValueChange={()=>{this.setState({
               sendGoodies:!this.state.sendGoodies
             })}}
@@ -103,7 +106,7 @@ render(){
           </Text>
         </View>
       </View>
-      <View style={{flex:1}}>
+      <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
         <TouchableOpacity
           style={styles.submitContainer}
           onPress={this.sendNotificationHttpRequest}
@@ -122,12 +125,17 @@ const styles = StyleSheet.create({
   container:{
     flex:1
   },
-  switchContainer:{
+  switchGrayContainer:{
     flex:1,
     flexDirection:'row',
     alignItems:'center',
-    marginLeft:50,
-    marginRight:50,
+  },
+  switchWhiteContainer:{
+    flex:1,
+    flexDirection:'row',
+    alignItems:'center',
+    backgroundColor:'ghostwhite',
+
   },
   submitContainer:{
     marginRight:20,

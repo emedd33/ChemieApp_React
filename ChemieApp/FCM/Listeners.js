@@ -58,11 +58,11 @@ export function registerAppListener(navigation){
     if(notif.opened_from_tray){
       if(notif.targetScreen === 'detail'){
         setTimeout(()=>{
-          navigation.navigate('Detail')
+          navigation.navigate('Home')
         }, 500)
       }
       setTimeout(()=>{
-        alert(`User tapped notification\n${JSON.stringify(notif)}`)
+        //alert(`User tapped notification\n${JSON.stringify(notif)}`)
       }, 500)
     }
 
