@@ -87,8 +87,7 @@ export default class EventDetailScreenBedPres extends React.Component{
 
 
   attendEventNavigation(body){
-    console.log(body);
-     this.props.navigation.navigate('EventAttendBedPres', body);
+    this.props.navigation.navigate('EventAttendBedPres', body);
   }
 
   componentWillMount(){

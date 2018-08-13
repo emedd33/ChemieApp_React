@@ -73,9 +73,7 @@ async componentWillMount(){
   let eventSubscription = await AsyncStorage.getItem('fcmEVENT');
   let infoSubscription = await AsyncStorage.getItem('fcmINFO');
 
-  console.log("EVENT:",eventSubscription);
-  console.log("KAFFE:",kaffeSubscription);
-  console.log("INFO:", infoSubscription);
+
   this.setState({
     subscribedToKaffe:JSON.parse(kaffeSubscription),
     subscribedToEvent:JSON.parse(eventSubscription),

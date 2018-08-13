@@ -59,14 +59,12 @@ class HttpRequests extends Component {
       this.state.response = res;
     })
     .catch((error) => {
-      console.log(error);
        let err = error;
        this.state.error = err
     });
     return this.state;
   }
   PostRequest=async(fetch_url, body, authToken)=>{
-    console.log(authToken);
     await fetch(fetch_url,{
     method:'POST',
     headers:{
@@ -87,11 +85,9 @@ class HttpRequests extends Component {
     this.state.response = res;
   })
   .catch((error) => {
-    console.log(error);
      let err = error;
      this.state.error = err
   });
-  console.log(this.state);
   return this.state;
   }
 }

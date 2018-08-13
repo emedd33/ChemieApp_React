@@ -112,8 +112,7 @@ export default class EventFormBedPres extends React.Component{
 
         // Formatting the url
         let FETCH_URL = BEDPRES_REGISTER_URL.concat(this.state.event_id).concat("/");
-        console.log(FETCH_URL);
-
+        
         if (this.state.companionName == ''){
           this.setState({
             companionName:null,

@@ -113,7 +113,7 @@ export default class EventAttendScreenSocial extends React.Component{
   }
 
 render(){
-  //console.log(this.props.navigation);
+  
   //Render progress circle if loading
   if (this.state.loading) {
     return(

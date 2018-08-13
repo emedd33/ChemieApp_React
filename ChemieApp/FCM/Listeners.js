@@ -48,6 +48,7 @@ export function registerAppListener(navigation){
   FCM.on(FCMEvent.Notification, notif => {
     console.log("Notification", notif);
 
+
     if(Platform.OS ==='ios' && notif._notificationType === NotificationType.WillPresent && !notif.local_notification){
       // this notification is only to decide if you want to show the notification when user if in foreground.
       // usually you can ignore it. just decide to show or not.

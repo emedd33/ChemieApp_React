@@ -72,7 +72,6 @@ export default class splashscreen extends React.Component{
       isAuthenticated:true,
       authToken:authToken,
     });
-    console.log(profile, authToken);
     this.props.navigation.navigate("Home", {profile:profile, authToken:authToken});
   }
     componentDidMount = () =>{

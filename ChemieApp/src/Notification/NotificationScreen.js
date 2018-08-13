@@ -43,7 +43,6 @@ export default class NotificationScreen extends React.Component{
           vaffler:this.state.sendVaffler,
           goodies:this.state.sendGoodies,
         }
-        console.log(FETCH_PUSH_URL);
         let jsonResponse = await httpRequests.PostRequest(FETCH_PUSH_URL, body, this.state.authToken)
         if (jsonResponse.httpStatus >= 200 && jsonResponse.httpStatus < 300){
           Alert.alert("suksess", "Så snill du er som sier ifra til andre");

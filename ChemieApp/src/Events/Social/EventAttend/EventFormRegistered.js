@@ -58,7 +58,6 @@ render(){
           paymentStatus = <Text>Betalt</Text>
       }
         }
-  console.log(this.state);
   return(
     // TODO: The dates and time in the deniedContainer are off.
     <View style={styles.container}>

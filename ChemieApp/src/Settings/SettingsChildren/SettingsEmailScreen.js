@@ -27,7 +27,6 @@ export default class SettingsEmailScreen extends React.Component{
       mail= mail.concat("@hc.ntnu.no?");
     }
     mailto = mailto.concat(mail);
-    console.log(mailto);
     Linking.openURL(mailto);
   }
 render(){

@@ -24,7 +24,6 @@ export default class SettingsGeneralScreen extends React.Component{
     this.logoutSubmit=this.logoutSubmit.bind(this);
   }
   logoutSubmit = async() => {
-    console.log("logging out");
     this.setState({
       loading:true
     })
@@ -32,17 +31,11 @@ export default class SettingsGeneralScreen extends React.Component{
       // TODO: remove other prefferences
 
       await AsyncStorage.removeItem('isAuthenticated');
-      console.log("removed isAuthenticated");
       await AsyncStorage.removeItem('authToken');
-      console.log("removed authToken");
       await AsyncStorage.removeItem('firstname');
-      console.log("removed firstname");
       await AsyncStorage.removeItem('lastname');
-      console.log("removed lastname");
       await AsyncStorage.removeItem('access_card');
-      console.log("removed access_card");
       await AsyncStorage.removeItem('membership')
-      console.log("removed membership");
       this.props.navigation.navigate('Login')
     } catch (error) {
       alert(error);
