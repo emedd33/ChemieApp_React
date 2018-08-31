@@ -1,5 +1,4 @@
 import React from 'react';
-import ImageResizer from 'react-native-image-resizer';
 import * as Progress from 'react-native-progress';
 
 import getMonth from 'ChemieApp/src/Functions/getMonth';

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Moment from 'react-moment';
 var moment = require('moment'); //time package used to determine ETA and dates.
 import 'moment/locale/nb'; //Norwegian language package used with moment()
 

@@ -1,7 +1,6 @@
 import React from 'react';
 import * as Progress from 'react-native-progress';
-import ImageResizer from 'react-native-image-resizer';
-import {ImageManipulator } from 'expo';
+
 
 import {
   StyleSheet,

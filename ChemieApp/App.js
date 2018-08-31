@@ -42,6 +42,8 @@ export default class App extends React.Component {
    };
  }
   async componentDidMount() {
+  //Setting up push notification listeners for reciving notification in background
+
    FCM.createNotificationChannel({
      id: 'default',
      name: 'Default',
@@ -55,7 +57,7 @@ export default class App extends React.Component {
      });
      if (notif && notif.targetScreen === "detail") {
        setTimeout(() => {
-         this.props.navigation.navigate("Detail");
+         this.props.navigation.navigate("Home");
        }, 500);
      }
    });

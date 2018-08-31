@@ -1,6 +1,5 @@
 import React from 'react';
 import * as Progress from 'react-native-progress';
-import ImageResizer from 'react-native-image-resizer';
 
 import getMonth from 'ChemieApp/src/Functions/getMonth';
 import HttpRequest from 'ChemieApp/src/Functions/HttpRequests';

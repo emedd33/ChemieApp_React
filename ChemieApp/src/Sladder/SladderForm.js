@@ -1,6 +1,5 @@
 import React from 'react';
 import * as Progress from 'react-native-progress';
-import ImgToBase64 from 'react-native-image-base64';
 
 import {
   View,

@@ -35,7 +35,7 @@ export default class NotificationScreen extends React.Component{
   }
   sendNotificationHttpRequest = async() =>{
       if (!this.state.sendCoffee && !this.state.sendVaffler && !this.state.sendGoodies){
-        Alert.alert("Ups", "Du må minst velge et alternativ")
+        Alert.alert("Ups!", "Du må minst velge et alternativ")
       } else {
         this.setState({loading:true})
         let body = {
@@ -45,7 +45,7 @@ export default class NotificationScreen extends React.Component{
         }
         let jsonResponse = await httpRequests.PostRequest(FETCH_PUSH_URL, body, this.state.authToken)
         if (jsonResponse.httpStatus >= 200 && jsonResponse.httpStatus < 300){
-          Alert.alert("suksess", "Så snill du er som sier ifra til andre");
+          Alert.alert("Suksess!", "Så snill du er som sier ifra til andre");
         }
         this.setState({loading:false})
       }
